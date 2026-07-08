@@ -55,6 +55,7 @@ app.get('/', (c) => {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Naim Automation Systems Co. — AI Operations Systems for Recruitment Agencies</title>
 <meta name="description" content="We build the AI-powered systems that run licensed recruitment agencies — candidate intake, document compliance, follow-ups and daily reporting. More placements. Less paperwork.">
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
