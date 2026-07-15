@@ -1,92 +1,96 @@
-/* Naim Automation Systems Co. — landing page interactions */
+/* Naim Automation Systems Co. — landing page behaviour */
 (function () {
   'use strict';
 
   /* ---------- Sticky header shadow ---------- */
-  const header = document.getElementById('site-header');
-  window.addEventListener('scroll', function () {
-    header.classList.toggle('scrolled', window.scrollY > 10);
-  }, { passive: true });
-
-  /* ---------- Mobile menu ---------- */
-  const burger = document.getElementById('nav-burger');
-  const nav = document.getElementById('main-nav');
-  if (burger) {
-    burger.addEventListener('click', function () {
-      nav.classList.toggle('open');
-    });
-    nav.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () { nav.classList.remove('open'); });
-    });
+  var topbar = document.getElementById('topbar');
+  if (topbar) {
+    var onScroll = function () {
+      topbar.classList.toggle('scrolled', window.scrollY > 8);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   }
 
-  /* ---------- Scroll reveal ---------- */
-  const observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(function (el) { observer.observe(el); });
+  /* ---------- Reveal on scroll ---------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('visible'); });
+  }
 
-  /* ---------- Currency toggle (KES primary / USD international) ---------- */
-  const toggle = document.getElementById('currency-toggle');
+  /* ---------- Currency toggle (KES / USD) ---------- */
+  var toggle = document.getElementById('currency-toggle');
   if (toggle) {
-    toggle.addEventListener('click', function () {
-      const opts = toggle.querySelectorAll('.cur-opt');
-      let next = 'KES';
-      opts.forEach(function (o) {
-        if (o.classList.contains('active') && o.dataset.cur === 'KES') next = 'USD';
+    var setCurrency = function (cur) {
+      toggle.querySelectorAll('.cur').forEach(function (b) {
+        b.classList.toggle('active', b.dataset.cur === cur);
       });
-      opts.forEach(function (o) { o.classList.toggle('active', o.dataset.cur === next); });
       document.querySelectorAll('[data-kes]').forEach(function (el) {
-        el.textContent = next === 'KES' ? el.dataset.kes : el.dataset.usd;
+        el.textContent = cur === 'usd' ? el.dataset.usd : el.dataset.kes;
       });
+      try { localStorage.setItem('nas-currency', cur); } catch (e) { /* private mode */ }
+    };
+    toggle.addEventListener('click', function () {
+      var active = toggle.querySelector('.cur.active');
+      setCurrency(active && active.dataset.cur === 'kes' ? 'usd' : 'kes');
     });
+    var saved = null;
+    try { saved = localStorage.getItem('nas-currency'); } catch (e) { /* ignore */ }
+    if (saved === 'usd') setCurrency('usd');
   }
 
-  /* ---------- Lead form (our own speed-to-lead) ---------- */
-  const form = document.getElementById('audit-form');
-  const statusEl = document.getElementById('form-status');
-  const submitBtn = document.getElementById('audit-submit');
-
+  /* ---------- Audit form (speed-to-lead: instant feedback) ---------- */
+  var form = document.getElementById('audit-form');
   if (form) {
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      statusEl.className = 'form-status';
-      statusEl.textContent = '';
-
-      const data = {};
+    var msg = document.getElementById('form-msg');
+    var submitBtn = document.getElementById('audit-submit');
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var data = {};
       new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
 
+      msg.className = 'form-msg';
+      msg.textContent = '';
+
       if (!data.agency_name || !data.contact_name || !data.phone) {
-        statusEl.classList.add('err');
-        statusEl.textContent = 'Please fill in the agency name, your name and WhatsApp number.';
+        msg.classList.add('err');
+        msg.textContent = 'Please fill in your agency name, your name and your phone number.';
         return;
       }
 
+      var original = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      const originalHtml = submitBtn.innerHTML;
-      submitBtn.innerHTML = 'Sending… <i class="fas fa-circle-notch fa-spin"></i>';
+      submitBtn.innerHTML = 'Sending…';
 
-      try {
-        const res = await axios.post('/api/leads', data);
-        if (res.data && res.data.ok) {
-          statusEl.classList.add('ok');
-          statusEl.textContent = 'Thank you — your audit request is received. We will contact you on WhatsApp within one business day.';
-          form.reset();
-        } else {
-          throw new Error('bad response');
-        }
-      } catch (err) {
-        statusEl.classList.add('err');
-        statusEl.textContent = 'Something went wrong. Please try again, or reach us directly on WhatsApp.';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalHtml;
-      }
+      axios.post('/api/leads', data)
+        .then(function (res) {
+          if (res.data && res.data.ok) {
+            msg.classList.add('ok');
+            msg.textContent = '✦ Received! Your audit request is in. Expect to hear from us fast — we practise what we sell.';
+            form.reset();
+          } else {
+            throw new Error((res.data && res.data.error) || 'Unexpected response');
+          }
+        })
+        .catch(function (err) {
+          msg.classList.add('err');
+          var apiMsg = err && err.response && err.response.data && err.response.data.error;
+          msg.textContent = apiMsg || 'Something went wrong. Please try again, or WhatsApp us directly.';
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = original;
+        });
     });
   }
 })();
