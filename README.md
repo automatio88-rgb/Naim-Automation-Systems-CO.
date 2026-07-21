@@ -30,12 +30,12 @@
 Admin key: `naim-admin-2026` (change before production).
 
 ## Currently Completed Features
-1. **Hormozi-rebuilt landing page** (`src/landing.tsx`):
-   - Above-the-fold: headline → proof stack → ONE CTA (`#audit`)
-   - Value Equation structure: dream outcome, perceived likelihood (case metrics), time delay (7–21 days), effort (we build it for you)
-   - Pain section with KES/USD cost-of-inaction math, 5 systems, flagship Agency Brain™ panel
-   - Risk reversal (50/50 + live demo before balance), ethical scarcity (Founding Partner ×3), FAQ, single audit form
-   - Currency toggle KES/USD (localStorage), scroll reveals, sticky topbar
+1. **Landing page rebuilt on the Paperless model** (`src/landing.tsx`) — matched to paperless.naiminvestments.com:
+   - White, calm, light typography (Jost 300), gold #C8A24A pill buttons, professional SVG icons only (no emojis)
+   - Structure: Before/After panel → hero ("Turn agency admin from Chaos into Clean systems on your phone") → What You Get (4 ticks + optional add-ons) → How It Works (3 numbered steps) → Your Data is Protected → Common Questions (5 FAQs) → booking form with time-slot select
+   - NO prices on the page (pricing answered in FAQ only, "exact quote after review"), no pressure line under CTA
+   - Real Before/After photographs (before-chaos.jpg / after-clean.jpg)
+   - Single action: Book Appointment
 2. **Interactive Digital Document Suite** (slide-deck styling, gold/cream, full-screen cover slides):
    - Signature pad: HTML5 canvas, touch + mouse, devicePixelRatio-sharp, clear/redo
    - Fill-in-the-blank golden fields collected into `fields_json`
@@ -69,4 +69,4 @@ npm run db:migrate:local              # apply migrations
 - **Platform**: Cloudflare Pages (ready; not yet deployed to production)
 - **Status**: ✅ Sandbox active
 - **Next Steps**: user approval of preview → production deploy → Lead Generation System Machine
-- **Last Updated**: 2026-07-15
+- **Last Updated**: 2026-07-19

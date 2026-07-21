@@ -1,10 +1,13 @@
 // Naim Automation Systems Co. — Landing Page
-// Built on Alex Hormozi's landing-page principles:
-//  1. 80% of the win is above the fold: outcome headline + proof + ONE clear CTA
-//  2. Value Equation: maximise Dream Outcome × Likelihood, crush Time Delay × Effort
-//  3. One page = one action (every CTA points to the same audit form)
-//  4. Results language, not features. Clarity over cleverness.
-//  5. Proof stack early. Risk reversal. Ethical scarcity.
+// Modeled exactly on the Paperless (paperless.naiminvestments.com) structure, wording style and presentation.
+// Clean. Light. Professional. No prices. No pressure.
+
+const ICONS = {
+  check: `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  shield: `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>`,
+  file: `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>`,
+  phone: `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+}
 
 export function landingPage(): string {
   return `<!DOCTYPE html>
@@ -12,437 +15,207 @@ export function landingPage(): string {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Naim Automation Systems Co. — Never Lose Another Candidate to a Slow Reply</title>
-<meta name="description" content="We install AI systems for Kenya's licensed recruitment agencies that answer every candidate in under 5 minutes, chase every document, and report to you daily — proven live at Naim Investments Ltd, Mombasa.">
+<title>Naim Automation Systems Co.</title>
+<meta name="description" content="Naim Automation Systems Co. — Turn agency admin chaos into clean automated systems on your phone.">
+<meta name="author" content="Naim Automation Systems Co.">
+<meta property="og:title" content="Naim Automation Systems Co.">
+<meta property="og:description" content="Turn agency admin chaos into clean automated systems on your phone.">
+<meta property="og:type" content="website">
 <link rel="icon" href="/static/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <link href="/static/style.css" rel="stylesheet">
 </head>
 <body>
 
-<!-- ============ TOP BAR — minimal, no exits (Hormozi: don't give people an easy way out) ============ -->
+<!-- ============ HEADER ============ -->
 <header class="topbar" id="topbar">
-  <div class="wrap topbar-inner">
-    <a class="brand" href="/" id="brand-home">
+  <div class="topbar-inner">
+    <a class="brand" href="/">
       <span class="brand-mark">NA</span>
-      <span class="brand-words">
-        <span class="brand-name">Naim Automation Systems Co.</span>
-        <span class="brand-tag">Automation &amp; AI Systems · Kenya</span>
-      </span>
+      <span class="brand-name">Naim Automation Systems Co.</span>
     </a>
-    <div class="topbar-right">
-      <button class="currency-toggle" id="currency-toggle" aria-label="Switch currency">
-        <span class="cur active" data-cur="kes">KES</span><span class="cur" data-cur="usd">USD</span>
-      </button>
-      <a class="btn btn-gold btn-sm" href="#audit">Get My Free Audit</a>
-    </div>
+    <nav class="topnav">
+      <a href="#what-you-get">What You Get</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#faq">Questions</a>
+      <a class="btn-pill" href="#book">Book Appointment</a>
+    </nav>
   </div>
 </header>
 
-<!-- ============ HERO — the 80% (headline → proof → single CTA, all above the fold) ============ -->
-<section class="hero" id="hero-section">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <p class="eyebrow reveal">For Kenya's 1,296 NEA-licensed recruitment agencies</p>
-      <h1 class="reveal d1">Never lose another candidate<br><em>to a slow reply.</em></h1>
-      <p class="hero-sub reveal d2">
-        We install done-for-you AI systems that answer every enquiry in <b>under 5 minutes</b>,
-        chase every document, follow up every lead and report to you daily —
-        <b>already running live</b> at a licensed Mombasa agency.
-      </p>
+<main>
 
-      <div class="hero-cta reveal d3">
-        <a class="btn btn-gold btn-lg" href="#audit">Get My Free Operations Audit <span class="arr">→</span></a>
-        <p class="cta-micro">Free · takes 2 minutes to request · no obligation, ever</p>
-      </div>
-
-      <div class="hero-proof reveal d4">
-        <div class="proof-item"><b>47h → 5min</b><span>first-response time at our live deployment</span></div>
-        <div class="proof-item"><b>155+</b><span>candidates managed on one system</span></div>
-        <div class="proof-item"><b>EN·SW·AR</b><span>replies in your candidates' languages</span></div>
-      </div>
-    </div>
-
-    <figure class="hero-visual reveal d2">
-      <div class="img-frame" id="hero-image">
-        <img src="/static/images/hero.jpg" alt="The Agency Brain system in action" loading="eager"
-             onerror="this.closest('.img-frame').classList.add('img-missing')">
-        <div class="img-placeholder"><span class="ph-mark">NA</span><span>Your image here<br><i>public/static/images/hero.jpg</i></span></div>
-      </div>
-      <figcaption class="hero-caption">The Director's Command Center — live daily briefing, 7:00 AM sharp.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ============ TRUST BAR ============ -->
-<section class="trustbar" aria-label="Compliance and ecosystem">
-  <div class="wrap trustbar-inner">
-    <span class="trust-label">Built for the licensed recruitment ecosystem</span>
-    <div class="trust-logos">
-      <span>NEA Licensed Agencies</span><i>✦</i>
-      <span>KAPEA Members</span><i>✦</i>
-      <span>Ministry of Labour Compliant</span><i>✦</i>
-      <span>Musaned-Ready Workflows</span>
-    </div>
-  </div>
-</section>
-
-<!-- ============ PAIN — the cost of doing nothing (short, skimmable) ============ -->
-<section class="section pain" id="problem-section">
+<!-- ============ BEFORE / AFTER ============ -->
+<section class="section" id="before-after">
   <div class="wrap">
-    <p class="eyebrow center reveal">The problem — in numbers you already feel</p>
-    <h2 class="center reveal d1">Every hour a candidate waits,<br><em>another agency answers first.</em></h2>
-
-    <div class="pain-grid reveal d2">
-      <article class="pain-card">
-        <span class="pain-num">01</span>
-        <h3>Enquiries die in the inbox</h3>
-        <p>WhatsApp messages at 9 PM. Calls during Friday prayers. By the time you reply, the candidate has registered elsewhere.</p>
-      </article>
-      <article class="pain-card">
-        <span class="pain-num">02</span>
-        <h3>Documents expire silently</h3>
-        <p>A passport lapses. A medical runs out. Nobody notices until the employer asks — and the placement collapses.</p>
-      </article>
-      <article class="pain-card">
-        <span class="pain-num">03</span>
-        <h3>Follow-up depends on memory</h3>
-        <p>Your staff are human. They forget. Each forgotten follow-up is a placement fee that quietly walks away.</p>
-      </article>
-      <article class="pain-card">
-        <span class="pain-num">04</span>
-        <h3>You fly blind</h3>
-        <p>How many enquiries came in this week? How many stalled? If the answer lives in someone's head, you don't run the agency — it runs you.</p>
-      </article>
+    <div class="ba-panel">
+      <h2 class="section-title">From Chaos &rarr; Clean</h2>
+      <div class="ba-grid">
+        <div class="ba-card">
+          <div class="ba-img">
+            <img src="/static/images/before-chaos.jpg" alt="Before — scattered admin and missed messages" loading="lazy" onerror="this.parentElement.classList.add('img-missing')">
+          </div>
+          <h3>Before</h3>
+          <p>Missed messages, scattered paperwork</p>
+        </div>
+        <div class="ba-card ba-after">
+          <div class="ba-img">
+            <img src="/static/images/after-clean.jpg" alt="After — clean automated system on a phone" loading="lazy" onerror="this.parentElement.classList.add('img-missing')">
+          </div>
+          <h3>After</h3>
+          <p>Every enquiry answered + records in order</p>
+        </div>
+      </div>
+      <p class="ba-tag">Same agency. Less stress. Everything on your phone.</p>
     </div>
-
-    <p class="pain-math center reveal d3">
-      One lost placement ≈ <b data-kes="KES 100,000+" data-usd="USD 770+">KES 100,000+</b> in fees.
-      Most agencies leak <b>3–5 placements a month</b> to slow replies alone. That's the real price of "we'll reply tomorrow."
-    </p>
   </div>
 </section>
 
-<!-- ============ THE FIX — offer stack (what you actually get) ============ -->
-<section class="section systems" id="systems-section">
+<!-- ============ HERO ============ -->
+<section class="section hero" id="hero">
+  <div class="wrap-narrow">
+    <h1>Turn agency admin from <em>Chaos</em> into <em>Clean</em> systems on your phone &mdash;<br class="br-d"> and never miss a candidate</h1>
+    <p class="hero-sub">We help recruitment agencies stop wasting time on admin. We build systems that answer every enquiry, keep client records neat, and put your whole business in your pocket.</p>
+    <a class="btn-pill btn-lg" href="#book">Book Appointment</a>
+    <p class="hero-note">No pressure. If you don&rsquo;t need this, we&rsquo;ll tell you.</p>
+  </div>
+</section>
+
+<!-- ============ WHAT YOU GET ============ -->
+<section class="section" id="what-you-get">
+  <div class="wrap-narrow">
+    <h2 class="section-title">What You Get</h2>
+    <ul class="get-list">
+      <li>${ICONS.check}<span>Custom Automation System (Enquiry Response / Records / Follow-ups)</span></li>
+      <li>${ICONS.check}<span>Automatic Branded Documents &amp; Reports</span></li>
+      <li>${ICONS.check}<span>Simple Searchable List of Candidate &amp; Client Records</span></li>
+      <li>${ICONS.check}<span>Short Training so you can run it yourself</span></li>
+    </ul>
+    <p class="get-note">Optional Add-Ons: Reminders, Follow-ups, Google Sheets Sync</p>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section section-gray" id="how-it-works">
   <div class="wrap">
-    <p class="eyebrow center reveal">The fix — installed for you, running in weeks not months</p>
-    <h2 class="center reveal d1">Five systems. One outcome:<br><em>an agency that never sleeps.</em></h2>
-
-    <div class="sys-list">
-      <article class="sys-row reveal">
-        <div class="sys-media img-frame">
-          <img src="/static/images/system-speed-to-lead.jpg" alt="Speed-to-Lead System" loading="lazy"
-               onerror="this.closest('.img-frame').classList.add('img-missing')">
-          <div class="img-placeholder"><span class="ph-mark">01</span><span>Your image here<br><i>system-speed-to-lead.jpg</i></span></div>
-        </div>
-        <div class="sys-copy">
-          <span class="sys-index">System 01</span>
-          <h3>The Speed-to-Lead System</h3>
-          <p class="sys-outcome">Every enquiry answered in under 5 minutes — 24/7, in English, Kiswahili or Arabic.</p>
-          <p>AI reception on WhatsApp and your website that qualifies candidates, answers the common questions and books them in — while your competitors are still asleep.</p>
-        </div>
-      </article>
-
-      <article class="sys-row rev reveal">
-        <div class="sys-media img-frame">
-          <img src="/static/images/system-documents.jpg" alt="Document Compliance Engine" loading="lazy"
-               onerror="this.closest('.img-frame').classList.add('img-missing')">
-          <div class="img-placeholder"><span class="ph-mark">02</span><span>Your image here<br><i>system-documents.jpg</i></span></div>
-        </div>
-        <div class="sys-copy">
-          <span class="sys-index">System 02</span>
-          <h3>The Document Compliance Engine</h3>
-          <p class="sys-outcome">No more expired passports discovered on deployment day.</p>
-          <p>Every candidate document tracked, verified and chased automatically — with expiry alerts weeks in advance and audit-ready records for NEA inspections.</p>
-        </div>
-      </article>
-
-      <article class="sys-row reveal">
-        <div class="sys-media img-frame">
-          <img src="/static/images/system-followup.jpg" alt="Follow-up Machine" loading="lazy"
-               onerror="this.closest('.img-frame').classList.add('img-missing')">
-          <div class="img-placeholder"><span class="ph-mark">03</span><span>Your image here<br><i>system-followup.jpg</i></span></div>
-        </div>
-        <div class="sys-copy">
-          <span class="sys-index">System 03</span>
-          <h3>The Follow-up Machine</h3>
-          <p class="sys-outcome">No lead ever forgotten — the system remembers so your staff don't have to.</p>
-          <p>Polite, persistent, perfectly-timed follow-up sequences that move candidates from "interested" to "deployed" on autopilot.</p>
-        </div>
-      </article>
-
-      <article class="sys-row rev reveal">
-        <div class="sys-media img-frame">
-          <img src="/static/images/system-reactivation.jpg" alt="Database Reactivation System" loading="lazy"
-               onerror="this.closest('.img-frame').classList.add('img-missing')">
-          <div class="img-placeholder"><span class="ph-mark">04</span><span>Your image here<br><i>system-reactivation.jpg</i></span></div>
-        </div>
-        <div class="sys-copy">
-          <span class="sys-index">System 04</span>
-          <h3>The Database Reactivation System</h3>
-          <p class="sys-outcome">Turn the old files in your cabinet into this month's placements.</p>
-          <p>Your dormant candidate list is an asset. We wake it up with respectful, targeted campaigns — often paying for the entire system with recovered placements.</p>
-        </div>
-      </article>
-
-      <article class="sys-row reveal">
-        <div class="sys-media img-frame">
-          <img src="/static/images/system-reporting.jpg" alt="Executive Reporting System" loading="lazy"
-               onerror="this.closest('.img-frame').classList.add('img-missing')">
-          <div class="img-placeholder"><span class="ph-mark">05</span><span>Your image here<br><i>system-reporting.jpg</i></span></div>
-        </div>
-        <div class="sys-copy">
-          <span class="sys-index">System 05</span>
-          <h3>The Executive Reporting System</h3>
-          <p class="sys-outcome">Your whole agency in one daily briefing — on your phone, 7:00 AM.</p>
-          <p>Numbers, alerts and bottlenecks delivered to you every morning. Ask questions in plain language and get answers instantly.</p>
-        </div>
-      </article>
-    </div>
-
-    <!-- Flagship -->
-    <div class="flagship reveal" id="flagship-panel">
-      <div class="flagship-copy">
-        <p class="eyebrow gold-soft">The flagship — all five, unified</p>
-        <h2>The Agency Brain<span class="tm">™</span></h2>
-        <p>One intelligent operations system running your entire agency end-to-end — intake, compliance, follow-up, reactivation and reporting, all talking to each other. This is what we built for Naim Investments Ltd. It's what we'll build for you.</p>
-        <a class="btn btn-cream" href="#audit">Start With The Free Audit <span class="arr">→</span></a>
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Book Appointment</h3>
+        <p>Consultation booked to understand your needs</p>
       </div>
-      <div class="flagship-media img-frame">
-        <img src="/static/images/flagship.jpg" alt="The Agency Brain" loading="lazy"
-             onerror="this.closest('.img-frame').classList.add('img-missing')">
-        <div class="img-placeholder dark"><span class="ph-mark">★</span><span>Your image here<br><i>flagship.jpg</i></span></div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>We build your system</h3>
+        <p>Custom designed for your agency</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>You go automated</h3>
+        <p>Start using it with confidence</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ PROOF — case study (perceived likelihood) ============ -->
-<section class="section case" id="case-study-section">
-  <div class="wrap">
-    <p class="eyebrow center reveal">Proof — not promises</p>
-    <h2 class="center reveal d1">Already running, <em>live in Mombasa.</em></h2>
-    <p class="case-intro center reveal d2">Naim Investments Ltd — an accredited staffing agency serving the Gulf labour market — runs its entire operation on our systems today. These are their numbers, not projections:</p>
-
-    <div class="case-metrics reveal d2">
-      <div class="metric"><b>47h → 5min</b><span>First response to candidate enquiries</span></div>
-      <div class="metric"><b>155+</b><span>Candidates in one managed pipeline</span></div>
-      <div class="metric"><b>7:00 AM</b><span>Director's daily briefing, never missed</span></div>
-      <div class="metric"><b>3</b><span>Languages handled automatically</span></div>
-    </div>
-
-    <blockquote class="testimonial reveal d3" id="testimonial-slot">
-      <p>"— Testimonial from the Director goes here. Replace this quote with the client's words once recorded. —"</p>
-      <footer><b>A.M. Abdalla</b> · Director, Naim Investments Ltd, Mombasa</footer>
-    </blockquote>
+<!-- ============ DATA PROTECTED ============ -->
+<section class="section" id="data">
+  <div class="wrap-narrow center">
+    <span class="shield-ic">${ICONS.shield}</span>
+    <h2 class="section-title">Your Data is Protected</h2>
+    <p class="data-text">We only collect what you need, protect access, and keep candidate and client data private.<br>Your business stays compliant with the Kenya Data Protection Act, 2019.</p>
   </div>
 </section>
 
-<!-- ============ PROCESS — crush effort & time delay ============ -->
-<section class="section process" id="process-section">
-  <div class="wrap">
-    <p class="eyebrow center reveal">Zero disruption to your operations</p>
-    <h2 class="center reveal d1">From audit to live system<br><em>in as little as 21 days.</em></h2>
-
-    <ol class="steps reveal d2">
-      <li><b>Free Operations Audit</b><span>We test your agency like a candidate would and show you exactly where enquiries leak. Yours to keep, free.</span><i>Day 0</i></li>
-      <li><b>Quotation &amp; Agreement</b><span>Fixed, itemised price. 50% deposit confirms. No surprises, no hourly billing.</span><i>Days 1–3</i></li>
-      <li><b>We Build — You Run Your Agency</b><span>Zero effort from your side beyond a contact person. Weekly progress updates.</span><i>Days 4–18</i></li>
-      <li><b>Live Demo &amp; Team Training</b><span>You watch the system perform before you pay the balance. Your team is trained.</span><i>Days 19–20</i></li>
-      <li><b>Handover &amp; Care</b><span>Owner's manual delivered. Monthly care plan with a report that shows the numbers.</span><i>Day 21 →</i></li>
-    </ol>
+<!-- ============ FAQ ============ -->
+<section class="section section-gray" id="faq">
+  <div class="wrap-narrow">
+    <h2 class="section-title">Common Questions</h2>
+    <div class="faq-list">
+      <details>
+        <summary>How much does this cost?</summary>
+        <p>Pricing is project-based for the initial setup, with a monthly subscription for maintenance, updates, and support. We&rsquo;ll provide an exact quote based on the size and complexity of your project.</p>
+      </details>
+      <details>
+        <summary>How long does setup take?</summary>
+        <p>Setup timelines depend on the number and complexity of systems required. Most projects are delivered within a reasonable implementation window, and we confirm a realistic timeline after reviewing your exact needs.</p>
+      </details>
+      <details>
+        <summary>Do I need a computer or special software?</summary>
+        <p>No. Everything works on your smartphone. You just need a modern phone with internet access.</p>
+      </details>
+      <details>
+        <summary>What if my staff don&rsquo;t know how to use it?</summary>
+        <p>We provide a short training session that covers everything. The systems are designed to be simple and intuitive.</p>
+      </details>
+      <details>
+        <summary>Is my client data safe?</summary>
+        <p>Yes. We use secure systems compliant with the Kenya Data Protection Act. Your data is encrypted, access-controlled, and stored safely.</p>
+      </details>
+    </div>
   </div>
 </section>
 
-<!-- ============ PRICING — value framed ============ -->
-<section class="section pricing" id="pricing-section">
-  <div class="wrap">
-    <p class="eyebrow center reveal">Investment</p>
-    <h2 class="center reveal d1">Priced against what it recovers —<br><em>not what it costs.</em></h2>
-    <p class="center price-note reveal d2">One recovered placement ≈ <b data-kes="KES 100,000+" data-usd="USD 770+">KES 100,000+</b>. Every tier below aims to pay for itself within the first weeks.</p>
+<!-- ============ BOOKING FORM ============ -->
+<section class="section" id="book">
+  <div class="wrap-narrow">
+    <h2 class="section-title">Let&rsquo;s Get You Automated</h2>
+    <p class="form-intro">Submit your details below, then choose a booking time.</p>
 
-    <div class="price-grid reveal d3">
-      <article class="price-card">
-        <h3>Single System</h3>
-        <p class="price-for">Fix your most painful leak first</p>
-        <p class="price"><span class="amount" data-kes="KES 45,000" data-usd="USD 350">KES 45,000</span><span class="from">from · one-time</span></p>
-        <ul>
-          <li>Any one of the five systems</li>
-          <li>Built, tested &amp; demonstrated live</li>
-          <li>Team training &amp; owner's manual</li>
-          <li>30-day adjustment window</li>
-        </ul>
-        <a class="btn btn-outline" href="#audit">Start With The Audit</a>
-      </article>
-
-      <article class="price-card featured">
-        <span class="badge">Most popular</span>
-        <h3>Growth Bundle</h3>
-        <p class="price-for">Three systems, wired together</p>
-        <p class="price"><span class="amount" data-kes="KES 120,000" data-usd="USD 925">KES 120,000</span><span class="from">from · one-time</span></p>
-        <ul>
-          <li>Any three systems, integrated</li>
-          <li>Everything in Single System</li>
-          <li>Priority build queue</li>
-          <li>Monthly performance report</li>
-        </ul>
-        <a class="btn btn-gold" href="#audit">Start With The Audit</a>
-      </article>
-
-      <article class="price-card">
-        <h3>The Agency Brain™</h3>
-        <p class="price-for">Your entire agency, automated</p>
-        <p class="price"><span class="amount" data-kes="KES 250,000" data-usd="USD 1,900">KES 250,000</span><span class="from">from · one-time</span></p>
-        <ul>
-          <li>All five systems, fully unified</li>
-          <li>Director's Command Center</li>
-          <li>Trilingual candidate experience</li>
-          <li>White-glove onboarding</li>
-        </ul>
-        <a class="btn btn-outline" href="#audit">Start With The Audit</a>
-      </article>
-    </div>
-
-    <!-- Risk reversal -->
-    <div class="guarantee reveal d3" id="guarantee-panel">
-      <div class="g-seal">✦</div>
-      <div>
-        <h3>You see it working before you pay the balance.</h3>
-        <p>50% to start, 50% only after a <b>live demonstration</b> of your system performing the agreed functions — plus a 30-day adjustment window after delivery. If we fail to deliver the agreed system and don't fix it within 21 days of notice, you're entitled to a refund for undelivered components. It's in the contract.</p>
+    <form id="book-form" class="book-form" novalidate>
+      <div class="form-2col">
+        <div class="ff">
+          <label for="f-name">Full name *</label>
+          <input id="f-name" name="contact_name" type="text" required autocomplete="name">
+        </div>
+        <div class="ff">
+          <label for="f-agency">Agency / business name *</label>
+          <input id="f-agency" name="agency_name" type="text" required autocomplete="organization">
+        </div>
+        <div class="ff">
+          <label for="f-phone">Phone / WhatsApp *</label>
+          <input id="f-phone" name="phone" type="tel" required autocomplete="tel">
+        </div>
+        <div class="ff">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email">
+        </div>
       </div>
-    </div>
+
+      <div class="ff">
+        <label for="f-details">Tell us about your project</label>
+        <textarea id="f-details" name="details" rows="4" placeholder="Tell us what tasks take your time and what you want automated"></textarea>
+      </div>
+
+      <div class="ff">
+        <label for="f-slot">Consultation appointment time slot</label>
+        <p class="slot-note">Please choose a preferred time slot that suits you. We will then contact you to confirm the closest available date.</p>
+        <select id="f-slot" name="slot">
+          <option value="">Select a time slot</option>
+          <option>Saturday — 12:00</option>
+          <option>Saturday — 12:30</option>
+          <option>Saturday — 13:00</option>
+          <option>Saturday — 13:30</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-pill btn-lg btn-submit" id="book-submit">Book Appointment</button>
+      <p id="form-msg" class="form-msg" role="status"></p>
+    </form>
   </div>
 </section>
 
-<!-- ============ SCARCITY — founding partner (ethical, real) ============ -->
-<section class="section founding" id="founding-section">
-  <div class="wrap founding-inner reveal">
-    <p class="eyebrow gold-soft">Founding Partner Programme — genuinely limited to 3 agencies</p>
-    <h2>One complete system. Built free.<br><em>In exchange for proof.</em></h2>
-    <p>As a founding-stage company with one flagship deployment live, we're selecting <b>three licensed agencies</b> to receive one system completely free — professionally built, to the same standard as our paid work. In return we ask only for a testimonial (if you're genuinely satisfied) and permission to publish the before/after numbers.</p>
-    <a class="btn btn-cream" href="#audit">Apply Via The Free Audit <span class="arr">→</span></a>
-  </div>
-</section>
-
-<!-- ============ FAQ — objection handling ============ -->
-<section class="section faq" id="faq-section">
-  <div class="wrap wrap-narrow">
-    <p class="eyebrow center reveal">Questions directors actually ask</p>
-    <h2 class="center reveal d1">Straight answers.</h2>
-
-    <div class="faq-list reveal d2">
-      <details>
-        <summary>Will this replace my staff?</summary>
-        <p>No — it removes the repetitive work that burns them out. Your team stops copy-pasting the same answers 40 times a day and focuses on interviews, employers and placements. The humans do human work; the system does the rest.</p>
-      </details>
-      <details>
-        <summary>My candidates use WhatsApp and speak Kiswahili or Arabic. Does it handle that?</summary>
-        <p>Yes. WhatsApp-first, trilingual by design — English, Kiswahili and Arabic. That's exactly how our live Mombasa deployment runs today.</p>
-      </details>
-      <details>
-        <summary>What about candidate data and the law?</summary>
-        <p>All systems are built in line with the Kenya Data Protection Act, 2019. Your data stays yours — it's written into our Service Agreement, which you can read before paying a shilling.</p>
-      </details>
-      <details>
-        <summary>How long until it's running?</summary>
-        <p>7–21 business days from deposit, depending on scope. You get weekly progress updates and see a live demonstration before the balance is due.</p>
-      </details>
-      <details>
-        <summary>What happens after delivery?</summary>
-        <p>A monthly care plan covers hosting, monitoring and support — with a monthly report showing enquiries answered, response times and hours saved. You'll always know what the system is earning you.</p>
-      </details>
-      <details>
-        <summary>What does the free audit involve from my side?</summary>
-        <p>Two minutes to fill the form below. We do the rest from the outside — the way a candidate experiences your agency — and hand you a written report of what we find. No meetings required until you want one.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FINAL CTA — the ONE action ============ -->
-<section class="section audit" id="audit">
-  <div class="wrap wrap-narrow">
-    <div class="audit-card reveal">
-      <p class="eyebrow center">Free · No obligation · Yours to keep</p>
-      <h2 class="center">Get your free<br><em>Operations Audit.</em></h2>
-      <p class="center audit-sub">We'll test your agency the way a candidate does — response time, follow-up, visibility — and send you a written report of exactly where placements are leaking. Even if you never hire us, the report is yours.</p>
-
-      <form id="audit-form" autocomplete="on">
-        <div class="form-row">
-          <div class="field">
-            <label for="f-agency">Agency name *</label>
-            <input id="f-agency" name="agency_name" type="text" required placeholder="e.g. Coastal Manpower Ltd">
-          </div>
-          <div class="field">
-            <label for="f-name">Your name *</label>
-            <input id="f-name" name="contact_name" type="text" required placeholder="e.g. Fatma Ali">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label for="f-phone">Phone / WhatsApp *</label>
-            <input id="f-phone" name="phone" type="tel" required placeholder="+254 7XX XXX XXX">
-          </div>
-          <div class="field">
-            <label for="f-email">Email <span class="opt">(optional)</span></label>
-            <input id="f-email" name="email" type="email" placeholder="you@agency.co.ke">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label for="f-size">Agency size <span class="opt">(optional)</span></label>
-            <select id="f-size" name="agency_size">
-              <option value="">Select…</option>
-              <option>1–5 staff</option>
-              <option>6–15 staff</option>
-              <option>16–40 staff</option>
-              <option>40+ staff</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="f-challenge">Biggest headache right now <span class="opt">(optional)</span></label>
-            <select id="f-challenge" name="main_challenge">
-              <option value="">Select…</option>
-              <option>Slow responses / missed enquiries</option>
-              <option>Document tracking &amp; compliance</option>
-              <option>Follow-up falling through cracks</option>
-              <option>No visibility / reporting</option>
-              <option>All of the above</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-gold btn-lg btn-block" id="audit-submit">Send Me My Free Audit <span class="arr">→</span></button>
-        <p class="cta-micro center">We reply within 5 minutes during business hours — we run our own speed-to-lead system, after all.</p>
-        <p id="form-msg" class="form-msg" role="status"></p>
-      </form>
-    </div>
-  </div>
-</section>
+</main>
 
 <!-- ============ FOOTER ============ -->
-<footer class="footer" id="site-footer">
-  <div class="wrap footer-inner">
-    <div class="footer-brand">
-      <span class="brand-mark">NA</span>
-      <div>
-        <b>Naim Automation Systems Co.</b>
-        <p>Automation &amp; AI systems for licensed recruitment agencies.<br>Mombasa, Kenya · Serving agencies nationwide.</p>
-      </div>
-    </div>
-    <div class="footer-links">
-      <a href="#systems-section">The Five Systems</a>
-      <a href="#pricing-section">Investment</a>
-      <a href="/docs">Client Document Portal</a>
-      <a href="#audit">Free Audit</a>
-    </div>
-  </div>
-  <div class="wrap footer-base">
-    <span>© 2026 Naim Automation Systems Co. All rights reserved.</span>
-    <span>Built on our own systems — of course.</span>
-  </div>
+<footer class="footer">
+  <span class="brand-mark">NA</span>
+  <p>Naim Automation Systems Co. &mdash; Mombasa, Kenya</p>
+  <p class="foot-links"><a href="/docs">Client Documents</a></p>
+  <p class="foot-copy">&copy; 2026 Naim Automation Systems Co. All rights reserved.</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>

@@ -1,8 +1,8 @@
-/* Naim Automation Systems Co. — landing page behaviour */
+/* Naim Automation Systems Co. — Landing Page JS */
 (function () {
   'use strict';
 
-  /* ---------- Sticky header shadow ---------- */
+  /* Topbar subtle border on scroll */
   var topbar = document.getElementById('topbar');
   if (topbar) {
     var onScroll = function () {
@@ -12,85 +12,57 @@
     onScroll();
   }
 
-  /* ---------- Reveal on scroll ---------- */
-  var revealEls = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    revealEls.forEach(function (el) { io.observe(el); });
-  } else {
-    revealEls.forEach(function (el) { el.classList.add('visible'); });
+  /* Booking form */
+  var form = document.getElementById('book-form');
+  var msg = document.getElementById('form-msg');
+  var submitBtn = document.getElementById('book-submit');
+
+  function showMsg(text, cls) {
+    if (!msg) return;
+    msg.textContent = text;
+    msg.className = 'form-msg ' + (cls || '');
   }
 
-  /* ---------- Currency toggle (KES / USD) ---------- */
-  var toggle = document.getElementById('currency-toggle');
-  if (toggle) {
-    var setCurrency = function (cur) {
-      toggle.querySelectorAll('.cur').forEach(function (b) {
-        b.classList.toggle('active', b.dataset.cur === cur);
-      });
-      document.querySelectorAll('[data-kes]').forEach(function (el) {
-        el.textContent = cur === 'usd' ? el.dataset.usd : el.dataset.kes;
-      });
-      try { localStorage.setItem('nas-currency', cur); } catch (e) { /* private mode */ }
-    };
-    toggle.addEventListener('click', function () {
-      var active = toggle.querySelector('.cur.active');
-      setCurrency(active && active.dataset.cur === 'kes' ? 'usd' : 'kes');
-    });
-    var saved = null;
-    try { saved = localStorage.getItem('nas-currency'); } catch (e) { /* ignore */ }
-    if (saved === 'usd') setCurrency('usd');
-  }
-
-  /* ---------- Audit form (speed-to-lead: instant feedback) ---------- */
-  var form = document.getElementById('audit-form');
   if (form) {
-    var msg = document.getElementById('form-msg');
-    var submitBtn = document.getElementById('audit-submit');
-    form.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      var data = {};
-      new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
 
-      msg.className = 'form-msg';
-      msg.textContent = '';
+      var name = (document.getElementById('f-name') || {}).value || '';
+      var agency = (document.getElementById('f-agency') || {}).value || '';
+      var phone = (document.getElementById('f-phone') || {}).value || '';
+      var email = (document.getElementById('f-email') || {}).value || '';
+      var details = (document.getElementById('f-details') || {}).value || '';
+      var slot = (document.getElementById('f-slot') || {}).value || '';
 
-      if (!data.agency_name || !data.contact_name || !data.phone) {
-        msg.classList.add('err');
-        msg.textContent = 'Please fill in your agency name, your name and your phone number.';
+      if (!name.trim() || !agency.trim() || !phone.trim()) {
+        showMsg('Please fill in your name, agency name and phone number.', 'err');
         return;
       }
 
-      var original = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Sending…';
+      var challenge = details.trim() || 'No additional project details provided.';
+      challenge += ' | Preferred slot: ' + (slot || 'No time slot selected.');
 
-      axios.post('/api/leads', data)
-        .then(function (res) {
-          if (res.data && res.data.ok) {
-            msg.classList.add('ok');
-            msg.textContent = '✦ Received! Your audit request is in. Expect to hear from us fast — we practise what we sell.';
-            form.reset();
-          } else {
-            throw new Error((res.data && res.data.error) || 'Unexpected response');
-          }
-        })
-        .catch(function (err) {
-          msg.classList.add('err');
-          var apiMsg = err && err.response && err.response.data && err.response.data.error;
-          msg.textContent = apiMsg || 'Something went wrong. Please try again, or WhatsApp us directly.';
-        })
-        .finally(function () {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = original;
-        });
+      submitBtn.disabled = true;
+      var original = submitBtn.textContent;
+      submitBtn.textContent = 'Sending…';
+      showMsg('', '');
+
+      axios.post('/api/leads', {
+        contact_name: name.trim(),
+        agency_name: agency.trim(),
+        phone: phone.trim(),
+        email: email.trim(),
+        main_challenge: challenge
+      }).then(function () {
+        form.reset();
+        submitBtn.disabled = false;
+        submitBtn.textContent = original;
+        showMsg('Thank you for your submission. We will be in touch.', 'ok');
+      }).catch(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = original;
+        showMsg('Sorry, we could not submit your request right now. Please try again.', 'err');
+      });
     });
   }
 })();
