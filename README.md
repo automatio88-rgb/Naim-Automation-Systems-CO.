@@ -2,7 +2,7 @@
 
 ## Project Overview
 - **Name**: Naim Automation Systems Co.
-- **Founder**: M.A. Salmin (Founder & Systems Architect, Mombasa, Kenya)
+- **Founder**: M.A. Salmin (Founder & Systems Architect, Nairobi, Kenya)
 - **Goal**: Premium cream/gold platform selling AI automation systems to the 1,296 licensed NEA/KAPEA recruitment agencies in Kenya — landing page rebuilt on Alex Hormozi's direct-response principles, plus a fully interactive digital document suite clients can read, fill and **sign on their phone screen**.
 - **Positioning**: "Never lose another candidate to a slow reply."
 

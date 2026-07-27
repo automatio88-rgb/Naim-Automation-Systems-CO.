@@ -8,7 +8,7 @@ export function docsHubPage(): string {
     <h1>Your documents,<br><em>signed on your phone.</em></h1>
     <div class="cover-rule"></div>
     <p class="cover-sub">No printing. No scanning. No email attachments. Open the document you need, read it in a beautiful full-screen view, fill in your details, and sign right on your screen — we receive it instantly.</p>
-    <p class="cover-meta">Official Digital Document Suite · Mombasa, Kenya</p>
+    <p class="cover-meta">Official Digital Document Suite · Nairobi, Kenya</p>
     <p class="cover-scroll">Choose your document</p>
   </div>
 </section>

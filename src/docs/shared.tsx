@@ -37,7 +37,7 @@ ${opts.body}
 </main>
 
 <footer class="doc-footer">
-  <span>© 2026 Naim Automation Systems Co. · Mombasa, Kenya</span>
+  <span>© 2026 Naim Automation Systems Co. · Nairobi, Kenya</span>
   <span class="gold">✦</span>
   <span>Questions? WhatsApp us any time.</span>
 </footer>

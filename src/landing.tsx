@@ -213,7 +213,7 @@ export function landingPage(): string {
 <!-- ============ FOOTER ============ -->
 <footer class="footer">
   <span class="brand-mark">NA</span>
-  <p>Naim Automation Systems Co. &mdash; Mombasa, Kenya</p>
+  <p>Naim Automation Systems Co. &mdash; Nairobi, Kenya</p>
   <p class="foot-links"><a href="/docs">Client Documents</a></p>
   <p class="foot-copy">&copy; 2026 Naim Automation Systems Co. All rights reserved.</p>
 </footer>
