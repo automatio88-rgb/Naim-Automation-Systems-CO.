@@ -14,6 +14,8 @@ export function docLayout(opts: {
 <title>${opts.title} — Naim Automation Systems Co.</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="/static/favicon.ico">
+<link rel="icon" type="image/png" sizes="64x64" href="/static/images/favicon.png">
+<link rel="apple-touch-icon" href="/static/images/favicon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -23,7 +25,7 @@ export function docLayout(opts: {
 
 <header class="doc-topbar">
   <a class="brand" href="/">
-    <span class="brand-mark">NA</span>
+    <img class="brand-logo" src="/static/images/naim-logo.png" alt="NaiM Agency logo">
     <span class="brand-words">
       <span class="brand-name">Naim Automation Systems Co.</span>
       <span class="brand-tag">Official Client Document</span>

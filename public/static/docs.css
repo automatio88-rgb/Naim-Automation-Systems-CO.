@@ -259,3 +259,11 @@ ul.tick li b { color: var(--ink); }
   .btn-lg { width: 100%; padding: 15px 22px; }
   .cover-slide { min-height: calc(100svh - 70px); }
 }
+
+/* ---------- NaiM logo brand mark ---------- */
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
+}

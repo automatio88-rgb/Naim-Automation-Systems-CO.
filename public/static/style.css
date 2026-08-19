@@ -329,3 +329,17 @@ em { font-style: normal; color: var(--gold); }
   .ba-img { height: 210px; }
   .ba-after .ba-img { height: 190px; }
 }
+
+/* ---------- NaiM logo brand mark ---------- */
+.brand-logo {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.footer-logo {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 14px;
+  display: block;
+}

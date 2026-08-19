@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your Onboarding Guide — Naim Automation Systems Co.</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --espresso:#211812;
+    --espresso-2:#2b1f18;
+    --cream:#efe6d6;
+    --cream-2:#e6dcc8;
+    --paper:#f4ecdc;
+    --ink:#1b120c;
+    --ink-soft:#3a2a1e;
+    --gold:#c8a24a;
+    --gold-soft:#b89040;
+    --muted-dark:#a89680;
+    --muted-light:#7a6a52;
+    --rule-dark:rgba(232,215,180,0.22);
+    --rule-light:rgba(43,31,24,0.22);
+  }
+  html,body{margin:0;padding:0;background:#0b0806;color:var(--ink);font-family:'Jost',sans-serif;}
+  deck-stage{background:#0b0806;}
+
+  /* ----------- generic slide shell ----------- */
+  .slide{
+    width:1920px;height:1080px;position:relative;overflow:hidden;
+    font-family:'Jost',sans-serif;font-weight:300;
+    color:var(--ink);
+  }
+  .slide.dark{background:var(--espresso);color:var(--cream);}
+  .slide.cream{background:var(--cream);color:var(--ink);}
+
+  /* subtle paper grain */
+  .slide::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:
+      radial-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      radial-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
+    background-size:3px 3px, 5px 5px;
+    background-position:0 0, 1px 2px;
+    mix-blend-mode:overlay;opacity:.6;
+  }
+
+  h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:500;margin:0;letter-spacing:-.005em;}
+  .serif{font-family:'Playfair Display',serif;}
+  .sans{font-family:'Jost',sans-serif;}
+
+  .eyebrow{
+    font-family:'Jost',sans-serif;font-weight:400;
+    font-size:14px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--gold);
+  }
+  .slide.cream .eyebrow{color:var(--gold-soft);}
+
+  .rule{height:1px;background:var(--rule-dark);width:100%;}
+  .slide.cream .rule{background:var(--rule-light);}
+
+  /* big page numeral */
+  .page-num{
+    position:absolute;
+    font-family:'Playfair Display',serif;font-weight:400;font-style:italic;
+    color:var(--gold);
+    line-height:.85;
+    letter-spacing:-.03em;
+    user-select:none;
+  }
+
+  /* NA mark */
+  .na-mark{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:56px;height:56px;border-radius:50%;
+    border:1.2px solid var(--gold);
+    font-family:'Playfair Display',serif;font-weight:500;
+    color:var(--gold);font-size:19px;letter-spacing:.02em;
+  }
+  .na-mark.lg{width:76px;height:76px;font-size:24px;border-width:1.4px;}
+
+  /* header ribbon (top of most pages) */
+  .top-ribbon{
+    position:absolute;top:56px;left:88px;right:88px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:13px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--muted-dark);
+  }
+  .slide.cream .top-ribbon{color:var(--muted-light);}
+  .top-ribbon .brand{display:flex;align-items:center;gap:18px;font-family:'Jost',sans-serif;font-weight:400;}
+  .top-ribbon .brand .dot{width:5px;height:5px;background:var(--gold);border-radius:50%;}
+
+  /* bottom ribbon */
+  .bottom-ribbon{
+    position:absolute;bottom:52px;left:88px;right:88px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:12px;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--muted-dark);
+  }
+  .slide.cream .bottom-ribbon{color:var(--muted-light);}
+
+  /* --------------- SLIDE 1 : COVER --------------- */
+  .cover-media{position:absolute;inset:0;}
+  .cover-media img{width:100%;height:100%;object-fit:cover;filter:brightness(.62) saturate(.9);}
+  .cover-overlay{position:absolute;inset:0;background:
+    linear-gradient(180deg, rgba(15,10,7,.55) 0%, rgba(15,10,7,.35) 45%, rgba(15,10,7,.7) 100%);}
+  .cover-content{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;color:var(--cream);
+    text-align:center;padding:0 140px;
+  }
+  .cover-content .eyebrow{margin-bottom:44px;}
+  .cover-content h1{
+    font-size:150px;line-height:.98;font-weight:500;
+    color:#f2e7cf;
+    letter-spacing:-.015em;
+  }
+  .cover-content h1 em{font-style:italic;font-weight:400;color:#f7e9c6;}
+  .cover-content .sub{
+    margin-top:52px;font-size:20px;letter-spacing:.32em;text-transform:uppercase;
+    color:#d9c9a4;font-weight:400;
+  }
+  .cover-side{
+    position:absolute;left:88px;top:56px;right:88px;bottom:52px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    color:#d9c9a4;
+  }
+  .cover-side .row{display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;letter-spacing:.3em;text-transform:uppercase;}
+  .cover-side .row .brand{display:flex;align-items:center;gap:18px;}
+  .cover-side .row .brand .dot{width:5px;height:5px;background:var(--gold);border-radius:50%;}
+
+  /* --------------- SLIDE 2 : CONTENTS --------------- */
+  .s2{display:grid;grid-template-columns:1.05fr .95fr;height:100%;}
+  .s2 .left{padding:170px 90px 140px 130px;display:flex;flex-direction:column;}
+  .s2 h1{font-size:150px;font-weight:500;line-height:.9;letter-spacing:-.015em;color:var(--ink);}
+  .s2 h1 em{font-style:italic;font-weight:400;}
+  .s2 .toc{margin-top:70px;}
+  .s2 .toc .row{
+    display:grid;grid-template-columns:78px 1fr auto;align-items:center;
+    padding:22px 0;border-top:1px solid var(--rule-light);
+    font-size:22px;font-weight:400;color:var(--ink);letter-spacing:.01em;
+  }
+  .s2 .toc .row:last-child{border-bottom:1px solid var(--rule-light);}
+  .s2 .toc .num{
+    font-family:'Playfair Display',serif;font-style:italic;
+    color:var(--gold);font-size:24px;font-weight:500;
+  }
+  .s2 .toc .dots{color:var(--muted-light);letter-spacing:.4em;font-size:14px;}
+  .s2 .right{position:relative;overflow:hidden;}
+  .s2 .right img{width:100%;height:100%;object-fit:cover;}
+  .s2 .right .frame-pad{position:absolute;inset:110px 90px 110px 0;overflow:hidden;}
+  .s2 .right .frame-pad img{width:100%;height:100%;object-fit:cover;}
+
+  /* --------------- SLIDE 3 : WELCOME (dark) --------------- */
+  .s3{display:grid;grid-template-columns:1.15fr .85fr;height:100%;}
+  .s3 .left{padding:180px 70px 140px 130px;display:flex;flex-direction:column;}
+  .s3 h1{font-size:140px;font-weight:500;line-height:.92;color:#f2e7cf;letter-spacing:-.015em;}
+  .s3 h1 em{font-style:italic;font-weight:400;color:#f7e9c6;}
+  .s3 .body{margin-top:48px;max-width:640px;font-size:19px;line-height:1.72;
+    color:#d9c9a4;font-weight:300;}
+  .s3 .body p{margin:0 0 18px;}
+  .s3 .sig{margin-top:52px;display:flex;align-items:center;gap:24px;}
+  .s3 .sig .line{width:56px;height:1px;background:var(--gold);}
+  .s3 .sig .who{color:#e6d5ae;letter-spacing:.24em;text-transform:uppercase;font-size:13px;}
+  .s3 .sig .who strong{color:#f2e7cf;font-weight:500;letter-spacing:.2em;display:block;margin-bottom:6px;}
+  .s3 .right{position:relative;}
+  .s3 .portrait{
+    position:absolute;top:150px;bottom:190px;left:0;right:130px;
+    overflow:hidden;
+  }
+  .s3 .portrait img{width:100%;height:100%;object-fit:cover;filter:brightness(.98) contrast(1.02);}
+  .s3 .portrait .caption{
+    position:absolute;left:0;right:0;bottom:-58px;
+    color:#c9b689;font-size:12px;letter-spacing:.3em;text-transform:uppercase;text-align:left;
+  }
+  .s3 .portrait .caption strong{color:#f2e7cf;font-weight:500;letter-spacing:.24em;display:block;margin-bottom:4px;}
+
+  /* --------------- SLIDE 4 : GUIDELINES (cream) --------------- */
+  .s4{padding:170px 130px 140px;height:100%;box-sizing:border-box;position:relative;}
+  .s4 h1{font-size:140px;font-weight:500;line-height:.92;letter-spacing:-.015em;}
+  .s4 h1 em{font-style:italic;font-weight:400;}
+  .s4 .cols{display:grid;grid-template-columns:1fr 1fr;gap:120px;margin-top:70px;max-width:1350px;}
+  .s4 .col h3{font-family:'Playfair Display',serif;font-size:26px;font-weight:500;font-style:italic;color:var(--ink);margin-bottom:20px;}
+  .s4 .col .kicker{color:var(--gold-soft);font-size:12px;letter-spacing:.34em;text-transform:uppercase;margin-bottom:14px;}
+  .s4 .col ul{list-style:none;padding:0;margin:0;font-size:19px;line-height:1.75;color:var(--ink-soft);font-weight:300;}
+  .s4 .col ul li{padding:14px 0;border-top:1px solid var(--rule-light);display:flex;justify-content:space-between;gap:20px;}
+  .s4 .col ul li:last-child{border-bottom:1px solid var(--rule-light);}
+  .s4 .col ul li .k{color:var(--muted-light);font-size:13px;letter-spacing:.2em;text-transform:uppercase;flex:0 0 auto;padding-top:4px;}
+  .s4 .col ul li .v{text-align:right;color:var(--ink);}
+  .s4 .col p{font-size:19px;line-height:1.72;color:var(--ink-soft);font-weight:300;margin:0 0 14px;}
+
+  /* --------------- SLIDE 5 : BUILD & APPROVAL (dark) --------------- */
+  .s5{padding:170px 130px 140px;height:100%;box-sizing:border-box;position:relative;}
+  .s5 h1{font-size:120px;font-weight:500;line-height:.94;color:#f2e7cf;letter-spacing:-.015em;max-width:1350px;}
+  .s5 h1 em{font-style:italic;font-weight:400;color:#f7e9c6;}
+  .s5 .lede{margin-top:56px;font-family:'Playfair Display',serif;font-style:italic;font-size:32px;line-height:1.4;color:#e6d5ae;max-width:1100px;font-weight:400;}
+  .s5 .body{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:100px;max-width:1400px;}
+  .s5 .body p{font-size:19px;line-height:1.75;color:#d9c9a4;font-weight:300;margin:0;}
+  .s5 .body p + p{margin-top:16px;}
+
+  /* --------------- SLIDE 6 : WHAT WE NEED (cream) --------------- */
+  .s6{padding:170px 130px 140px;height:100%;box-sizing:border-box;position:relative;}
+  .s6 h1{font-size:120px;font-weight:500;line-height:.94;letter-spacing:-.015em;max-width:1400px;}
+  .s6 h1 em{font-style:italic;font-weight:400;}
+  .s6 .lede{margin-top:44px;font-size:22px;color:var(--ink-soft);max-width:1000px;font-weight:300;line-height:1.6;font-style:italic;font-family:'Playfair Display',serif;}
+  .s6 .checklist{margin-top:52px;display:grid;grid-template-columns:1fr 1fr;gap:14px 90px;max-width:1500px;}
+  .s6 .checklist .item{
+    display:grid;grid-template-columns:60px 1fr;gap:22px;
+    padding:22px 0;border-top:1px solid var(--rule-light);
+    align-items:flex-start;
+  }
+  .s6 .checklist .item:nth-last-child(-n+2){border-bottom:1px solid var(--rule-light);}
+  .s6 .checklist .item .n{
+    font-family:'Playfair Display',serif;font-style:italic;font-weight:500;
+    color:var(--gold-soft);font-size:22px;padding-top:2px;
+  }
+  .s6 .checklist .item .t h4{font-family:'Playfair Display',serif;font-weight:500;font-size:22px;color:var(--ink);margin-bottom:6px;}
+  .s6 .checklist .item .t p{margin:0;font-size:16px;line-height:1.6;color:var(--ink-soft);font-weight:300;}
+
+  /* --------------- SLIDE 7 : CONTRACT & INVOICE (dark) --------------- */
+  .s7{padding:170px 130px 140px;height:100%;box-sizing:border-box;position:relative;}
+  .s7 h1{font-size:120px;font-weight:500;line-height:.94;color:#f2e7cf;letter-spacing:-.015em;max-width:1400px;}
+  .s7 h1 em{font-style:italic;font-weight:400;color:#f7e9c6;}
+  .s7 .body{margin-top:56px;max-width:1100px;font-size:19px;line-height:1.75;color:#d9c9a4;font-weight:300;}
+  .s7 .terms{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1100px;}
+  .s7 .terms .t{border-top:1px solid var(--rule-dark);padding-top:22px;}
+  .s7 .terms .t .k{color:var(--gold);font-family:'Playfair Display',serif;font-style:italic;font-size:22px;font-weight:500;margin-bottom:10px;}
+  .s7 .terms .t .v{font-size:17px;color:#d9c9a4;line-height:1.6;font-weight:300;}
+  .s7 .link-cta{
+    position:absolute;left:130px;right:130px;bottom:180px;
+    display:flex;align-items:center;justify-content:space-between;gap:40px;
+    padding:36px 44px;
+    border:1px solid var(--rule-dark);
+    background:rgba(232,215,180,0.03);
+  }
+  .s7 .link-cta .txt{font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:#c9b689;}
+  .s7 .link-cta .url{font-family:'Playfair Display',serif;font-style:italic;font-size:30px;color:var(--gold);font-weight:500;letter-spacing:.005em;}
+
+  /* --------------- SLIDE 8 : THE PROCESS (cream, standalone) --------------- */
+  .s8{padding:170px 130px 140px;height:100%;box-sizing:border-box;position:relative;}
+  .s8 h1{font-size:140px;font-weight:500;line-height:.92;letter-spacing:-.015em;}
+  .s8 h1 em{font-style:italic;font-weight:400;}
+  .s8 .steps{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:14px 90px;max-width:1500px;}
+  .s8 .step{
+    display:grid;grid-template-columns:60px 1fr;gap:22px;
+    padding:22px 0;border-top:1px solid var(--rule-light);
+    align-items:flex-start;
+  }
+  .s8 .step:nth-last-child(-n+1),
+  .s8 .step:nth-last-child(-n+2){border-bottom:1px solid var(--rule-light);}
+  .s8 .step .n{
+    font-family:'Playfair Display',serif;font-style:italic;font-weight:500;
+    color:var(--gold-soft);font-size:22px;padding-top:2px;
+  }
+  .s8 .step h4{font-family:'Playfair Display',serif;font-weight:500;font-size:22px;color:var(--ink);margin-bottom:6px;}
+  .s8 .step p{margin:0;font-size:16px;line-height:1.6;color:var(--ink-soft);font-weight:300;}
+
+  /* --------------- SLIDE 9 : THANK YOU (dark, final) --------------- */
+  .s9{height:100%;position:relative;overflow:hidden;}
+  .s9 .media{position:absolute;inset:0;}
+  .s9 .media img{width:100%;height:100%;object-fit:cover;filter:brightness(.68) saturate(.95);}
+  .s9 .media .overlay{position:absolute;inset:0;background:
+    linear-gradient(180deg, rgba(15,10,7,.5) 0%, rgba(15,10,7,.35) 40%, rgba(15,10,7,.72) 100%);}
+  .s9 .content{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    padding:0 180px;color:#f2e7cf;
+  }
+  .s9 .content .eyebrow{color:var(--gold);margin-bottom:48px;}
+  .s9 .content h1{
+    font-family:'Playfair Display',serif;font-weight:400;font-style:italic;
+    font-size:200px;line-height:.95;letter-spacing:-.015em;color:#f7e9c6;
+  }
+  .s9 .content .note{
+    margin-top:64px;max-width:800px;
+    font-family:'Jost',sans-serif;font-weight:300;
+    font-size:20px;line-height:1.7;color:#d9c9a4;
+  }
+  .s9 .content .rule{
+    width:60px;height:1px;background:var(--gold);
+    margin:44px auto 0;
+  }
+
+  /* --------------- EMPTY PORTRAIT FRAME (welcome page) --------------- */
+  .portrait-frame{
+    position:absolute;top:150px;bottom:190px;left:0;right:130px;
+    border:1px solid rgba(232,215,180,0.18);
+    background:
+      linear-gradient(180deg, rgba(232,215,180,0.02) 0%, rgba(232,215,180,0.04) 100%);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .portrait-frame::before,
+  .portrait-frame::after{
+    content:"";position:absolute;
+    width:28px;height:28px;
+    border:1px solid var(--gold);
+    opacity:.55;
+  }
+  .portrait-frame::before{top:16px;left:16px;border-right:none;border-bottom:none;}
+  .portrait-frame::after{bottom:16px;right:16px;border-left:none;border-top:none;}
+  .portrait-frame .placeholder-label{
+    font-family:'Jost',sans-serif;font-weight:400;
+    font-size:11px;letter-spacing:.32em;text-transform:uppercase;
+    color:rgba(232,215,180,0.35);
+    text-align:center;
+  }
+  .portrait-frame .caption{
+    position:absolute;left:0;right:0;bottom:-58px;
+    color:#c9b689;font-size:12px;letter-spacing:.3em;text-transform:uppercase;text-align:left;
+  }
+  .portrait-frame .caption strong{color:#f2e7cf;font-weight:500;letter-spacing:.24em;display:block;margin-bottom:4px;}
+
+  /* icon utility (thin-line, gold) */
+  .ic{width:22px;height:22px;stroke:var(--gold);stroke-width:1.2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto;}
+  .slide.cream .ic{stroke:var(--gold-soft);}
+
+  /* soft vignette on dark slides */
+  .slide.dark::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,.35) 100%);
+  }
+
+</style>
+</head>
+<body>
+
+<deck-stage>
+
+<!-- ============================================================ -->
+<!-- SLIDE 1 — COVER -->
+<!-- ============================================================ -->
+<section class="slide dark" data-screen-label="01 Cover">
+  <div class="cover-media">
+    <img src="assets/cover.jpg" alt="">
+    <div class="cover-overlay"></div>
+  </div>
+  <div class="cover-side">
+    <div class="row">
+      <div class="brand"><span class="dot"></span><span>Naim Automation Systems Co.</span></div>
+      <div>Nairobi · Kenya</div>
+    </div>
+    <div class="row">
+      <div>Client Onboarding</div>
+      <div>MMXXVI</div>
+    </div>
+  </div>
+  <div class="cover-content">
+    <div class="na-mark lg" style="margin-bottom:56px;">NA</div>
+    <div class="eyebrow">A guide for new clients</div>
+    <h1 style="margin-top:36px;">Your onboarding<br><em>guide</em></h1>
+    <div class="sub">Welcome to Naim Automation Systems Co.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2 — CONTENTS -->
+<!-- ============================================================ -->
+<section class="slide cream" data-screen-label="02 Contents">
+  <div class="top-ribbon">
+    <div class="brand"><span class="dot"></span><span>Naim Automation Systems Co.</span></div>
+    <div>Onboarding · Contents</div>
+  </div>
+  <div class="s2">
+    <div class="left">
+      <div class="eyebrow" style="margin-bottom:28px;">In this guide</div>
+      <h1><em>Contents</em></h1>
+      <div class="toc">
+        <div class="row"><div class="num">01</div><div>Welcome</div><div class="dots">— PAGE 03</div></div>
+        <div class="row"><div class="num">02</div><div>Guidelines</div><div class="dots">— PAGE 04</div></div>
+        <div class="row"><div class="num">03</div><div>Build &amp; approval process</div><div class="dots">— PAGE 05</div></div>
+        <div class="row"><div class="num">04</div><div>What we need from you</div><div class="dots">— PAGE 06</div></div>
+        <div class="row"><div class="num">05</div><div>Contract &amp; invoice</div><div class="dots">— PAGE 07</div></div>
+        <div class="row"><div class="num">06</div><div>The process</div><div class="dots">— PAGE 08</div></div>
+        <div class="row"><div class="num">—</div><div>Thank you</div><div class="dots">— PAGE 09</div></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="frame-pad">
+        <img src="assets/agenda.jpg" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="bottom-ribbon">
+    <div>Your onboarding guide</div>
+    <div>Page 02 · Contents</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3 — WELCOME -->
+<!-- ============================================================ -->
+<section class="slide dark" data-screen-label="03 Welcome">
+  <div class="top-ribbon">
+    <div class="brand"><span class="dot"></span><span>Naim Automation Systems Co.</span></div>
+    <div>Section 01 · Welcome</div>
+  </div>
+  <div class="s3">
+    <div class="left">
+      <div class="eyebrow" style="margin-bottom:28px;">Section 01</div>
+      <h1><em>Welcome.</em></h1>
+      <div class="body">
+        <p>Thank you for choosing Naim Automation Systems Co. as your automation partner. We are thrilled to formally welcome you.</p>
+        <p>We help businesses stop wasting time on admin. We build systems that answer every enquiry in minutes, keep records neat and searchable, and put your whole business in your pocket — so your team focuses on the work that matters, not paperwork.</p>
+        <p>This guide explains what to expect at every step of working with us. Keep it close — it answers most questions before they arise.</p>
+      </div>
+      <div class="sig">
+        <div class="line"></div>
+        <div class="who"><strong>M.A. Salmin</strong>Founder &amp; Systems Architect</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="portrait-frame">
+        <span class="placeholder-label">Portrait to be added</span>
+        <div class="caption"><strong>M.A. Salmin</strong>Founder &amp; Systems Architect</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num" style="right:130px;bottom:120px;font-size:220px;">01</div>
+  <div class="bottom-ribbon">
+    <div>Your onboarding guide</div>
+    <div>Page 03 · Welcome</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4 — GUIDELINES -->
+<!-- ============================================================ -->
+<section class="slide cream" data-screen-label="04 Guidelines">
+  <div class="top-ribbon">
+    <div class="brand"><span class="dot"></span><span>Naim Automation Systems Co.</span></div>
+    <div>Section 02 · Guidelines</div>
+  </div>
+  <div class="s4">
+    <div class="eyebrow" style="margin-bottom:28px;">Section 02</div>
+    <h1><em>Guidelines.</em></h1>
+    <div class="cols">
+      <div class="col">
+        <div class="kicker">Working hours &amp; contact</div>
+        <h3>When we are here.</h3>
+        <ul>
+          <li><div class="k">Days</div><div class="v">Monday — Friday</div></li>
+          <li><div class="k">Hours</div><div class="v">09:00 — 18:00 EAT</div></li>
+          <li><div class="k">Response</div><div class="v">Within one business day</div></li>
+          <li><div class="k">Emergencies</div><div class="v">Prioritised</div></li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="kicker">How to reach us</div>
+        <h3>Two clean channels.</h3>
+        <p>All communication runs through your dedicated Email and WhatsApp channel.</p>
+        <p>Kindly consolidate feedback through your appointed contact person — it keeps your project on schedule.</p>
+        <p>Questions answered within one business day; one weekly summary during the build so you always know where we are.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num" style="right:130px;bottom:120px;font-size:220px;color:var(--gold-soft);">02</div>
+  <div class="bottom-ribbon">
+    <div>Your onboarding guide</div>
+    <div>Page 04 · Guidelines</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5 — BUILD & APPROVAL -->
+<!-- ============================================================ -->
+<section class="slide dark" data-screen-label="05 Build and Approval">
+  <div class="top-ribbon">
+    <div class="brand"><span class="dot"></span><span>Naim Automation Systems Co.</span></div>
+    <div>Section 03 · Build &amp; approval</div>
+  </div>
+  <div class="s5">
+    <div class="eyebrow" style="margin-bottom:28px;">Section 03</div>
+    <h1>Build &amp; approval <em>process.</em></h1>
+    <div class="lede">Every second counts. Once your deposit is received and your materials are in, the build begins.</div>
+    <div class="body">
+      <div>
+        <p>We engineer your system and send progress updates so you are never in the dark. Nothing goes live without your approval — you review, we refine, and only what you approve is deployed.</p>
+      </div>
+      <div>
+        <p>If you'd like to make changes at any stage, simply tell your contact person. Changes are always possible; they are simply quoted in writing first, so there are never surprises on the invoice.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num" style="right:130px;bottom:120px;font-size:220px;">03</div>
+  <div class="bottom-ribbon">
+    <div>Your onboarding guide</div>
+    <div>Page 05 · Build &amp; approval</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6 — WHAT WE NEED -->
+<!-- ============================================================ -->
+<section class="slide cream" data-screen-label="06 What We Need">
+  <div class="top-ribbon">
+    <div class="brand"><span class="dot"></span><span>Naim Automation Systems Co.</span></div>
+    <div>Section 04 · What we need</div>
+  </div>
+  <div class="s6">
+    <div class="eyebrow" style="margin-bottom:28px;">Section 04</div>
+    <h1>What we need <em>from you.</em></h1>
+    <div class="lede">A few simple items keep your project on schedule.</div>
+    <div class="checklist">
+      <div class="item">
+        <div class="n">i.</div>
+        <div class="t">
+          <h4>One contact person</h4>
+          <p>Someone on your side authorised to give approvals — it keeps decisions clean and quick.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="n">ii.</div>
+        <div class="t">
+          <h4>Access credentials</h4>
+          <p>Logins for the accounts your system will connect to, shared securely — never by plain text.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="n">iii.</div>
+        <div class="t">
+          <h4>A short walkthrough</h4>
+          <p>Fifteen minutes on how things are done today, so we build around your real workflow.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="n">iv.</div>
+        <div class="t">
+          <h4>Sample data</h4>
+          <p>A handful of example records — anonymised is perfectly fine.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="n">v.</div>
+        <div class="t">
+          <h4>Branding assets</h4>
+          <p>Your logo and preferred wording, so every document your system generates feels like you.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="n">vi.</div>
+        <div class="t">
+          <h4>The deposit</h4>
+          <p>Your timeline starts the day it is received.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num" style="right:130px;bottom:120px;font-size:220px;color:var(--gold-soft);">04</div>
+  <div class="bottom-ribbon">
+    <div>Your onboarding guide</div>
+    <div>Page 06 · What we need</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 7 — CONTRACT & INVOICE -->
+<!-- ============================================================ -->
+<section class="slide dark" data-screen-label="07 Contract and Invoice">
+  <div class="top-ribbon">
+    <div class="brand"><span class="dot"></span><span>Naim Automation Systems Co.</span></div>
+    <div>Section 05 · Contract &amp; invoice</div>
+  </div>
+  <div class="s7">
+    <div class="eyebrow" style="margin-bottom:28px;">Section 05</div>
+    <h1>Contract &amp; <em>invoice.</em></h1>
+    <div class="body">
+      Please be aware that no work is carried out until the Service Agreement has been signed and the deposit has been received. Our payment structure is simple, and there are no surprises along the way.
+    </div>
+    <div class="terms">
+      <div class="t">
+        <div class="k">50% deposit</div>
+        <div class="v">To begin — timeline starts the day it is received.</div>
+      </div>
+      <div class="t">
+        <div class="k">50% balance</div>
+        <div class="v">Only after you watch your finished system perform live in a demonstration.</div>
+      </div>
+    </div>
+    <div class="body" style="margin-top:36px;max-width:1100px;">
+      The monthly care plan — hosting, upkeep, monitoring and support — begins the month after final delivery.
+    </div>
+    <div class="link-cta">
+      <div class="txt">Review &amp; sign from your phone</div>
+      <div class="url">naim-automation.pages.dev/docs</div>
+    </div>
+  </div>
+  <div class="page-num" style="right:130px;bottom:120px;font-size:220px;">05</div>
+  <div class="bottom-ribbon">
+    <div>Your onboarding guide</div>
+    <div>Page 07 · Contract &amp; invoice</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 8 — THE PROCESS (standalone) -->
+<!-- ============================================================ -->
+<section class="slide cream" data-screen-label="08 The Process">
+  <div class="top-ribbon">
+    <div class="brand"><span class="dot"></span><span>Naim Automation Systems Co.</span></div>
+    <div>Section 06 · The process</div>
+  </div>
+  <div class="s8">
+    <div class="eyebrow" style="margin-bottom:28px;">Section 06</div>
+    <h1>The <em>Process.</em></h1>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <div class="t">
+          <h4>Book appointment</h4>
+          <p>A short consultation so we truly understand your needs before proposing anything.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <div class="t">
+          <h4>Quotation &amp; agreement</h4>
+          <p>An itemised quote and Service Agreement — review and sign from your phone.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <div class="t">
+          <h4>We build your system</h4>
+          <p>Roughly 7–21 business days, with progress updates so you are never in the dark.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">04</div>
+        <div class="t">
+          <h4>Live demo &amp; training</h4>
+          <p>You see it work before the balance. A short training session for your team follows.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">05</div>
+        <div class="t">
+          <h4>Handover &amp; care</h4>
+          <p>Owner's manual delivered, then the optional monthly care plan takes over.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num" style="right:130px;bottom:120px;font-size:220px;color:var(--gold-soft);">06</div>
+  <div class="bottom-ribbon">
+    <div>Your onboarding guide</div>
+    <div>Page 08 · The process</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 9 — THANK YOU (standalone final) -->
+<!-- ============================================================ -->
+<section class="slide dark" data-screen-label="09 Thank You">
+  <div class="s9">
+    <div class="media">
+      <img src="assets/thankyou.jpg" alt="">
+      <div class="overlay"></div>
+    </div>
+    <div class="content">
+      <div class="eyebrow">A final note</div>
+      <h1>Thank you.</h1>
+      <div class="rule"></div>
+      <p class="note">If you have any questions regarding your onboarding, please don't hesitate to contact us on WhatsApp.</p>
+    </div>
+  </div>
+</section>
+
+</deck-stage>
+
+<script src="deck_stage.js"></script>
+</body>
+</html>
