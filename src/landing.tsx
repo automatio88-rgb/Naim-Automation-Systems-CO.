@@ -216,7 +216,6 @@ export function landingPage(): string {
 <footer class="footer">
   <img class="brand-logo footer-logo" src="/static/images/naim-logo.png" alt="NaiM Agency logo">
   <p>Naim Automation Systems Co. &mdash; Nairobi, Kenya</p>
-  <p class="foot-links"><a href="/docs">Client Documents</a></p>
   <p class="foot-copy">&copy; 2026 Naim Automation Systems Co. All rights reserved.</p>
 </footer>
 
