@@ -3,8 +3,6 @@ import { cors } from 'hono/cors'
 import { landingPage } from './landing'
 import { docsHubPage } from './docs/hub'
 import { quotationPage } from './docs/quotation'
-import { agreementPage } from './docs/agreement'
-import { foundingPartnerPage } from './docs/founding'
 import { onboardingPage } from './docs/onboarding'
 
 type Bindings = {
@@ -119,9 +117,10 @@ app.get('/', (c) => c.html(landingPage()))
 
 // ---------- Document Suite (interactive, sign-on-phone) ----------
 app.get('/docs', (c) => c.html(docsHubPage()))
-app.get('/docs/quotation', (c) => c.html(quotationPage()))
-app.get('/docs/agreement', (c) => c.html(agreementPage()))
-app.get('/docs/founding-partner', (c) => c.html(foundingPartnerPage()))
 app.get('/docs/onboarding', (c) => c.html(onboardingPage()))
+app.get('/docs/quotation', (c) => c.html(quotationPage()))
+// Legacy document paths now live inside the two-document flow
+app.get('/docs/agreement', (c) => c.redirect('/docs/quotation'))
+app.get('/docs/founding-partner', (c) => c.redirect('/docs'))
 
 export default app

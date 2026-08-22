@@ -156,6 +156,10 @@
         signature: signature,
         agreed: true
       }).then(function () {
+        // Record honest completion progress (unlocks the next document in the portal)
+        try {
+          localStorage.setItem('naim_done_' + submitBtn.getAttribute('data-doc-type'), new Date().toISOString());
+        } catch (e) {}
         // Hide the form pieces, show success panel
         var section = document.getElementById('sign-section');
         if (section) {

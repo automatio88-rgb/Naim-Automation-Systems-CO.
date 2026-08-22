@@ -208,7 +208,7 @@ h1 em,h2 em{color:var(--gold)}
 <div class="deck-rail">
   <div class="deck-rail-inner">
     <span class="rb-brand"><img src="/static/images/naim-logo.png" alt=""><span>Naim Automation Systems Co. · Onboarding</span></span>
-    <span class="rb-count" id="rail-count">Page 1 of 9</span>
+    <span class="rb-count" id="rail-count">Page 1 of 10</span>
   </div>
   <div class="deck-progress"><div class="bar" id="rail-bar"></div></div>
 </div>
