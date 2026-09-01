@@ -40,7 +40,11 @@
   function getPos(e) {
     var rect = canvas.getBoundingClientRect();
     var src = (e.touches && e.touches.length) ? e.touches[0] : e;
-    return { x: src.clientX - rect.left, y: src.clientY - rect.top };
+    // Compensate for ancestor transform:scale() (fit-to-screen slides):
+    // rect is the scaled size, clientWidth/Height are the layout size.
+    var sx = rect.width > 0 ? canvas.clientWidth / rect.width : 1;
+    var sy = rect.height > 0 ? canvas.clientHeight / rect.height : 1;
+    return { x: (src.clientX - rect.left) * sx, y: (src.clientY - rect.top) * sy };
   }
 
   if (canvas) {
@@ -160,19 +164,25 @@
         try {
           localStorage.setItem('naim_done_' + submitBtn.getAttribute('data-doc-type'), new Date().toISOString());
         } catch (e) {}
-        // Hide the form pieces, show success panel
-        var section = document.getElementById('sign-section');
-        if (section) {
-          section.querySelectorAll('.sign-grid, .sig-wrap, .agree-row, #doc-submit, .sign-sub, h2, .eyebrow').forEach(function (el) {
-            el.style.display = 'none';
-          });
+        // Hide the form, show success panel
+        var form = document.getElementById('sign-form');
+        if (form) {
+          form.style.display = 'none';
+        } else {
+          var section = document.getElementById('sign-section');
+          if (section) {
+            section.querySelectorAll('.sign-grid, .sig-wrap, .agree-row, #doc-submit, .sign-sub, h2, .eyebrow').forEach(function (el) {
+              el.style.display = 'none';
+            });
+          }
         }
         showMsg('', '');
         var panel = document.getElementById('submitted-panel');
         if (panel) {
           panel.hidden = false;
-          panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        // Re-fit the slide now that content changed (no-scroll decks)
+        try { window.dispatchEvent(new Event('resize')); } catch (e) {}
       }).catch(function (err) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = original;
