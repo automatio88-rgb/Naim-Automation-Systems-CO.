@@ -1,0 +1,18 @@
+# Hermes Agent config (copy to ~/.hermes/config.yaml). Adjust paths and keys.
+model:
+  provider: openrouter
+  default: nousresearch/hermes-4-70b
+
+mcp_servers:
+  naim-command:
+    command: /opt/naim/mcp-server/.venv/bin/python
+    args: ["/opt/naim/mcp-server/server.py"]
+    env:
+      SUPABASE_URL: "https://YOUR-PROJECT.supabase.co"
+      SUPABASE_SERVICE_ROLE_KEY: "YOUR-SERVICE-ROLE-KEY"
+
+# Optional: Hermes Agent's own Telegram gateway (alternative to telegram_bot.py)
+# gateway:
+#   telegram:
+#     bot_token: "123456:ABC..."
+#     allowed_chat_ids: [123456789]

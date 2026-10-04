@@ -1,0 +1,13 @@
+[Unit]
+Description=NAIM Telegram cockpit
+After=network-online.target
+
+[Service]
+WorkingDirectory=/opt/naim/mcp-server
+EnvironmentFile=/opt/naim/mcp-server/.env
+ExecStart=/opt/naim/mcp-server/.venv/bin/python telegram_bot.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
