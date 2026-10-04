@@ -576,7 +576,7 @@ create table if not exists public.tasks (
   entity_type text,
   entity_id uuid,
   assignee_id uuid references public.staff(id) on delete set null,
-  created_by_kind text not null default 'human' check (created_by_kind in ('human','hermes')),
+  created_by_kind text not null default 'human' check (created_by_kind in ('human','hermes','system')),
   created_by text,
   completed_at timestamptz,
   is_demo boolean not null default false,
