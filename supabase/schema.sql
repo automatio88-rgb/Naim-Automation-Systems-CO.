@@ -95,9 +95,9 @@ create table if not exists public.leads (
   contacts jsonb not null default '[]',
   source text not null default 'manual',      -- landing_page | scraper | referral | manual | walk_in | import
   score int not null default 0 check (score between 0 and 100),
-  quality text not null default 'cold' check (quality in ('hot','warm','cold')),
+  quality text not null default 'low' check (quality in ('high','medium','low')),
   status text not null default 'new' check (status in
-    ('new','enriched','contacted','replied','call_booked','qualified','converted','lost','disqualified')),
+    ('new','enriched','queued','sent','replied','booked','converted','dead')),
   dossier text,
   personalization jsonb not null default '{}',
   tags text[] not null default '{}',
@@ -191,7 +191,7 @@ create table if not exists public.deals (
   lead_id uuid references public.leads(id) on delete set null,
   title text not null,
   value_kes numeric(12,2) not null default 0,
-  stage text not null default 'discovery' check (stage in ('discovery','proposal','negotiation','contract','won','lost')),
+  stage text not null default 'discovery' check (stage in ('discovery','consultation','proposal','contract','deposit_paid','won','lost')),
   probability int not null default 20,
   expected_close date,
   won_at timestamptz,
@@ -340,7 +340,7 @@ create table if not exists public.projects (
   client_id uuid references public.clients(id) on delete cascade,
   deal_id uuid references public.deals(id) on delete set null,
   name text not null,
-  status text not null default 'onboarding' check (status in ('onboarding','in_progress','review','delivered','on_hold','cancelled')),
+  status text not null default 'materials_pending' check (status in ('materials_pending','in_build','review','live_demo','delivered','in_care_plan','on_hold','cancelled')),
   priority text not null default 'medium',
   started_at date,
   due_at date,
@@ -635,7 +635,7 @@ create index if not exists idx_activities_created on public.activities(created_a
 create index if not exists idx_activities_entity on public.activities(entity_type, entity_id);
 
 create table if not exists public.hermes_bots (
-  name text primary key,                       -- scout | enricher | closer | operator | ledger
+  name text primary key,                       -- scout | sage | herald | echo | ledger
   display_name text not null,
   role text not null,
   routine text,
@@ -770,7 +770,8 @@ create trigger trg_payment_rollup after insert or update or delete on public.pay
 
 -- ---------- activity logging triggers ----------
 create or replace function public.log_entity_activity() returns trigger language plpgsql security definer set search_path = public as $$
-declare label text; v text; summ text; actor text := coalesce(nullif(current_setting('request.jwt.claim.email', true), ''), 'system');
+declare label text; v text; summ text;
+  actor text := coalesce(nullif(nullif(current_setting('request.jwt.claims', true), '')::jsonb->>'email', ''), 'system');
 begin
   if tg_table_name = 'leads' then
     label := new.business_name;
@@ -881,7 +882,7 @@ end $$;
 -- ---------- reporting views ----------
 create or replace view public.v_lead_funnel with (security_invoker = true) as
 select s.status, s.ord, coalesce(c.n, 0) as count
-from (values ('new',1),('enriched',2),('contacted',3),('replied',4),('call_booked',5),('qualified',6),('converted',7)) s(status, ord)
+from (values ('new',1),('enriched',2),('queued',3),('sent',4),('replied',5),('booked',6),('converted',7)) s(status, ord)
 left join (select status, count(1) n from public.leads where deleted_at is null group by status) c on c.status = s.status
 order by s.ord;
 

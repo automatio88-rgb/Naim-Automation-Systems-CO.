@@ -1,0 +1,8 @@
+{
+  "name": "naim-command-local-backend",
+  "private": true,
+  "type": "module",
+  "description": "LOCAL PREVIEW ONLY: serves office-app/dist, proxies /rest/v1 to PostgREST and emulates the Supabase auth endpoints used by the app. Production uses Netlify + Supabase.",
+  "scripts": { "start": "node server.mjs" },
+  "dependencies": { "pg": "^8.16.0" }
+}
