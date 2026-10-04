@@ -1,0 +1,18 @@
+# Netlify site 1 of 3 — Landing page
+# In Netlify: "Base directory" = site
+[build]
+  command = "npm install && npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Required env vars (Netlify → Site settings → Environment variables):
+#   SUPABASE_URL               https://<project-ref>.supabase.co
+#   SUPABASE_SERVICE_ROLE_KEY  service role key (server-side only, never in the browser)
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

@@ -1,0 +1,14 @@
+{
+  "name": "naim-site",
+  "private": true,
+  "type": "module",
+  "description": "Naim Automation Systems Co. — public landing page (Netlify static + Netlify Functions, Supabase storage)",
+  "scripts": {
+    "build": "tsx build.mjs",
+    "dev": "npm run build && npx serve dist -l 4100",
+    "test:functions": "tsx ../scripts/test-functions.mjs site"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}

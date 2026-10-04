@@ -13,12 +13,10 @@ dist/
 
 # deps
 node_modules/
-.wrangler
 
 # env
 .env
 .env.production
-.dev.vars
 
 # logs
 logs/
@@ -31,3 +29,6 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+
+# netlify
+.netlify/

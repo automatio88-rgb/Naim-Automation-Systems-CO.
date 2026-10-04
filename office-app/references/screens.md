@@ -1,0 +1,3395 @@
+# NAIM COMMAND — Screenshot Reference Catalogue
+
+Auto-documented from the founder's 77 uploaded templates (download.png … download-76.png). Leads Engine = first screens; the rest = salon system (dark/light + palettes). Two distinct Client 360 views: Appointments (3 tabs: Services, Notes, Timeline) vs Customers (5 tabs: Visits, Invoices, Memberships, …).
+
+## #0 `download.png` — leads-engine · Actions · Webhook control panel (Actions page): grid of action cards for triggering/pausing automation systems, score threshold setting, and outreach queue preview (collapsed, 0 leads)
+- **Theme:** Dark mode. Page bg near-black ~#0F1012; sidebar ~#141518 with a subtle right border ~#1E2024; cards ~#16171A with 1px border ~#24262B and slight radius (~4px). Primary accent blue ~#3B82F6 (Trigger Enrichment / Approve & Send buttons, logo text, active nav). Danger red ~#EF4444 (Pause Outreach). Status green ~#22C55E ('PIPELINE LIVE'). Icon tints: violet ~#6366F1/#8B5CF6 (chip icon), green ~#22C55E (send icon), amber ~#EAB308 (pause icon), lavender ~#A78BFA (sliders icon), blue ~#3B82F6 (eye icon). Typography: headings and buttons in a monospace / techno uppercase font (Space Mono / JetBrains Mono style, bold, letter-spaced); body descriptions in sans-serif gray ~#8B8F98; titles white ~#E5E7EB.
+- **Layout:** Fixed left sidebar ~205px wide, full height, logo top, 3 nav items, live-status footer pinned bottom. Main content: page header top-left — title 'ACTIONS' (large, bold monospace uppercase, white) with subtitle 'WEBHOOK CONTROL PANEL' (small monospace uppercase, gray, letter-spaced). Below: 2-column card grid (~16px gap), each card with padding ~20px: row 1 = Run Enrichment Now | Send Today's Outreach; row 2 = Pause All Outreach | Minimum Score Threshold; row 3 = full-width (spans 2 cols) Preview Outreach Queue. Card internal layout: square icon tile (~36px, dark bg ~#1B1C20, border) on left, title (bold monospace uppercase) + description (sans gray, 2 lines) to the right, action control below aligned with the text column. Right column is cropped in screenshot (content overflows the viewport edge).
+- **Sidebar:** Logo block: radio/broadcast icon ((•)) + 'B2B LEADS' (blue, monospace bold) with subtitle 'ENGINE V1' (gray, monospace, letter-spaced), Dashboard (grid/4-squares icon), Leads (table icon), Actions (lightning bolt icon) — ACTIVE: blue text ~#60A5FA, filled bg ~#1E2A44 with blue-tinted border, full-width rounded-rect, Footer (bottom-left, separated by top border): green dot + 'PIPELINE LIVE' (green, monospace uppercase small)
+- **Client 360:** none
+- **Components:**
+  - Page title 'ACTIONS' + subtitle 'WEBHOOK CONTROL PANEL'
+  - Card 'RUN ENRICHMENT NOW' — icon: CPU/chip (violet). Description: 'Triggers System 2 to enrich all unprocessed leads with AI research and scoring.' Button: 'Trigger Enrichment' (solid blue ~#3B82F6, dark text, monospace, small radius)
+  - Card 'SEND TODAY'S OUTREACH' — icon: paper-plane/send (green). Description: 'Approves and sends outreach emails to all HIGH[-quality] leads not yet contacted.' (truncated). Button: 'Approve & Send' (solid blue)
+  - Card 'PAUSE ALL OUTREACH' — icon: pause-in-circle (amber/yellow). Description: 'Immediately pauses System 3 from sending any further outreach emails.' Button: 'Pause Outreach' (solid red ~#EF4444, white text)
+  - Card 'MINIMUM SCORE THRESHOLD' — icon: sliders/adjustments (lavender). Description: 'Outreach is only sent to leads at or above this sco[re]. Stored locally on this device.' Controls inline: number input showing '0' (dark field, border, ~80px wide), button 'Save Threshold' (outlined/dark secondary button, white text), suffix text '/ 100' (gray)
+  - Card 'PREVIEW OUTREACH QUEUE' (full width) — icon: eye (blue). Description: 'HIGH quality leads queued for outreach with their personalization lines.' Collapsible toggle button: chevron-down + '0 leads in queue' (outlined dark, monospace) — expands list of queued leads; currently empty
+  - Sidebar status indicator 'PIPELINE LIVE' with green dot
+- **Features:**
+  - Manual webhook triggers for backend automation pipelines (System 2 = AI enrichment & scoring; System 3 = outreach sender), likely n8n/Make webhooks
+  - Human-in-the-loop approval: 'Approve & Send' gate before daily outreach emails go out
+  - Kill switch: pause all outreach immediately (destructive/red action)
+  - Configurable lead score threshold (0–100) gating outreach, persisted in localStorage
+  - Outreach queue preview with personalization lines per lead (expandable list, count badge)
+  - Global pipeline health/status indicator (Live)
+  - Lead quality tiers (HIGH etc.) used for routing
+- **NAIM translation:** Becomes NAIM COMMAND 'Automations / Control Panel' module. Cards map to Naim's own sales engine targeting Nairobi/East Africa recruitment agencies: 'Run Enrichment Now' (research agency prospects, score fit for AI automation), 'Send Today's Outreach' (approve & send personalized cold emails/WhatsApp to HIGH-fit agencies), 'Pause All Outreach' kill switch, 'Minimum Score Threshold' (persist server-side per business, not just localStorage), 'Preview Outreach Queue' (expandable table: agency, contact, score, personalization line, channel, with per-row approve/skip/edit). Extend with a business switcher (main agency-automation business + future side-businesses each with own pipelines), per-workflow last-run timestamp/status, run logs, confirmation modal on destructive actions, and the sidebar 'PIPELINE LIVE' indicator reflecting real webhook health. Can also host delivery-side triggers for client automations (e.g., re-run CV parsing, candidate matching for a client agency).
+
+## #1 `download-1.png` — leads-engine · Dashboard · Dashboard main view, scrolled slightly down: Pipeline Funnel strip + Live Activity Feed + Upcoming Calls (empty state). The top edge shows the bottoms of a row of 5 cards (likely KPI cards) cut off above the funnel.
+- **Theme:** Dark mode, near-black 'terminal/ops console' aesthetic. App background ~#121417; sidebar ~#16181c; card surfaces ~#1a1d21 with 1px borders ~#2a2e34; hovered/selected row ~#1f2227. Primary text ~#e6e8eb, muted labels ~#8b9099. Accents: brand/active blue ~#3b82f6 (active nav bg ~#1e3a5f with border ~#2f5a8f); funnel stage colors: Scraped gray ~#9ca3af, Enriched blue ~#3b82f6, Outreach steel-blue ~#6b9bd1/#60a5fa, Replied teal/green ~#2dd4bf, Booked purple ~#a78bfa; 'CALL BOOKED' label purple ~#a78bfa; 'OUTREACH SENT' label blue ~#60a5fa; live status dot green ~#22c55e. Typography: monospace, uppercase, letter-spaced for section headers and small labels (e.g. JetBrains Mono / IBM Plex Mono style); large monospace numerals in funnel.
+- **Layout:** Fixed left sidebar ~160px wide (full height, right border). Main content area with ~16-20px padding, stacked sections: (1) row of 5 equal cards at top (only bottom borders visible — probably KPI stat cards); (2) full-width 'PIPELINE FUNNEL' card, horizontal; (3) two-column row below, equal widths (~50/50, gap ~12px): left 'LIVE ACTIVITY FEED' card, right 'UPCOMING CALLS' card; both stretch to bottom of viewport. Cards have subtle borders, small radius (~4-6px), no heavy shadows.
+- **Sidebar:** Brand block (top-left): small radio/broadcast icon (blue, ((•)) style) + 'B2B LEADS' (blue, monospace, uppercase, bold) with subtitle 'ENGINE V1' (muted gray, monospace) beneath, Dashboard (active: grid/4-squares icon, blue text, filled blue-tinted pill background with blue border), Leads (table/grid icon, gray text), Actions (lightning bolt icon, gray text), Footer status (bottom-left, separated by top border): green dot + 'PIPELINE LIVE' (green, monospace, uppercase, small)
+- **Client 360:** none
+- **Components:**
+  - Top row (partially cut off): 5 card bottoms evenly spaced across width — likely KPI cards; content not visible
+  - Card 'PIPELINE FUNNEL' (section title top-left, uppercase monospace, muted gray, small ~10px, letter-spaced)
+  - Funnel stage 1: big numeral '4' (white/gray), colored underline bar gray ~#9ca3af, label 'SCRAPED' below (muted, uppercase mono)
+  - Connector between 1→2: '25%' (small muted text above) and a '>' chevron
+  - Funnel stage 2: '1' (blue ~#3b82f6), blue underline, label 'ENRICHED'
+  - Connector 2→3: '300%' + '>'
+  - Funnel stage 3: '3' (light steel blue ~#7aa7e0), steel-blue underline, label 'OUTREACH'
+  - Connector 3→4: '67%' + '>'
+  - Funnel stage 4: '2' (teal ~#2dd4bf), teal underline, label 'REPLIED'
+  - Connector 4→5: '100%' + '>'
+  - Funnel stage 5: '2' (purple ~#a78bfa), purple underline, label 'BOOKED'
+  - Note: funnel stages occupy left ~60% of the card; each stage block ~65px wide; conversion % = next stage count / previous stage count (can exceed 100%, e.g. 300%, because counts are current-stage totals, not cumulative)
+  - Card 'LIVE ACTIVITY FEED' (header uppercase mono muted, header separated by bottom border)
+  - Feed row 1 (hovered, slightly lighter bg, mouse cursor present): calendar icon (purple) | event type 'CALL BOOKED' (purple, uppercase mono bold small) over company name 'Redbird' (white, bold) | right-aligned timestamp '4 days ago' (muted)
+  - Feed row 2: calendar icon (purple) | 'CALL BOOKED' / 'Holbox' | 'about 1 month ago'
+  - Feed row 3: paper-plane/send icon (blue) | 'OUTREACH SENT' (blue) / 'JOEY DTLA' | 'about 1 month ago'
+  - Feed row 4: paper-plane icon (blue) | 'OUTREACH SENT' / 'Redbird' | 'about 1 month ago'
+  - Feed rows separated by 1px dividers, ~44px tall each; relative timestamps (date-fns 'formatDistanceToNow' style)
+  - Card 'UPCOMING CALLS' with header-right badge '0 booked' (purple text ~#a78bfa on dark purple bg ~#2a2340 with purple border, small rounded pill, mono)
+  - Upcoming Calls empty state: centered muted text 'No upcoming calls' near top of card body
+  - A blurred/redacted white blob overlays the lower-right of the screenshot (privacy redaction, not UI)
+- **Features:**
+  - Lead pipeline stage tracking: Scraped → Enriched → Outreach → Replied → Booked
+  - Stage-to-stage conversion percentages shown between funnel steps
+  - Real-time activity feed of pipeline events (call booked, outreach sent) with typed icons/colors and relative timestamps
+  - Upcoming calls list with count badge and empty state
+  - Global 'Pipeline live' system status indicator (automation running heartbeat)
+  - Three-module app: Dashboard, Leads (table), Actions (control panel to trigger automations)
+- **NAIM translation:** Becomes the NAIM COMMAND Sales Dashboard home. Funnel stages adapted to recruitment-agency prospecting: Sourced (scraped agencies) → Enriched (decision-maker + contact found) → Outreach Sent → Replied → Discovery Call Booked, optionally extended with Proposal → Won (client onboarded). Keep conversion % connectors. Live Activity Feed shows events across sales and delivery (CALL BOOKED, OUTREACH SENT, REPLY RECEIVED, PROPOSAL SENT, INVOICE PAID, AUTOMATION DEPLOYED) with color-coded type labels; make it filterable by business unit since side-businesses will be added. Upcoming Calls card lists discovery/demo calls (from calendar integration, Africa/Nairobi timezone) with an 'N booked' badge and 'No upcoming calls' empty state. Top 5 KPI cards (cut off here) should be e.g. Total Leads, Reply Rate, Calls Booked, Pipeline Value (KES/USD), MRR. Sidebar keeps the brand block style ('NAIM COMMAND' / 'OFFICE V1') and the green 'PIPELINE LIVE' heartbeat reflecting automation worker status (turn red/amber if scraper/outreach jobs fail). Preserve dark mono terminal look as the default theme, with salon-style light mode and palettes added later.
+
+## #2 `download-2.png` — leads-engine · Leads · Leads table / list view with search + filters (default state, 4 of 4 leads, sorted by Score descending)
+- **Theme:** Dark mode. Page background near-black (~#0d0e12 / #111216). Sidebar slightly lighter charcoal (~#16171c) with a thin right border (~#22242a). Table container is a dark panel (~#14151a) with 1px border (~#23252b). Inputs and selects use dark fill (~#1a1b20) with border ~#2a2c33. Accent blue for brand and active nav (~#3b82f6 text, active item bg ~#1e2a44 with border ~#2f4a7a). Monospace/technical typography (JetBrains Mono / IBM Plex Mono style) for headers, labels, badges and dates; sans/bold for business names. Badge colors: score high = amber/orange text ~#f5a524 on dark amber bg ~#3a2a0a with amber border; score low = red text ~#ef4444 on dark red bg ~#3a1416; quality HIGH = green text ~#22c55e on dark green bg ~#0f2e1c with green border; quality LOW = red text ~#ef4444 on dark red bg with red border. Status dot colors: Booked = purple/violet ~#a78bfa (text also violet), Sent = blue ~#60a5fa (text blue-ish), Not Sent = grey ~#9ca3af. Muted text ~#6b7280.
+- **Layout:** Two-column app shell. Fixed left sidebar ~160px wide, full height, brand at top, then vertical nav list with icon+label items (~36px tall, rounded ~4px). Main content area with ~18px padding. Header row: left = page title 'LEADS' (bold, uppercase, monospace, letter-spaced, white ~#f3f4f6) with subtitle '4 of 4 leads' (muted, small monospace) below; right = outlined 'Refresh' button with circular-arrows icon. Below header: a filter toolbar in one horizontal row: wide search input (~250px), 'All Quality' dropdown, 'All Status' dropdown, label 'MIN SCORE' + small numeric input. Below that: full-width bordered table card with header row and 4 data rows; row separators are thin dark lines; generous empty space beneath table (no pagination visible). Lower-right of screenshot is obscured/blurred (redaction artifact, not UI).
+- **Sidebar:** Brand block (top-left): broadcast/radio-waves icon in blue + 'B2B LEADS' (blue, bold monospace, uppercase) with subtitle 'ENGINE V1' (muted grey, small monospace, letter-spaced), Dashboard (grid/4-squares icon) – inactive, grey, Leads (table/list icon) – ACTIVE: blue text, blue-tinted rounded background with subtle blue border, Actions (lightning bolt icon) – inactive, grey
+- **Client 360:** none
+- **Components:**
+  - Page title: 'LEADS' (uppercase, monospace, bold)
+  - Subtitle/counter: '4 of 4 leads' (filtered count of total)
+  - Button (top-right, outlined, dark bg, light border, rounded ~6px): refresh/rotate icon + 'Refresh'
+  - Search input with magnifying-glass icon, placeholder 'Search leads…'
+  - Select dropdown: 'All Quality' with chevron-down (options implied: All Quality, HIGH, MEDIUM?, LOW)
+  - Select dropdown: 'All Status' with chevron-down (options implied: All Status, Not Sent, Sent, Booked, possibly Replied)
+  - Inline label 'MIN SCORE' (tiny uppercase muted monospace) + numeric input showing placeholder/value '0'
+  - Table header columns (uppercase, small, muted monospace, letter-spaced): 'BUSINESS' (with sort ⇕ icon), 'SCORE' (with active sort chevron-down icon, highlighted blue = currently sorted descending), 'QUALITY', 'STATUS', 'SCRAPED' (with sort ⇕ icon)
+  - Row 1: Business 'Holbox' | Score badge '73' (amber) | Quality badge 'HIGH' (green) | Status '● Booked' (violet) | Scraped '—'
+  - Row 2: Business 'JOEY DTLA' | Score '71' (amber) | Quality 'HIGH' (green) | Status '● Sent' (blue) | Scraped '14/05/2026'
+  - Row 3: Business 'Redbird' | Score '68' (amber) | Quality 'HIGH' (green) | Status '● Booked' (violet) | Scraped '—'
+  - Row 4: Business 'Girl & the Goat Los Angeles' with secondary line URL 'http://girlandthegoat.com/' (small muted monospace) | Score '0' (red) | Quality 'LOW' (red) | Status '● Not Sent' (grey) | Scraped (obscured)
+  - Score badges: small square-ish pill, monospace number, colored text + tinted bg + 1px colored border
+  - Quality badges: uppercase monospace pill, same tinted style
+  - Status: colored dot + label (no pill)
+  - Mouse cursor visible near the search bar (hover state, no tooltip)
+  - No pagination, no row checkboxes, no row action buttons visible (rows likely clickable to open lead detail)
+- **Features:**
+  - Central lead database populated by a scraper (Scraped date column, website URL captured)
+  - Automated lead scoring 0–100 with color thresholds (≈≥60 amber/high, 0 red)
+  - Quality tier classification (HIGH / LOW, likely MEDIUM too) derived from score
+  - Outreach pipeline status per lead: Not Sent → Sent → Booked (meeting booked)
+  - Full-text search across leads
+  - Filter by quality, by status, and by minimum score threshold
+  - Sortable columns (Business, Score, Scraped); default sort Score desc
+  - Live count of filtered vs total ('4 of 4 leads')
+  - Manual Refresh to re-sync data from backend/scraper
+- **NAIM translation:** Becomes NAIM COMMAND 'Leads' module under Sales: a table of recruitment agencies (prospects) in Kenya/East Africa and beyond. Columns: Agency (name + website/LinkedIn as subline), Fit Score (0–100 based on size, hiring volume, tech stack, job-post activity), Quality tier (HIGH/MED/LOW), Outreach Status (Not Contacted → Sent → Replied → Call Booked → Proposal → Won/Lost), Source/Scraped date, plus optional Owner and Business Unit (to support future side-businesses via a business switcher filter). Keep toolbar: search, Quality filter, Status filter, Min Score input, and add Source and Business filters; keep Refresh (re-run sync from scraper/CRM). Reuse dark monospace aesthetic with blue accent, amber/green/red badges, and status dots. Row click should open a lead detail drawer (later linking to a Customers-style 360 once the agency converts to a client).
+
+## #3 `download-3.png` — salon-system · Appointments · Appointments List view (default) with KPI cards, status pipeline chevron filter, filters panel and DataTables-style appointments table
+- **Theme:** Light content area (#F1F3F6 page bg, white cards) with dark navy sidebar (#0F1E3A / #13254A). Primary accent blue (#2F7BE5 active nav pill). Header buttons dark navy (#0F1E3A) for primary, light grey (#E9ECEF) for secondary. KPI card colors: navy (#1B2D52), blue (#3B82F6), amber/yellow (#E5B42A), red (#D93030).
+- **Layout:** Fixed left sidebar ~150px wide dark navy, section headers in small uppercase grey caps. Main area: (1) top white rounded header bar with page title 'Appointments' (calendar icon) on left, action button row center-right, global search, icon buttons, notification bell with red badge, 'Welcome, admin'. (2) Large white rounded content card containing: section title 'Appointments' with view switcher (segmented control) at right; row of 4 equal KPI cards (4-column grid); full-width status pipeline of 8 chevron/arrow-shaped segments; Filters panel (light grey bg) with 5 inputs in one row; table controls row ('Show 10 entries' left, 'Search:' right); data table with dark navy header; footer row with 'Showing 1 to 2 of 2 entries' left and pagination right.
+- **Sidebar:** Brand header: scissors icon + 'Salon ERP' with collapse button '<' (top right of sidebar, rounded square), User block: square logo avatar 'RAMEEZ' (purple/dark), name 'admin', role badge 'Admin' (small pill, dark blue), Section GENERAL: Dashboard (line-chart icon), My Day (calendar-day icon), Section SALON: Front Desk (bell/concierge icon), Appointments (calendar icon, ACTIVE - filled blue pill #2F7BE5, white text), Customers (address-book icon), POS / Billing (cash-register icon), Services (scissors icon), Memberships (id-card icon), Section INVENTORY: Inventory (truck/boxes icon), Purchases (truck icon) — list continues below fold
+- **Client 360:** none (not visible in this screenshot; the eye action on rows likely opens the APPOINTMENTS 3-tab Client 360: Services, Notes, Timeline)
+- **Components:**
+  - Top header title: 'Appointments' with calendar-check icon
+  - Header buttons (left to right): '+ New Booking' (primary, dark navy filled, white text), 'Walk-In' (walking person icon), 'CSV' (file icon), 'PDF' (file-pdf icon), 'Print' (printer icon), 'Import CSV' (file-import icon), 'Template' (download icon), 'Today' (calendar icon) — secondary light grey small buttons
+  - Global search input: placeholder 'Search everything...' with magnifier icon
+  - Icon buttons: palette (theme picker) icon, brush/paint (customize) icon, bell with red badge '6'
+  - Text: 'Welcome, admin'
+  - Section heading: 'Appointments' (calendar icon) bold
+  - View switcher segmented control (dark outline, active filled navy): 'List' (active, list icon), 'Calendar' (calendar icon), 'Queue' (users/queue icon), 'Waitlist' (hourglass icon)
+  - KPI card 1 (navy #1B2D52): value '2', label 'Appointments', faint large calendar-check watermark icon bottom-right
+  - KPI card 2 (blue #3B82F6): value '0', label 'Upcoming', clock watermark icon
+  - KPI card 3 (amber #E5B42A): value '1', label 'In Salon', salon chair watermark icon
+  - KPI card 4 (red #D93030): value '0', label 'No-Shows', user-with-x watermark icon
+  - Status pipeline chevrons (clickable filter, uppercase with counts): 'ALL (2)' navy #2B3E63 (active), 'BOOKED (0)' light blue #7FA9E8, 'CONFIRMED (0)' lavender #A9A6F0, 'CHECKED-IN (1)' orange #F39C2C, 'IN PROGRESS (0)' purple #B48CF0, 'COMPLETED (1)' green #2E7D32, 'CANCELLED (0)' grey #B5B5B5, 'NO SHOW (0)' salmon/pink #E88A8A
+  - Filters panel: header 'Filters' with funnel icon, divider line navy; 'Clear' button (grey #6C757D, x-circle icon) top-right
+  - Filter FROM: date input value '09/02/2026' with calendar picker icon
+  - Filter TO: date input value '10/09/2026'
+  - Filter SEARCH: text input placeholder 'Customer, stylist, service...'
+  - Filter BRANCH: select 'All branches'
+  - Filter STYLIST: select 'All stylists'
+  - Table controls: 'Show [10 ▾] entries' and 'Search:' input
+  - Table header (navy #0F1E3A, white text, sortable arrows): Date, Time, Customer, Stylist, Services, Station, Mins, Status, Actions
+  - Row 1 (light grey zebra): Sep 05, 2026 | 11:00–11:30 | Client 1 (bold) | Staff 1 | Haircut – Classic | Chair 1 | 30 | status pill 'COMPLETED' green #2E7D32 | actions: eye (view), pencil (edit), red trash (delete)
+  - Row 2: Sep 05, 2026 | 14:00–15:00 | Client 3 (bold) | Staff 2 | Facial – Gold | Room 1 | 60 | status pill 'CHECKED-IN' orange #F39C2C | eye, pencil, red trash
+  - Footer: 'Showing 1 to 2 of 2 entries'; pagination 'Previous' [1] 'Next'
+- **Features:**
+  - Appointment booking with quick '+ New Booking' and 'Walk-In' entry
+  - Export CSV/PDF, Print, Import CSV with downloadable Template
+  - 'Today' quick date filter
+  - Four alternate views: List, Calendar, Queue, Waitlist
+  - KPI summary: total appointments, upcoming, currently in salon, no-shows
+  - Status lifecycle pipeline doubling as filter: Booked → Confirmed → Checked-In → In Progress → Completed, plus Cancelled / No Show
+  - Date range, free-text, branch (multi-branch) and stylist (staff) filters
+  - Resource allocation per appointment (Station: Chair/Room) and duration in minutes
+  - Row actions view/edit/delete; view (eye) likely opens appointment Client 360 drawer
+  - Global search, notifications, theme palette switcher
+- **NAIM translation:** Becomes NAIM COMMAND 'Meetings / Engagements' page: '+ New Meeting' (discovery call/demo) and 'Walk-In' → 'Quick Log Call'. KPI cards: Meetings, Upcoming, In Delivery/Live Now, No-Shows. Status pipeline: Booked → Confirmed → Held (Checked-In) → Proposal/In Progress → Won (Completed), Cancelled, No Show. Columns: Date, Time, Client (recruitment agency), Owner (sales rep instead of stylist), Services (automation package e.g. 'CV Screening Bot', 'WhatsApp Follow-up'), Channel/Location (Zoom/Office instead of Station), Mins, Status, Actions. Filters: From/To, Search, Business Unit (instead of Branch, supports future side-businesses), Owner. Views: List, Calendar, Queue (today's call queue), Waitlist (prospects awaiting slot). Keep CSV/PDF/Import/Template exports and the 3-tab appointment 360 (Services, Notes, Timeline) from the eye icon.
+
+## #4 `download-4.png` — salon-system · Roles & Permissions (System section) · Role × Page permission matrix (full-page grid of toggle chips). Light mode, default/blue-accent palette. Vertical scroll partway down (sidebar scrolled to its lower half; matrix shows rows from GENERAL through FINANCE > Expenses). Horizontal scroll on the matrix: an 8th role column is cut off at the right edge.
+- **Theme:** Light mode. Content background very light grey-blue (~#EEF1F6). Cards white (#FFFFFF), rounded ~8px, subtle shadow. Sidebar is dark navy (~#0F2340 to #132A4A) with white/light-grey text and icons. Active nav item is a bright blue pill (~#2F80ED). Permission chips: granted = solid green (~#43A047 / #4CAF50) with white letter; not granted = white with light grey border (~#D0D5DD) and grey letter (~#9AA3AF); locked Super Admin = pale/faded green (~#C8E6C9) with white letters, non-interactive. Role header badges are each a distinct solid color: Super Admin purple (~#6A1B9A), Owner burnt orange (~#C25E14), Branch Manager dark teal (~#1F6E5E), Receptionist blue (~#2F7FE0), Stylist violet (~#8E44EC), Inventory Mgr brown/rust (~#8A3B16), Accountant dark green (~#1B6B3A), 8th role (cut off) magenta/pink (~#C2185B). Section header rows light grey (~#F1F3F6) with small uppercase grey text. Thin blue progress/accent line visible at very top center of the header.
+- **Layout:** Fixed left sidebar (~150px wide, dark navy) with icon + label items grouped under small uppercase section labels (HR, REPORTS, SYSTEM), scrollable, with a pinned 'Dark Mode' toggle button at the bottom. Main area: (1) Top header card (white, full width, rounded) with page icon + title 'Roles & Permissions' on the left; on the right: a search input 'Search everything...' with magnifier icon, then three round icon buttons (palette/theme icon, brush/paint icon, bell with red count badge '6'), then text 'Welcome, admin'. (2) Below, a large white card containing: card title (people/shield icon + 'Roles & Permissions'), an info line with ⓘ icon, then a wide permission matrix table. Matrix: first column 'Page' (~120px) listing pages grouped by section header rows; then one column per role (~95px each), each column header = colored role badge + small grey caption 'V-A-E-D-AP-X'. Each cell holds 6 small square chips in a row: V, A, E, D, AP, X. Matrix scrolls horizontally (scrollbar at bottom, 8th column clipped) and vertically (scrollbar on right).
+- **Sidebar:** (scrolled; items above Expenses not visible), Expenses, Finance, Payroll, Cash Till, HR (section label), Staff, Leave Requests, REPORTS (section label), Reports, SYSTEM (section label), Branches, Users Management, Settings, Activity Logs, Roles & Permissions (ACTIVE – blue pill), My Account, About App, Bottom pinned button: moon icon + 'Dark Mode' (dark navy rounded button, full sidebar width)
+- **Client 360:** none
+- **Components:**
+  - Header title: icon (user-shield) + 'Roles & Permissions'
+  - Global search input: placeholder 'Search everything...' with search icon
+  - Icon button: palette (theme palette picker)
+  - Icon button: brush (appearance/customize)
+  - Icon button: bell with red notification badge '6'
+  - Text: 'Welcome, admin'
+  - Card title: icon + 'Roles & Permissions'
+  - Info text: 'ⓘ Toggle V-A-E-D-AP-X (View/Add/Edit/Delete/Approve/Export) per role × page. Changes save instantly. Super Admin is locked to full access.'
+  - Matrix column header 'Page'
+  - Role column headers (colored badges, each with caption 'V-A-E-D-AP-X'): 'Super Admin', 'Owner', 'Branch Manager', 'Receptionist', 'Stylist', 'Inventory Mgr', 'Accountant', [8th role, pink/magenta, label cut off]
+  - Section row 'GENERAL': pages 'Dashboard', 'AI Assistant', 'My Day'
+  - Section row 'SALON': pages 'Front Desk', 'Appointments', 'Customers', 'POS / Billing', 'Services', 'Memberships'
+  - Section row 'INVENTORY': pages 'Inventory', 'Purchases'
+  - Section row 'FINANCE': page 'Expenses' (more rows below, scrolled off)
+  - Permission chips per cell: V, A, E, D, AP, X (green = granted, white/grey outline = not granted)
+  - Super Admin column: all chips pale-green locked (full access) for all rows; AI Assistant row in Super Admin appears faded/outlined (likely module disabled/not applicable)
+  - Approx. visible grants – Owner: Dashboard V; AI Assistant none; My Day V; Front Desk V,A,E; Appointments, Customers, POS/Billing, Services, Memberships, Inventory, Purchases, Expenses: all six (V,A,E,D,AP,X)
+  - Branch Manager: Dashboard V; AI Assistant none; My Day V; Front Desk V,A,E; Appointments V,A,E,D (+AP,X partly); Customers V,A,E,D,AP,X; POS/Billing V,A,E + AP,X (D off); Services all; Memberships all; Inventory all; Purchases V,A,E + AP,X (D off); Expenses V,A,E,D,AP,X-ish
+  - Receptionist: Dashboard V; AI Assistant none; My Day none; Front Desk V,A,E; Appointments V,A,E,D; Customers V,A,E,D; POS/Billing V,A; Services none; Memberships V,A,E; Inventory/Purchases/Expenses none
+  - Stylist: Dashboard V; AI Assistant V; My Day V; Front Desk none; Appointments V + E; Customers V + E; POS none; Services V; Memberships none; Inventory/Purchases/Expenses none
+  - Inventory Mgr: Dashboard V; Services V; Inventory V,A,E + X; Purchases V,A,E + X; others none
+  - Accountant: Dashboard V; Appointments V; Customers V + X; POS/Billing V + X; Memberships V; Inventory V + X; Purchases V,E + X; Expenses V,A,E,D + X
+  - Horizontal scrollbar below matrix; vertical scrollbar at right of matrix
+  - Mouse cursor hovering near Dashboard row (chips clickable)
+- **Features:**
+  - Granular RBAC: per-role × per-page permissions with 6 action levels (View, Add, Edit, Delete, Approve, Export)
+  - Instant auto-save on toggle (no Save button)
+  - Locked Super Admin role with full access, visually faded/non-editable
+  - Multiple predefined roles with distinct color badges (role color reused elsewhere, e.g. staff tags)
+  - Pages grouped by module sections (General, Salon, Inventory, Finance, …) mirroring the sidebar
+  - Approve permission implies approval workflows (e.g. expenses, purchases, leave)
+  - Export permission controls CSV/PDF exports per page
+  - Related system admin modules: Branches (multi-branch), Users Management, Activity Logs (audit), Settings, My Account, About App
+  - Global search, notifications with badge, theme palette picker, dark mode toggle
+- **NAIM translation:** Build a 'Roles & Permissions' page under SYSTEM in NAIM COMMAND with the identical matrix UX: page rows grouped by sidebar sections, role columns with colored badges, six chips V/A/E/D/AP/X per cell, instant save, Super Admin locked. Suggested roles: Super Admin (founder, locked), Owner/Director, Sales Manager, SDR/Lead Researcher, Automation Engineer (delivery), Account Manager/Client Success, Accountant/Finance, plus a future 'Side-Business Manager' or 'Client Portal/Viewer' role (the cut-off 8th column). Suggested page sections: GENERAL (Dashboard, AI Assistant, My Day), SALES (Leads Engine, Pipeline/Funnel, Outreach Actions, Proposals, Clients – recruitment agencies), DELIVERY (Projects, Automations/Workflows, Support Tickets, Retainers/Subscriptions in place of Memberships), FINANCE (Invoices/Billing in place of POS, Expenses, Payroll, Cash/M-Pesa till), HR (Staff, Leave Requests), REPORTS, SYSTEM (Business Units instead of Branches – one per side-business, Users, Settings, Activity Logs, Roles & Permissions). Example defaults: SDR gets V/A/E on Leads and Outreach, no Finance; Automation Engineer gets V/E on Projects and Automations, V on Clients; Accountant gets V/X on Clients and Invoices, full on Expenses; Approve used for proposal discounts, expenses and leave. Enforce permissions server-side and hide sidebar items lacking V.
+
+## #5 `download-5.png` — salon-system · Sidebar navigation (lower half, scrolled), active page: Roles & Permissions · Sidebar scrolled to the bottom. Shows the end of the finance group, then the HR, REPORTS and SYSTEM sections, plus the footer buttons Dark Mode and Logout. 'Roles & Permissions' is the active item. Main content area is not visible (cropped).
+- **Theme:** Dark mode. Sidebar background is a deep navy gradient (#0B1A33 to #0F2242). Item text and icons are near-white (#E6ECF5). Section headers are small, uppercase, muted grey-blue (#8A97AD). Active item is a solid bright blue pill (#3B7BE0, roughly #2F6FD6 to #4A86E8) with white text and icon. The Dark Mode button has a navy fill (#13284A), a thin light-blue border (#3A5A8C) and rounded corners. The Logout button is dark maroon/red (#5A1F2A, with a red tint around #7A2633) and white text. A thin scrollbar is visible on the right edge (grey, #5A6577).
+- **Layout:** The sidebar is a fixed left column, about 200–210px wide and full viewport height. The nav list scrolls vertically and has its own thin scrollbar on the right edge. Items are about 34px tall with a left icon (16px), a ~12px gap, then the label at roughly 13px medium weight. Section headers are uppercase, about 10–11px, bold, letter-spaced and muted, with extra top margin. A divider line separates the nav list from the sticky footer. The footer holds two full-width stacked buttons, each about 36px tall with an 8px radius: Dark Mode (outlined navy) and Logout (dark red). The active item is a full-width rounded rectangle (about 6px radius) highlighted in blue, with small horizontal inset margins (about 8px).
+- **Sidebar:** (finance group, header scrolled out of view) Expenses (icon: money bill), Finance (icon: pie chart), Payroll (icon: money check / ID card), Cash Till (icon: cash register), HR (section header), Staff (icon: user), Leave Requests (icon: plane departure), REPORTS (section header), Reports (icon: bar chart), SYSTEM (section header), Branches (icon: store / shop front), Users Management (icon: users group), Settings (icon: cog), Activity Logs (icon: history / clock-rewind), Roles & Permissions (ACTIVE, icon: user-gear / user-shield), My Account (icon: user circle), About App (icon: info circle), [Footer button] Dark Mode (icon: crescent moon), [Footer button] Logout (icon: sign-out arrow)
+- **Client 360:** none
+- **Components:**
+  - Nav item 'Expenses' with money-bill icon
+  - Nav item 'Finance' with pie-chart icon
+  - Nav item 'Payroll' with money-check icon
+  - Nav item 'Cash Till' with cash-register icon
+  - Section label 'HR'
+  - Nav item 'Staff' with user icon
+  - Nav item 'Leave Requests' with plane-departure icon
+  - Section label 'REPORTS'
+  - Nav item 'Reports' with bar-chart icon
+  - Section label 'SYSTEM'
+  - Nav item 'Branches' with store icon
+  - Nav item 'Users Management' with users icon
+  - Nav item 'Settings' with gear icon
+  - Nav item 'Activity Logs' with history icon
+  - Nav item 'Roles & Permissions' with user-cog icon, in the active/selected state (blue filled pill)
+  - Nav item 'My Account' with user-circle icon
+  - Nav item 'About App' with info-circle icon
+  - Horizontal divider above the footer
+  - Button 'Dark Mode' with moon icon. This is the theme toggle; the label likely switches to 'Light Mode' when toggled.
+  - Button 'Logout' with sign-out icon, dark red danger style
+  - Vertical scrollbar on the sidebar's right edge
+- **Features:**
+  - Grouped navigation with section headers. Finance-related items (Expenses, Finance, Payroll, Cash Till) are grouped under a header that has scrolled out of view.
+  - HR module: staff directory and leave request workflow
+  - Reports module
+  - Multi-branch support (Branches)
+  - User management plus role-based access control (Roles & Permissions page)
+  - Audit trail (Activity Logs)
+  - Global Settings, a personal My Account profile page, and an About App page with version info
+  - Persistent dark/light theme toggle in the sidebar footer
+  - Logout in the sidebar footer
+  - Sidebar scrolls independently while the footer stays sticky
+- **NAIM translation:** Reuse this sidebar shell for NAIM COMMAND, keeping the same grouping and the sticky footer (Dark Mode toggle + Logout).
+
+Finance group:
+- Expenses → SaaS/tools and ad spend
+- Finance → retainers, MRR and invoices to recruitment-agency clients
+- Payroll → contractor/VA payouts
+- Cash Till → M-Pesa/petty cash ledger
+
+HR:
+- Staff → team members (SDRs, automation builders)
+- Leave Requests
+
+REPORTS:
+- Reports → pipeline/funnel conversion, revenue, delivery SLAs
+
+SYSTEM:
+- Branches → Business Units. This lets the agency-automation business and future side-businesses each have scoped data, with a unit switcher.
+- Users Management
+- Roles & Permissions → roles like Founder/Admin, Sales, Delivery, Finance, with per-module permissions
+- Activity Logs → audit of lead edits, outreach actions, invoice changes
+- Settings → integrations such as email, WhatsApp and CRM API keys
+- My Account
+- About App → NAIM COMMAND version
+
+Visual spec: navy dark sidebar, blue active pill, red Logout button.
+
+## #6 `download-6.png` — salon-system · Customers · Customers list page (default view) with KPI cards, chevron status-filter strip, filter panel and DataTables-style customer table. No drawer or modal is open; the cursor is hovering the 'Customers' sidebar item.
+- **Theme:** Light content area (page bg ~#EEF1F5, white cards and panels) with a dark navy sidebar (~#0F1E3A / #13254A). Active sidebar item is a bright blue pill (~#2F7BEA). Table header is dark navy (~#13254A) with white text. Primary button is dark navy (~#13254A). KPI cards use a 4-color palette: navy (~#1C2E5A), green (~#3FA34D), blue (~#3B82E6) and amber/yellow (~#F2C230). Status chevrons: navy (~#2B3E66), dark green (~#2E7D32), grey (~#A9AEB6) and salmon/red (~#E57C7C).
+- **Layout:** Fixed left sidebar of about 150px, dark navy. The main area has a white sticky top bar card with rounded corners. Below it is a white page card titled 'Customers' containing, in order: (1) a row of 4 equal-width KPI cards in a 4-column grid; (2) a full-width 4-segment chevron/arrow status-filter strip; (3) a light-grey rounded Filters panel with a 3-column grid of inputs; (4) a DataTables-style table with 'Show N entries' and 'Search:' controls on top, and an info line plus pagination at the bottom. A thin blue progress/accent line is partially visible at the very top-center of the viewport.
+- **Sidebar:** Header: scissors icon + 'Salon ERP' + collapse button '<' (rounded square, top-right of the sidebar), Profile block: square logo 'RAMEEZ' (dark tile with red/white text), username 'admin', role badge 'Admin' (small pill), Section label 'GENERAL', Dashboard (chart-line icon), My Day (calendar icon), Section label 'SALON', Front Desk (bell/desk icon), Appointments (calendar-check icon), Customers (address-book icon) — ACTIVE, blue pill highlight, POS / Billing (cash register icon), Services (scissors icon), Memberships (id-card icon), Section label 'INVENTORY', Inventory (boxes icon), Purchases (truck icon), (the sidebar scrolls; more items are cut off below)
+- **Client 360:** none — this screenshot shows only the Customers list. The eye icon in each row is the entry point to the CUSTOMERS-page Customer 360 (the ~5-tab version: Visits, Invoices, Memberships, etc.). No tabs are visible in this screenshot.
+- **Components:**
+  - Top bar, left: address-book icon + page title 'Customers' (bold).
+  - Top bar actions (left to right): '+ Add Customer' (primary dark navy button, white text); 'CSV' (light button with file icon); 'PDF' (light button with file icon); 'Print' (printer icon); 'Import CSV' (upload icon); 'Template' (download icon).
+  - Global search input with search icon and placeholder 'Search everything...' (rounded, light grey).
+  - Icon buttons: palette icon (theme/palette switcher) and paintbrush icon (appearance/customize).
+  - Notification bell with red count badge '6'.
+  - Greeting text 'Welcome, admin'.
+  - Section heading inside the page card: address-book icon + 'Customers'.
+  - KPI card 1 (navy): big number '3', label 'Total Customers', faded contact-card icon at bottom-right.
+  - KPI card 2 (green): '3', label 'Active', faded user-check icon.
+  - KPI card 3 (blue): '455', label 'Loyalty Points', faded star icon.
+  - KPI card 4 (amber): '1', label 'No-Shows', faded user-x icon.
+  - Chevron status tabs, centered uppercase labels: 'ALL (3)' (navy, currently selected), 'ACTIVE (3)' (green), 'INACTIVE (0)' (grey), 'NO-SHOW RISK (0)' (salmon). Each segment is arrow-shaped and points right.
+  - Filters panel: header with funnel icon + 'Filters', and a 'Clear' button at the right (grey, with a circle-x icon). A navy divider line sits under the header.
+  - Filter field 'SEARCH' (search icon label): text input, placeholder 'Name, mobile, email...'.
+  - Filter field 'PREFERRED BRANCH' (building icon label): select, default 'All branches'.
+  - Filter field 'GENDER' (venus-mars icon label): select, default 'All genders'.
+  - Table controls: 'Show [10 v] entries' at left; 'Search:' with a text input at right.
+  - Table header columns (navy background, white bold text): Customer (with sort arrow, the active sort), Mobile, Email, Gender, Branch, Points, No-Show, Status, Actions.
+  - Row 1: Customer 'Client 1' (bold) with subline 'Layered cut, allergic to ammonia color' (a note or preference); Mobile '03001000011'; Email 'client1@demo.com'; Gender 'Male'; Branch 'Branch 1 – Gulberg'; Points '120'; No-Show '0'; Status green pill 'ACTIVE'.
+  - Row 2: 'Client 2' with subline 'Short fade'; Mobile '03001000012'; Email 'client2@demo.com'; Gender 'Male'; Branch 'Branch 1 – Gulberg'; Points '45'; No-Show shown as a red circular badge '1'; Status 'ACTIVE'.
+  - Row 3: 'Client 3' with subline 'Gold facial monthly'; Mobile '03001000013'; Email 'client3@demo.com'; Gender 'Female'; Branch 'Branch 2 – Blue Area'; Points '290'; No-Show '0'; Status 'ACTIVE'.
+  - Actions per row: eye icon (view, opens the Customer 360), pencil icon (edit), red trash icon (delete).
+  - Rows use zebra striping, and the Customer column is shaded slightly grey (the sorted column).
+  - Footer: 'Showing 1 to 3 of 3 entries' at left; pagination 'Previous [1] Next' at right.
+- **Features:**
+  - Customer CRM list with KPIs: total, active, loyalty points sum and no-show count.
+  - Segment quick-filters by status: all, active, inactive and no-show risk.
+  - Multi-branch support: a preferred branch per customer, plus a branch filter.
+  - Demographic filter (gender) and free-text search by name, mobile or email.
+  - Loyalty points tracking per customer.
+  - No-show tracking, with a red badge when the count is above 0 and a risk segmentation.
+  - Customer notes/preferences shown inline under the name (allergies, usual service).
+  - Data export to CSV and PDF, print, CSV import and a downloadable import template.
+  - Per-row CRUD: view (360), edit and delete.
+  - Global search, notifications and a theme palette switcher in the top bar.
+  - Role-based user (Admin badge).
+- **NAIM translation:** Maps to NAIM COMMAND 'Clients / Accounts' (recruitment agencies). Top-bar actions: '+ Add Client', CSV, PDF, Print, Import CSV and Template. KPI cards: Total Clients, Active Retainers, MRR or Account Value (replacing Loyalty Points), and At-Risk/Churn Risk (replacing No-Shows, e.g. missed meetings or late payments). Chevron segments: ALL / ACTIVE / PAUSED-INACTIVE / CHURN RISK. Filters: search (name, phone, email), Business Unit (replacing Preferred Branch, to support future side-businesses) and Industry/Agency Size (replacing Gender). Table columns: Client (agency name plus a one-line note such as 'Uses Bullhorn, wants WhatsApp screening bot'), Phone (+254...), Email, Segment, Business Unit, Value/MRR, Missed meetings or Overdue invoices (red badge), Status pill, and Actions (view 360, edit, delete). The eye icon opens the Client 360 with the 5 customer-level tabs, mapped as Projects/Deliveries (Visits), Invoices, Retainers/Subscriptions (Memberships), Notes and Timeline. Keep the navy sidebar, the colored KPI palette and the theme switcher.
+
+## #7 `download-7.png` — salon-system · POS / Billing · POS / Billing main screen, Services catalogue tab active, empty cart (Walk-in customer, Branch 1 – Gulberg). Cursor is hovering the active 'POS / Billing' sidebar item.
+- **Theme:** Light content area (#FFFFFF cards on a very light grey canvas ~#F4F5F7) with a dark navy sidebar (~#0F1B2D / #111C2E). Primary accent is a dark navy (~#0F1E36) for the active pill tab, 'New Sale' button and numbered catalogue badges. Active sidebar item is a bright blue (~#2F6FE0 / #3B7BEA) with white text. Prices are in blue (~#1F5FBF). 'Settled' is green (~#2E9E4F). Notification badge is red/orange (~#E5533D). 'Add' buttons are mid-grey (~#6B7280) with white text. Focused input has a blue border (~#3B82F6).
+- **Layout:** Fixed left sidebar (~150px, dark navy) and a main area. Top: a full-width white header card. On the left it shows the page title 'POS / Billing' with a register icon. On the right it holds the action buttons, then a global search, then icon buttons and the user greeting. Below the header is a two-column body. The left column (~75% width) is the catalogue: a pill tab bar, then a row of 3 inputs (search, barcode, code), a helper hint line, and a grid of catalogue item cards (3 cards in a row, each ~115x42px). The right column (~25% width) is a tall white 'cart/bill' panel. From top to bottom it contains the Branch and Customer selects, the empty-cart state, the totals block, the Tips and Payments sections, and a footer with paid status. The cards have 8px rounded corners and a subtle 1px border (~#E5E7EB).
+- **Sidebar:** Header: scissors icon + 'Salon ERP' brand, with a collapse button ('<') in a dark rounded square at the top right, Profile block: square logo/avatar 'RAMEEZ' (dark background, red underline), name 'admin', grey pill badge 'Admin', Section 'GENERAL': Dashboard (line-chart icon), My Day (calendar icon), Section 'SALON': Front Desk (bell/desk icon), Appointments (calendar icon), Customers (contact-card icon), POS / Billing (cash-register icon; ACTIVE, blue highlight, hover cursor), Services (scissors icon), Memberships (card icon), Section 'INVENTORY': Inventory (boxes icon), Purchases (truck icon). The list is cut off and continues below, with a scrollbar visible.
+- **Client 360:** none
+- **Components:**
+  - Header title: register icon + 'POS / Billing' (bold, dark)
+  - Header button 'New Sale' (dark navy filled, white text, with a small icon)
+  - Header button 'Invoices' (light/ghost with a list icon)
+  - Header button 'Clear Cart' (light/ghost with a reset/circular-arrow icon)
+  - Global search input with a magnifier icon and placeholder 'Search everything...'
+  - Icon button: palette (theme switcher)
+  - Icon button: brush/paint (appearance)
+  - Icon button: notification bell with a red count badge (shows '0')
+  - Text 'Welcome, admin'
+  - Catalogue tab pills: 'Services' (active, dark navy filled, scissors icon), 'Products' (box icon), 'Packages' (gift/package icon), 'Memberships' (card icon). The inactive pills are white with a border.
+  - Input: magnifier + placeholder 'Search catalogue...' (wide)
+  - Input: barcode icon + placeholder 'Scan barcode / SKU → Enter'
+  - Input: '#' prefix + placeholder 'Code + Enter' (focused, blue border, text cursor visible)
+  - Helper hint with a keyboard icon: 'Type an item's number in Code and hit Enter to add it — 3*7 adds 3 × code 7.' The words 'Code', 'Enter' and '3*7' are bold.
+  - Catalogue card 1: dark navy square badge '1' + 'Haircut – Classic' (bold) / '30 min' (grey) / 'Rs 500' (blue bold)
+  - Catalogue card 2: badge '2' + 'Hair Color – Full' / '90 min' / 'Rs 2,500'
+  - Catalogue card 3: badge '3' + 'Facial – Gold' / '60 min' / 'Rs 1,800'
+  - Cart panel label 'Branch' (building icon) with a select set to 'Branch 1 – Gulberg' and a chevron
+  - Cart panel label 'Customer' (person icon) with a select set to 'Walk-in' and a chevron
+  - Empty state: grey shopping-basket icon + text 'Tap catalogue items to build the bill' (grey, centered)
+  - Row 'Subtotal' with value 'Rs 0' (right aligned)
+  - Row 'Discount' with a numeric input showing '0'
+  - Row 'Tax %' with an empty numeric input
+  - Row 'Tax amount' with value 'Rs 0'
+  - Divider (thick dark line), then 'Total' (bold) with value 'Rs 0' (bold)
+  - Section 'Tips (pass-through, not revenue)' with a hand/coins icon and a grey '+ Add' button
+  - Section 'Payments' with a cash icon and a grey '+ Add' button
+  - Footer: 'Paid Rs 0' (left) and 'Settled' (green, right)
+- **Features:**
+  - Point-of-sale / invoicing with a multi-type catalogue (services, products, packages, memberships)
+  - Three ways to add items: text search, barcode/SKU scan, and a numeric quick-code with a quantity multiplier syntax (qty*code)
+  - Numbered catalogue items for keyboard-driven fast entry
+  - Each item shows its duration and price (currency 'Rs')
+  - Multi-branch selection per sale
+  - Customer attach with a 'Walk-in' default
+  - Bill-level discount and a tax % that auto-computes the tax amount
+  - Tips tracked separately as pass-through (excluded from revenue)
+  - Split / multiple payments via '+ Add' (several payment lines)
+  - Settlement status (Paid amount vs total, 'Settled' badge)
+  - New Sale, Invoices list and Clear Cart actions
+  - Global search, theme palette switcher and notifications
+- **NAIM translation:** This becomes NAIM COMMAND's 'Quotes / Invoicing' (Billing) module. The catalogue tabs map to the following: Services become AI automation packages (e.g. 1 = 'CV Screening Bot', 2 = 'WhatsApp Candidate Outreach', 3 = 'Interview Scheduler Agent'), with setup time/effort shown instead of minutes and prices in KES. Products become add-ons or licenses (extra seats, API credits). Packages become bundled offers (Starter/Growth/Enterprise). Memberships become monthly retainers or SaaS subscriptions. Branch becomes the Business Unit/Entity selector (Naim Automation vs future side-businesses). Customer becomes a recruitment agency client picked from CRM/Leads, with a 'Prospect / Ad-hoc' default instead of Walk-in. Keep the quick-code entry (qty*code) for fast quote building, plus discount, the VAT 16% default and auto tax amount. Replace Tips with 'Pass-through costs (reimbursables, third-party API fees — not revenue)'. Payments supports split/milestone payments (M-Pesa, bank transfer, card) with a Paid vs Total settled/partially-paid/outstanding status. The header actions become 'New Quote/Invoice', 'Invoices', 'Clear'. Keep the same light theme with the dark navy sidebar and blue accent, and the right-hand bill panel layout.
+
+## #8 `download-8.png` — salon-system · Services · Services list (Services tab active) with KPI cards, status chevron funnel filter (ALL/ACTIVE/INACTIVE), filters panel and DataTables-style services table
+- **Theme:** Light content area (#F4F6F9 page bg, white cards) with a dark navy sidebar (#0F1E36 to #13284A). Primary accent is navy (#0B1F3A) for the Add Service button and the table header. KPI card 1 is a dark navy gradient (#1B2F55 to #2A4374). KPI cards 2 and 3 are a bright blue gradient (#2F6FD6 to #4A8BEA). Active sidebar item is blue (#2F6FE0). Status chevrons: ALL is slate navy (#3A5078), ACTIVE is green (#2E7D32), INACTIVE is grey (#A9ADB3). Green pill badges use #2E7D32 or #1E8E3E with white text.
+- **Layout:** Fixed left sidebar about 150px wide, dark navy. The main area has a sticky white top bar card with rounded corners: page title on the left, action buttons and global search on the right. Below it, a large white rounded content card contains a section title, a 3-column KPI card grid (equal widths, about 130px tall), a horizontal tab strip, a full-width 3-segment chevron status bar, a collapsible Filters panel and a full-width data table. Light grey page background.
+- **Sidebar:** Header: scissors icon + 'Salon ERP' + collapse button '<' (dark rounded square), Avatar: rounded-square logo 'RAMEEZ' with a purple/blue border, User name 'admin' with a small pill badge 'Admin', Section GENERAL: Dashboard (line-chart icon), My Day (calendar-check icon), Section SALON: Front Desk (bell/desk icon), Appointments (calendar icon), Customers (id-card icon), POS / Billing (cash register icon), Services (scissors icon, ACTIVE, highlighted in a blue pill), Memberships (id-card icon, hover state), Section INVENTORY: Inventory (boxes icon), Purchases (truck icon), The list continues below the fold, and a scrollbar is visible on the sidebar
+- **Client 360:** none
+- **Components:**
+  - Top bar, left: scissors icon + title 'Services'.
+  - Top bar, right (left to right): primary navy button '+ Add Service'; light buttons 'CSV' (file icon), 'PDF' (file icon), 'Print' (printer icon), 'Import CSV' (file-import icon), 'Template' (download icon).
+  - Top bar, right (continued): global search input 'Search everything...' with a magnifier icon; round theme/palette icon button; brush/paint icon button (theme customizer); bell icon with a red notification badge showing '0'; text 'Welcome, admin'.
+  - Section heading: scissors icon + 'Services'.
+  - KPI card 1 (dark navy): big number '3', label 'Services', faded large scissors watermark icon at bottom-right.
+  - KPI card 2 (blue): '3', label 'Categories', faded layers/stack watermark icon.
+  - KPI card 3 (blue): '2', label 'Packages', faded open-box watermark icon.
+  - Tabs: 'Services' (scissors icon, active, blue text with blue underline), 'Categories' (layers icon), 'Packages' (box icon).
+  - Chevron/arrow segmented status filter: 'ALL (3)' (navy), 'ACTIVE (3)' (green), 'INACTIVE (0)' (grey). Segments are arrow-shaped, with uppercase white text.
+  - Filters panel (light grey bg): funnel icon + 'Filters' heading; dark divider line; grey button 'Clear' with an x-circle icon at top-right; field label 'SEARCH SERVICES' with a search icon; input with placeholder 'Search services...'.
+  - Table controls: 'Show [10 v] entries' dropdown on the left; 'Search:' input on the right (DataTables style).
+  - Table header (navy bg, white text, sortable arrows): Service (sorted asc), Category, Price, Actual Cost, Margin %, Mins, Status, Actions.
+  - Row 1: 'Facial – Gold' with a small blue flask/package icon | Skin | Rs 1,800 | Rs 250 | green pill '86%' | 60 | green pill 'ACTIVE' | actions.
+  - Row 2: 'Hair Color – Full' with a flask icon | Hair | Rs 2,500 | Rs 227 | '91%' | 90 | ACTIVE | actions.
+  - Row 3: 'Haircut – Classic' | Hair | Rs 500 | Rs 50 | '90%' | 30 | ACTIVE | actions.
+  - Action icons in each row: eye (view, dark), pencil (edit, dark), trash (delete, red #D32F2F).
+  - Table styling: rows are alternating light grey/white; the Service column is bold.
+- **Features:**
+  - Service catalog CRUD (add, view, edit, delete)
+  - Service categories management (Categories tab)
+  - Service packages/bundles (Packages tab), with a flask icon on rows that are likely used in packages or consume products
+  - Cost tracking per service (Actual Cost, likely from product consumption/recipes) and auto-calculated Margin %
+  - Duration (Mins) per service, used for appointment scheduling
+  - Active/inactive status with counts in a funnel-style chevron filter
+  - Export to CSV, PDF and Print; bulk Import CSV with a downloadable Template
+  - Global search, notifications and a theme/palette customizer
+  - Paginated, sortable, searchable table
+- **NAIM translation:** This maps to NAIM COMMAND's 'Offers / Services Catalog' module. It lists his sellable AI automation products for recruitment agencies, for example 'CV Screening Bot', 'Candidate Outreach Automation', 'Interview Scheduler Agent' and 'Job-Board Sync'. Column mapping: Category becomes Offer Line (Recruitment Automation, AI Agents, Integrations, and future side-business lines). Price becomes Setup Fee / Monthly Retainer in KES. Actual Cost becomes Delivery Cost (API/LLM usage, hosting, contractor hours). Margin % stays as Margin %, colour-coded. Mins becomes Est. Delivery Hours/Days. Status stays as Active/Inactive. The Packages tab becomes bundled tiers (Starter/Growth/Enterprise agency packages). KPI cards become Offers / Offer Lines / Packages. Keep the chevron ALL/ACTIVE/INACTIVE filter, the CSV/PDF/Print/Import/Template toolbar, and the view/edit/delete actions. Recommended additions: a pricing-model field (one-off vs recurring), and links so that offers selected in proposals and deals flow into invoicing (POS/Billing becomes Invoices/Proposals).
+
+## #9 `download-9.png` — salon-system · Memberships · Memberships list page, 'Plans' tab active (membership plan catalogue table with status chevron filter)
+- **Theme:** Light content area (page bg ~#EEF1F5, white cards #FFFFFF) with dark navy sidebar (~#0F2340 / #132A4A). Primary accent navy (~#13294B) on 'Add Membership Plan' button and table header. Active sidebar item is bright blue pill (~#2F7BE5). Status chevrons: ALL slate-navy (~#3E5577), ACTIVE green (~#2E7D32), INACTIVE light grey (~#B8BCC2, white text). ACTIVE badges green pill (~#2E7D32, white uppercase text). Delete icon red (~#D32F2F). KPI card dark navy gradient (~#0F2A55 to #1B3A6B) with faint ID-card icon watermark.
+- **Layout:** Fixed left sidebar (~150px, dark navy) + main content. Top bar is a white rounded card spanning content width: left = ID-card icon + page title 'Memberships'; right = action button group then global search, theme/palette icon, brush icon, notification bell with red badge, 'Welcome, admin'. Below: white content card containing section heading 'Memberships' (icon + bold title), one KPI card (~40% width, left aligned), tab strip, full-width 3-segment arrow/chevron status filter bar, collapsible 'Filters' panel (light grey bg), then a DataTables-style table with 'Show N entries' left, 'Search:' right, pagination footer.
+- **Sidebar:** Header: scissors icon + 'Salon ERP' + collapse button '<' (rounded square, top-right of sidebar), Profile block: square logo 'RAMEEZ' (dark purple/black tile with border), name 'admin', role pill badge 'Admin', Section label: GENERAL, Dashboard (line-chart icon), My Day (calendar-check icon), Section label: SALON, Front Desk (bell/desk icon), Appointments (calendar icon), Customers (contact card icon), POS / Billing (receipt icon), Services (scissors icon), Memberships (ID card icon) — ACTIVE, blue highlighted pill, mouse cursor hovering, Section label: INVENTORY, Inventory (boxes icon), Purchases (truck icon), (sidebar scrolls; more items below, vertical scrollbar visible)
+- **Client 360:** none — this is the Memberships plans list; no client 360 view is shown.
+- **Components:**
+  - Top bar title: ID-card icon + 'Memberships'
+  - Primary button (dark navy, white text): '+ Add Membership Plan'
+  - Secondary light buttons with icons: 'CSV', 'PDF', 'Print' (printer icon), 'Import CSV' (file icon), 'Template' (download icon)
+  - Global search input with magnifier icon, placeholder 'Search everything...'
+  - Icon buttons: palette (theme picker), paint brush (appearance/customize), bell with red notification badge (count '6'-ish)
+  - Text: 'Welcome, admin'
+  - Section header: ID-card icon + 'Memberships'
+  - KPI card (dark navy gradient, rounded, shadow): big number '2', label 'Plans', large faint ID-card icon bottom-right
+  - Tabs: 'Plans' (active, blue text + blue underline, list icon) | 'Customer Memberships' (inactive, grey, card icon)
+  - Chevron status filter bar (3 arrow-shaped segments, equal width): 'ALL (2)' slate-navy, 'ACTIVE (2)' green, 'INACTIVE (0)' grey
+  - Filters panel: funnel icon + 'Filters' heading with dark underline rule; right button 'Clear' (dark grey, x-circle icon); field label 'SEARCH PLANS' with magnifier icon; full-width input placeholder 'Search plans...'
+  - Table controls: 'Show [10 v] entries' dropdown; 'Search:' text input at right
+  - Table header (dark navy bg, white bold text, sort arrows on each): Plan (sorted asc ▲), Price, Validity, Benefit, Discount, Status, Actions
+  - Row 1: Plan 'Gold Card' (bold, grey highlighted sorted column) | 'Rs 8,000' | '365 d' | 'Discount pct' | '15%' | badge 'ACTIVE' (green) | actions: eye (view), pencil (edit), red trash (delete)
+  - Row 2: 'Silver Card' | 'Rs 3,000' | '180 d' | 'Discount pct' | '10%' | badge 'ACTIVE' | eye, pencil, red trash
+  - Footer: 'Showing 1 to 2 of 2 entries'; pagination 'Previous' [1] 'Next'
+- **Features:**
+  - Membership/subscription plan catalogue with price (Rs currency), validity in days, benefit type (Discount pct), discount %, active/inactive status
+  - CRUD on plans: add, view, edit, delete
+  - Bulk export CSV/PDF/Print, Import CSV with downloadable Template
+  - KPI summary count of plans
+  - Status segment filter with live counts (All/Active/Inactive)
+  - Collapsible filter panel with text search and Clear
+  - Separate tab for customer membership assignments (which customers hold which plan)
+  - Sortable, paginated, searchable data table
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** Becomes 'Retainers / Service Plans' module in NAIM COMMAND: catalogue of recurring packages sold to recruitment agencies (e.g., 'Starter Automation' KES 30,000/mo, 'Growth AI Recruiter' KES 80,000/mo) with columns Plan, Price (KES), Term/Validity (days or months), Benefit (e.g., included automations, support hours, discount pct on add-ons), Discount, Status, Actions. Tabs: 'Plans' and 'Client Subscriptions' (which agency is on which retainer, start/renewal dates, MRR). KPI cards: Plans count, Active subscriptions, MRR, Renewals due. Keep the chevron ALL/ACTIVE/INACTIVE filter, Filters panel, CSV/PDF/Print/Import/Template toolbar, and the same view/edit/delete icons. A 'business' selector could scope plans per side-business.
+
+## #10 `download-10.png` — salon-system · Inventory · Inventory main page – Products tab active, status chevron filter on ALL, products DataTable (10 entries per page)
+- **Theme:** Light mode content area (white #FFFFFF cards on light grey #F1F3F6 background) with a dark navy sidebar (#0F1E3D to #13254A gradient). Primary accent navy #1B2A4A for the top-bar Add Product button and the table header. Active sidebar item is bright blue #2F6FDB. KPI cards are color-coded: navy gradient #1E3A6E to #142850, green #3A9A48, amber/yellow #F2C230. Status chevrons are slate #3D5275 (ALL), dark green #2E7D32 (ACTIVE) and grey #A9ADB3 (INACTIVE).
+- **Layout:** Fixed left sidebar about 150px wide, dark navy, holding uppercase section labels and icon+label nav items. The main area has a sticky white top bar containing: the page title with an icon on the left; action buttons in the center-right; a global search, theme icons, a notification bell and a greeting on the right. The content is a white card titled 'Inventory' (with a boxes icon). Inside the card, from top to bottom: (1) a row of three equal-width KPI cards in a 3-column grid, rounded about 10px, each with a large faded icon at bottom-right; (2) a tab bar with 'Products' and 'Stock Ledger'; (3) a full-width 3-segment chevron/arrow status filter bar; (4) a collapsible 'Filters' panel on a light-grey background with a Clear button; (5) DataTables-style controls ('Show N entries' on the left, 'Search:' on the right); (6) a data table with a navy header row and sortable columns.
+- **Sidebar:** Logo 'RAMEEZ' (dark square badge), User: 'admin' with pill badge 'Admin', Section GENERAL: Dashboard, My Day, Section SALON: Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, Section INVENTORY: Inventory (active, blue highlight), Purchases (hovered, cursor pointing), Section FINANCE: Expenses (list continues below the fold; sidebar is scrollable)
+- **Client 360:** none
+- **Components:**
+  - Top bar title: icon + 'Inventory'
+  - Top bar button 'Add Product' with + icon (filled dark navy, primary)
+  - Top bar buttons in light grey with icons: 'CSV', 'PDF', 'Print', 'Import CSV', 'Template' (download icon)
+  - Global search input, placeholder 'Search everything...', with a magnifier icon
+  - Icon buttons: palette (theme picker), brush (customize), and a bell showing a red badge with a count
+  - Text 'Welcome, admin'
+  - Card header: boxes icon + 'Inventory'
+  - KPI card 1 (navy): value '4', label 'Products', faded boxes icon
+  - KPI card 2 (green): value 'Rs 8,050', label 'Stock Value', faded money-bag ($) icon
+  - KPI card 3 (yellow): value '1', label 'Low Stock', faded warning-triangle icon
+  - Tabs: 'Products' (active, blue text with blue underline, boxes icon) and 'Stock Ledger' (book/ledger icon)
+  - Chevron status filter, 3 segments: 'ALL (4)' (active, slate navy), 'ACTIVE (4)' (green), 'INACTIVE (0)' (grey)
+  - Filters panel: funnel icon + 'Filters' heading; button 'Clear' (grey #6C757D with a circle-x icon); field label 'SEARCH PRODUCTS' with a magnifier icon; input placeholder 'Search products...'
+  - Table controls: 'Show [10 ▾] entries' and 'Search:' input
+  - Table header (navy #0F1E3D, white bold text, sort arrows): SKU (sorted ascending), Product, Brand, Usage, Pack, Cost, Sale, Min, On Hand, Status, Actions
+  - Row 1: PRD-001 | Shampoo 250ml (bold) | Brand A | RETAIL badge (blue #3B6FE0 pill) | 1 pcs | Rs 150 | Rs 250 | 10 | 23 (bold) | ACTIVE (green pill) | eye, pencil and red trash icons
+  - Row 2: PRD-002 | Hair Color Tube | Brand B | BACKBAR badge (purple #8B5CF6 pill) | 100 ml | Rs 400 | — | 15 | 11.5 with red 'LOW' pill | ACTIVE | actions
+  - Row 3: PRD-003 | Developer 1L | Brand B | BACKBAR | 1000 ml | Rs 900 | — | 5 | 0 | ACTIVE | actions (more rows continue below the fold)
+  - Row styling: alternating light zebra stripes; the SKU column is in muted grey text
+- **Features:**
+  - Product catalog with SKU, brand, usage type (Retail = sold to customer, Backbar = consumed internally), pack size and unit, cost price, sale price (blank for internal-use items)
+  - Minimum stock threshold with automatic LOW badge when on-hand is below min
+  - KPI summary: product count, total stock value (cost × qty), low-stock count
+  - Stock Ledger tab for inventory movement history (in/out/adjustments)
+  - Status segmentation: Active / Inactive with counts
+  - Export to CSV/PDF, Print, bulk Import CSV with a downloadable Template
+  - Per-row actions: view, edit, delete
+  - Global search, theme palette switcher, notifications
+  - Linked Purchases module (procurement) feeding inventory
+- **NAIM translation:** This maps to a 'Assets & Resources' or 'Service Catalog / Licenses' module in NAIM COMMAND. Each product becomes a deliverable component or resource: AI automation packages, API credits, SaaS seats/licenses (OpenAI, WhatsApp API, n8n, Twilio), plus hardware for future side-businesses. Field mapping: SKU becomes the package/resource code. Usage RETAIL/BACKBAR becomes 'Resale to client' vs 'Internal use'. Pack becomes the unit (credits, seats, months). Cost/Sale become KES cost vs client price, which gives margin. Min/On Hand becomes the remaining credits/quota, with a LOW alert. The KPIs become: Active Packages/Resources, Resource Value (KES), Low Balance alerts. The Stock Ledger becomes a usage/consumption ledger per client deployment. Keep the same UI pattern: top-bar export/import buttons, colored KPI cards, ALL/ACTIVE/INACTIVE chevron filter, Filters panel, and a navy-header DataTable with view/edit/delete. Purchases maps to vendor subscriptions/expenses procurement. Use 'KES' instead of 'Rs'.
+
+## #11 `download-11.png` — salon-system · Purchases (Inventory section) · Purchases page, 'Purchase Orders' tab active (Suppliers tab available), list/table view with KPI cards, status pipeline chevrons and filters
+- **Theme:** Light content area (page bg ~#EEF1F5, white cards #FFFFFF) with dark navy sidebar (~#0B1F3A / #0F2547). Active sidebar item bright blue (~#2F7BE5). Top action buttons dark navy (~#0F2547) for primary, light grey (~#F1F3F5) for secondary. KPI card colors: navy (~#1E3A5F gradient), blue (~#3B82E0), amber/yellow (~#E8B21E), green (~#3FA34D). Status badges: ORDERED blue pill (~#2F6FD6), RECEIVED dark green pill (~#2E7D32). Due amount red (~#C62828).
+- **Layout:** Fixed left sidebar (~150px wide, dark navy, icon + label per item, uppercase grey section headers, scrollbar visible). Main area: top header bar card (white, rounded) with truck icon + page title 'Purchases' on left and action buttons + global search + icon buttons + 'Welcome, admin' on right. Below, a large white rounded content card containing: section title with truck icon, tab strip (2 tabs, underline active), a 4-column KPI card row (equal widths), a 5-segment chevron/arrow status pipeline spanning full width, a Filters panel (light grey bg, 3-column grid of inputs: From | To | Search), then a DataTables-style table (Show N entries left, Search box right, dark navy header row, sortable columns, pagination footer).
+- **Sidebar:** SALON (section header), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, INVENTORY (section header), Inventory, Purchases (active, blue highlight), FINANCE (section header), Expenses (hover state, cursor over it), Finance, Payroll, Cash Till, HR (section header), Staff, Leave Requests, REPORTS (section header, cut off below)
+- **Client 360:** none
+- **Components:**
+  - Header bar: truck icon + 'Purchases' title (bold)
+  - Primary button: '+ New Purchase Order' (dark navy, white text)
+  - Secondary buttons with icons: 'Reorder' (cart icon), 'CSV' (file icon), 'PDF' (file icon), 'Print' (printer icon)
+  - Global search input: placeholder 'Search everything...'
+  - Icon buttons: palette (theme switcher), brush (customize), bell with red notification badge showing '6'
+  - Greeting text: 'Welcome, admin'
+  - Content card title: truck icon + 'Purchases'
+  - Tabs: 'Purchase Orders' (active, blue text with blue underline, document icon), 'Suppliers' (truck icon, inactive grey)
+  - KPI card 1 (dark navy gradient): value '2', label 'Purchase Orders', faded document/invoice watermark icon bottom-right
+  - KPI card 2 (blue): value 'Rs 15,900', label 'Ordered Value', faded money-bag ($) watermark icon
+  - KPI card 3 (amber/yellow): value 'Rs 2,500', label 'Payable', faded hourglass watermark icon
+  - KPI card 4 (green): value '1', label 'Awaiting Receipt', faded delivery-truck watermark icon
+  - Status pipeline chevrons (clickable filters, arrow-shaped segments): 'ALL (2)' dark navy (~#2C4466, currently selected), 'DRAFT (0)' grey (~#A9AEB4), 'ORDERED (1)' blue (~#2F7BE5), 'RECEIVED (1)' green (~#2E7D32), 'CANCELLED (0)' salmon/red (~#E08A85)
+  - Filters panel: funnel icon + 'Filters' heading, dark divider line under heading, 'Clear' button (grey, with x-circle icon) top-right
+  - Filter field 'FROM' (calendar icon label) date input value '06/11/2026'
+  - Filter field 'TO' (calendar icon label) date input value '09/09/2026'
+  - Filter field 'SEARCH' (magnifier icon label) text input placeholder 'PO no, supplier...'
+  - Table controls: 'Show [10 ▾] entries' dropdown; 'Search:' input on right
+  - Table header (dark navy ~#0F2547, white text, sort arrows): 'PO No', 'Date' (currently sorted desc), 'Supplier', 'Branch', 'Lines', 'Total', 'Paid', 'Due', 'Status', 'Actions'
+  - Row 1: 'PO-2026-002' (bold) | 'Sep 02, 2026' | 'Supplier 2' | 'Branch 2 – Blue Area' | '1' | 'Rs 7,500' | 'Rs 5,000' | 'Rs 2,500' (red bold) | badge 'ORDERED' (blue pill) | eye icon (view)
+  - Row 2: 'PO-2026-001' (bold) | 'Aug 29, 2026' | 'Supplier 1' | 'Branch 1 – Gulberg' | '2' | 'Rs 8,400' | 'Rs 8,400' | '—' | badge 'RECEIVED' (green pill) | eye icon (view)
+  - Sorted column cells lightly shaded grey
+  - Footer: 'Showing 1 to 2 of 2 entries' left; pagination 'Previous' | '1' (active, bordered) | 'Next' right
+- **Features:**
+  - Purchase order management with lifecycle statuses: Draft → Ordered → Received, plus Cancelled
+  - Supplier management (separate Suppliers tab)
+  - Multi-branch purchasing (each PO tied to a branch)
+  - Partial payment tracking per PO (Total / Paid / Due) and aggregate Payable KPI
+  - Line-item counts per PO
+  - Reorder shortcut (likely generates POs from low-stock inventory)
+  - Export CSV / PDF / Print
+  - Date-range and text filters with Clear; status pipeline doubles as quick filter with counts
+  - Sortable, paginated, searchable data table
+  - Auto-numbered POs (PO-YYYY-NNN)
+  - Global search, notifications, theme/palette customization
+- **NAIM translation:** Map to a 'Purchases / Vendor Spend' module in NAIM COMMAND's Finance/Operations area: POs for tools and subcontracting (e.g., API credits, SaaS licences like OpenAI/Twilio/WhatsApp BSP, freelance developers, hardware). Tabs: 'Purchase Orders' and 'Vendors'. KPI cards: # POs, Ordered Value (KES), Payable (outstanding to vendors), Awaiting Delivery/Activation. Status pipeline: All / Draft / Ordered / Delivered / Cancelled. Replace 'Branch' with 'Business Unit' (Recruitment Automation, side-business X) or 'Client Project' to allocate cost to a delivery engagement for margin tracking. Keep Total/Paid/Due with red due, KES currency (Rs → KES), CSV/PDF/Print exports, and swap 'Reorder' for 'Renew subscriptions' (auto-draft POs for expiring SaaS). Same reusable pattern (KPI row + chevron status filter + filter panel + table) should be used for the Leads pipeline and Deals pages.
+
+## #12 `download-12.png` — salon-system · Expenses (Finance group) · Expenses list view: KPI count card, category chevron filter bar, collapsible Filters panel, DataTables-style expenses table with 3 rows
+- **Theme:** Light mode content area (page bg ~#EEF1F5, white cards #FFFFFF) with a dark navy sidebar (~#0F1E3D to #13254A). Primary/active accent blue ~#2F6FE0 (active sidebar item 'Expenses'). Table header dark navy ~#0F1E3D with white text. Category chevron palette: ALL dark slate ~#2E3E5C, RENT blue ~#2F6FE0, UTILITIES indigo/violet ~#6A4FE0, SALARIES light lavender ~#B9A3F0, SUPPLIES sage green ~#8DB580, MARKETING amber/orange ~#F0A020, MISC grey ~#B5B9C0. Dark 'Add Expense' button ~#0F1E3D. Delete icon red ~#E03A3A.
+- **Layout:** Fixed left dark sidebar (~150px wide) with uppercase grey section headers and icon+label items; white rounded nav item highlight for active. Main area on light grey background: (1) top sticky white header bar with page icon + title 'Expenses' on left and action buttons + global search + icons + greeting on right; (2) white content card containing: section title 'Expenses' with icon; a single wide KPI card (approx 40% width, left-aligned) with dark navy gradient; full-width horizontal chevron/arrow-shaped segmented category tabs (7 segments, equal width); a light-grey bordered Filters panel with header row (title left, Clear button right) and a full-width search input; a DataTables block: 'Show [10] entries' left and 'Search:' input right, full-width table, footer 'Showing 1 to 3 of 3 entries' left and pagination right.
+- **Sidebar:** SALON (section header, partially cut off at top), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses (active, blue pill highlight), Finance, Payroll, Cash Till (hover state, cursor over it; label partially obscured as 'Cash ill'), HR (section header), Staff, Leave Requests, REPORTS (section header, cut off at bottom)
+- **Client 360:** none
+- **Components:**
+  - Top header: page icon (banknote/money icon) + title 'Expenses' (bold)
+  - Header button '+ Add Expense' (primary, dark navy fill, white text)
+  - Header button 'CSV' (light grey, file icon)
+  - Header button 'PDF' (light grey, file icon)
+  - Header button 'Print' (light grey, printer icon)
+  - Header button 'Import CSV' (light grey, import icon)
+  - Header button 'Template' (light grey, download icon)
+  - Global search input placeholder 'Search everything...' with search icon
+  - Icon button: palette (theme selector)
+  - Icon button: brush/pen (customize/appearance)
+  - Notification bell with red badge '6'
+  - Text 'Welcome, admin'
+  - Section title with icon: 'Expenses'
+  - KPI card: large number '3', label 'Expenses', dark navy gradient background (~#0F1E3D→#1E3A6E), faded large money/banknote watermark icon bottom-right
+  - Category chevron filter bar (arrow-shaped segments with counts): 'ALL (3)' [active, dark slate], 'RENT (1)' [blue], 'UTILITIES (1)' [indigo], 'SALARIES (0)' [lavender], 'SUPPLIES (0)' [sage green], 'MARKETING (1)' [amber], 'MISC (0)' [grey]
+  - Filters panel: header with funnel icon + 'Filters'; right button '⊗ Clear' (grey, rounded); dark underline divider beneath header
+  - Filter field label 'SEARCH EXPENSES' (small caps, search icon) with input placeholder 'Search expenses...'
+  - DataTables length control: 'Show [10 ▾] entries'
+  - DataTables search: 'Search:' with text input
+  - Table columns (dark navy header, sortable arrows): Date (sorted ascending ▲), Category, Branch, Vendor, Amount, Paid Via, Source, By, Actions
+  - Row 1: Aug 15, 2026 | UTILITIES (indigo pill badge) | Branch 1 – Gulberg | Power Co | Rs 8,500 (bold) | Cash | Manual | accountant1 | actions: eye (view), pencil (edit), trash red (delete)
+  - Row 2: Aug 22, 2026 | MARKETING (amber pill badge) | Branch 2 – Blue Area | Social Ads | Rs 5,000 | Card | Manual | manager1 | eye, pencil, trash
+  - Row 3: Sep 30, 2026 | RENT (blue pill badge) | Branch 2 – Blue Area | — | Rs 5,000 | Cash | Manual | admin | eye, pencil, trash
+  - Rows striped (alternating light grey ~#F5F6F8 / white)
+  - Footer: 'Showing 1 to 3 of 3 entries'; pagination 'Previous' [1] 'Next'
+- **Features:**
+  - Expense logging with category, branch, vendor, amount, payment method, source, and recorded-by user
+  - Category taxonomy with color coding and live counts per category (Rent, Utilities, Salaries, Supplies, Marketing, Misc)
+  - Multi-branch expense attribution
+  - Payment method tracking (Cash, Card)
+  - Source tracking (Manual vs presumably automated e.g. from Payroll/Purchases)
+  - User audit trail ('By' column: accountant1, manager1, admin) implying role-based users
+  - Export CSV/PDF, Print, Import CSV with downloadable template
+  - Text search filter + table search, pagination, sortable columns
+  - Row-level view/edit/delete actions
+  - Global search, theme palette switcher, notifications
+  - Currency formatting (Rs)
+- **NAIM translation:** Becomes NAIM COMMAND > Finance > Expenses. Currency KES ('KES 8,500'). Categories remapped for an AI-automation agency: Software/SaaS & API (OpenAI, n8n, hosting), Contractors/Freelancers, Salaries, Marketing/Ads (LinkedIn, Meta), Lead Data/Tools (Apollo, scraping), Office/Rent & Utilities, Travel/Client Meetings, Misc — each with color chevron + count. Replace 'Branch' with 'Business Unit' (Naim Automation core vs future side-businesses) and add optional 'Client/Project' link so expenses can be allocated to recruitment-agency deliveries for per-client profitability. Paid Via: M-Pesa, Bank, Card, Cash. Source: Manual / Recurring subscription / Imported. Keep KPI card but expand to a row: Total Expenses (count), This Month KES, Recurring Monthly Burn, Top Category. Keep CSV/PDF/Print/Import CSV/Template toolbar, filters (search, date range, category, business unit), DataTable with view/edit/delete and audit 'By' column.
+
+## #13 `download-13.png` — salon-system · Payroll · Payroll list view, Payroll tab active (Payroll | Advances sub-tabs), filtered by Payroll Month = September 2026, with status pipeline chevrons and a staff payroll DataTable (header row visible only; rows are below the fold)
+- **Theme:** Light content area with a dark navy sidebar. Sidebar bg ~#0B1E3F / #0F2547 with white text; the active item (Payroll) is a bright blue pill ~#2F6FE0. Page bg ~#F3F5F8, cards are white with a subtle shadow. Accents: KPI blue gradient ~#2563EB→#5B8DEF, dark navy ~#13264A, green ~#3FA34D, yellow/amber ~#F2B705, gray ~#6B7280, light blue ~#7FA8EF, sage green ~#7FB27A. Primary button is dark navy ~#13264A. A thin blue loading/progress bar sits at the top edge of the header.
+- **Layout:** Fixed left sidebar (~150px wide) with a dark navy background. Section labels are small uppercase gray text. Each nav item has an icon plus a label, and the sidebar has its own vertical scrollbar. The main area has two parts. The first is a top header card: on the left, a page icon plus the title 'Payroll'. On the right, an action button group, a global search input, a theme palette icon, a brush icon, a bell with a red badge, and 'Welcome, admin'. The second is a content card containing, in order: the section title 'Payroll' with an icon; one large standalone KPI card (about half the width) for Advances; an underline-style tab bar (Payroll | Advances); a 4-column KPI card grid; a 4-segment chevron/arrow status pipeline at full width; a filter panel card ('Payroll Month' with a Clear button and a month input); and a DataTables-style table with 'Show N entries' and a Search box above a dark navy header row.
+- **Sidebar:** SALON (section label), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, INVENTORY (section label), Inventory, Purchases, FINANCE (section label), Expenses, Finance, Payroll (active, blue highlighted pill, cursor hovering), Cash Till, HR (section label), Staff, Leave Requests, REPORTS (section label, cut off below)
+- **Client 360:** none
+- **Components:**
+  - Header: page icon (ID-card/money icon) + title 'Payroll' (bold, dark)
+  - Header button 'Generate Payroll' (primary, dark navy fill, white text, gear/cog icon)
+  - Header button 'Approve All' (light/outlined, double-check icon)
+  - Header button 'Pay All Approved' (light, cash icon)
+  - Header button 'CSV' (light, file icon)
+  - Header button 'PDF' (light, file icon)
+  - Header button 'Print' (light, printer icon)
+  - Global search input with placeholder 'Search everything...' and a magnifier icon
+  - Icon button: palette (theme switcher)
+  - Icon button: brush (customize)
+  - Notification bell with red count badge (shows '6' or similar)
+  - Text 'Welcome, admin'
+  - Section title 'Payroll' with icon
+  - Large KPI card (blue gradient ~#2563EB→#6A9BF0): value '3', label 'Advances', faded hand-holding-dollar icon at bottom-right
+  - Tabs (underline style): 'Payroll' (active, blue underline, icon) and 'Advances' (hand/coin icon)
+  - KPI card 1 (dark navy ~#13264A): '3' / 'Slips', faded money-bill/receipt icon
+  - KPI card 2 (green ~#3FA34D): 'Rs 706' / 'Net Payroll', faded money-bag icon
+  - KPI card 3 (blue ~#2F7BEA): 'Rs 235' / 'Commission', faded percent icon
+  - KPI card 4 (amber ~#F2B705): 'Rs 1,414' / 'Advance Recovery', faded undo/rotate-left icon
+  - Status pipeline chevrons (clickable filters, uppercase small white text): 'ALL (3)' (dark slate ~#3B4A63), 'DRAFT (3)' (gray ~#6B7280), 'APPROVED (0)' (light blue ~#7FA8EF), 'PAID (0)' (sage green ~#7FB27A)
+  - Filter panel card (light gray bg ~#F1F3F6): title 'Payroll Month' with a funnel icon, dark underline divider; 'Clear' button at right (gray ~#6B7280, x-circle icon)
+  - Field label 'MONTH' (calendar icon, small caps) with a month picker input showing 'September 2026' and a calendar icon at right
+  - Table controls: 'Show [10 ▾] entries' at left, 'Search:' input at right
+  - Table header (dark navy ~#13264A, white bold text, sort arrows): 'Staff' (sorted asc ▲), 'Branch', 'Days', 'Prorated Base', 'Commission', 'Incent.', 'Deduct.', 'Adv. Rec.', 'Net Pay', 'Status', 'Actions'
+- **Features:**
+  - Monthly payroll generation for all staff (Generate Payroll)
+  - Payroll slip lifecycle: Draft → Approved → Paid, with bulk 'Approve All' and 'Pay All Approved'
+  - Status pipeline with per-status counts acting as filters
+  - Pay computation: prorated base salary by days worked + commission + incentives − deductions − advance recovery = net pay
+  - Staff salary advances module (separate Advances tab), recovered automatically from payroll
+  - Multi-branch staff (Branch column)
+  - Month filter for payroll period
+  - Export to CSV/PDF and Print
+  - Per-row actions (likely view slip, edit, approve, pay, delete)
+  - KPI summary: slip count, net payroll total, total commission, advance recovery
+  - Currency shown as Rs (would be KES for Naim)
+- **NAIM translation:** This maps to NAIM COMMAND → Finance → Payroll & Commissions for the team: sales reps/closers, automation engineers, VAs and contractors. Keep the Payroll | Advances tabs and the Draft → Approved → Paid pipeline with bulk Approve All / Pay All Approved (pay-out could later be via M-Pesa B2C). Use KES. Columns would be: Team Member, Business Unit (replacing Branch: Recruitment-AI agency vs. future side-businesses), Days, Prorated Base/Retainer, Commission (auto-calculated from closed-won deals and collected invoices in the Leads/Deals module), Incentives (e.g., booking-quota bonuses), Deductions (PAYE/NHIF-SHIF/NSSF/Housing Levy), Advance Recovery, Net Pay, Status, Actions (view payslip PDF, edit, approve, mark paid). The KPI cards become Slips, Net Payroll (KES), Commission (KES), Advance Recovery (KES). Keep the month filter, CSV/PDF/Print export, and the top header pattern (global search, theme palette switcher, notifications, user greeting). The sidebar grouping maps to SALES / DELIVERY / FINANCE (Expenses, Finance, Payroll, Cash/Petty Cash) / HR (Team, Leave) / REPORTS.
+
+## #14 `download-14.png` — salon-system · Dashboard · Main dashboard, 'Today' range selected: greeting header, 8 colored KPI tiles, 5 operational widget cards, and a row of 4 charts (partially visible, scroll continues)
+- **Theme:** Light content area (#F4F6FA page bg, white #FFFFFF cards) with a dark navy sidebar (#0F1E3A to #13284A). Primary accent is a blue active state (#2F6FE4, used on the 'Today' pill and the active nav item). KPI tiles are multi-colored: navy #1B2A4A, red #E04848, green #3FA34D, blue #3B82F6, amber #E8B422, purple #8B3FE0, teal #2BA38C, dark navy #1E3260. Card top borders are a thin blue accent (#3B82F6). The header shows a palette icon and a brush icon for theme switching.
+- **Layout:** Fixed left sidebar (~150px, dark navy) with a scrollable main area. The top bar is a white rounded card: on the left a chart icon + 'Dashboard' title; on the right action buttons, a branch selector, a search field, theme icons, a notifications bell with a red badge '9', and 'Welcome, admin'. Below that sits a greeting row on the left with a date-range segmented control on the right. Next comes a KPI row of 8 equal tiles in one row. Then a 5-column row of widget cards: Upcoming, In the chair, Needs attention, Today, and Collected. Last is a 4-column chart row: Revenue line, Service vs product donut, Money in by method, and Footfall bar. Cards have rounded corners (~10px), soft shadows and a thin colored top border.
+- **Sidebar:** Brand: scissors icon + 'Salon ERP' + collapse button '<', Logo tile 'RAMEEZ' (dark square with red/white wordmark), User: 'admin' + badge 'Admin', Section GENERAL: Dashboard (active, blue pill), My Day, Section SALON: Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, Section INVENTORY: Inventory, Purchases (list continues below, scrollable)
+- **Client 360:** none
+- **Components:**
+  - Top bar buttons: '+ New Appointment' (dark navy filled, calendar icon), 'New Sale' (light, cart icon), 'Walk-in' (light, walking icon)
+  - Dropdown 'All branches'
+  - Search input 'Search everything...' with magnifier icon
+  - Icon buttons: palette (theme), brush (customize), bell with red badge '9'
+  - Text 'Welcome, admin'
+  - Greeting 'Good morning, admin 👋' with subtext 'Today, September 9, 2026'
+  - Segmented range control: 'Today' (active, blue) | 'This Week' | 'This Month' | 'This Quarter' | '📅 Custom Range'
+  - KPI tile 1 (navy): 'Rs 0' / 'Today Revenue' / money-bag icon / footer 'More info ➜'
+  - KPI tile 2 (red): 'Rs 0' / 'Today Expenses' / cash icon / 'More info ➜'
+  - KPI tile 3 (green): 'Rs 0' / 'Today Profit' / trend chart icon / 'More info ➜'
+  - KPI tile 4 (blue): '0' / 'Today Appointments' / calendar-check icon / 'More info ➜'
+  - KPI tile 5 (amber): '0' / 'Still To Arrive' / clock icon / 'More info ➜'
+  - KPI tile 6 (purple): '0' / 'In Salon Now' / chair icon / 'More info ➜'
+  - KPI tile 7 (teal): '0%' / 'Chair Occupancy' / gauge icon / 'More info ➜'
+  - KPI tile 8 (dark navy): 'Rs 10,345' / 'Month Revenue' / bar chart icon / 'More info ➜'
+  - Card 'Upcoming appointments' with calendar icon and '→' and '—' header controls. Empty state: grey calendar icon, 'Nothing on the books right now', grey button 'View Calendar'
+  - Card 'In the chair right now' with chair icon and '→' / '—' controls. Empty state: sofa icon, 'No one is being served right now', grey button 'View Live Floor'
+  - Card 'Needs attention' with warning triangle icon and '→' / '—' controls. It holds a 2x3 grid of count chips, each with a colored left border, a number and a label: '1 Waiting for a slot' (hourglass, blue), '1 Leave requests' (plane, blue), '3 Payroll to settle' (blue), '1 Open purchase orders' (truck, blue), '1 Products below min' (red border), '1 Packages expiring' (amber border)
+  - Card 'Today' (calendar icon, '—'), a key-value list: Completed services 0; Walk-ins 0; New customers 0; No-shows / cancelled 0; Avg bill Rs 0; Tips collected Rs 0; Dues raised Rs 0
+  - Card 'Collected · Today' (wallet icon, '—'): big 'Rs 0', a delta line '— 0% vs previous (Rs 0)', then rows Cash Rs 0, Card Rs 0, Bank Rs 0, Online Rs 0
+  - Chart card 'Revenue · last 14 days': line/area chart with light blue fill, y-axis 4,000–9,000 and a single sharp spike
+  - Chart card 'Service vs product revenue': donut chart, fully green (#2E7D32)
+  - Card 'Money in by method': rows Cash / Card / Bank / Online, each with a thin progress bar, '0%' and 'Rs 0'
+  - Chart card 'Footfall · last 14 days': bar chart, y-axis 1.0–2.0, one blue bar (#2F6FE4)
+- **Features:**
+  - Global quick actions: new appointment, new sale (POS), walk-in check-in
+  - Multi-branch filtering
+  - Global search across all entities
+  - Theme palette and customization
+  - Notifications center with unread count
+  - Time-range filtering of all KPIs (Today / Week / Month / Quarter / Custom)
+  - Financial KPIs: revenue, expenses, profit, month-to-date revenue
+  - Operational live KPIs: appointments, still to arrive, in salon now, chair occupancy %
+  - Drill-down 'More info' links on each KPI
+  - Live queue widgets with empty states and CTA deep links (calendar, live floor)
+  - Exceptions/attention inbox aggregating waitlist, HR leave, payroll, purchase orders, low stock and expiring packages
+  - Daily summary metrics (no-shows, avg bill, tips, dues)
+  - Collections breakdown by payment method with period comparison
+  - Trend analytics: 14-day revenue, revenue mix donut, footfall
+  - Collapsible/minimizable widget cards ('—') and navigate arrows ('→')
+- **NAIM translation:** This becomes the NAIM COMMAND Home dashboard. The top bar quick actions become '+ New Lead', 'Log Deal/Invoice' and 'Book Demo Call'. The branch selector becomes a Business selector (Naim Automation, side businesses). Global search covers leads, agencies, deals and invoices. The 8 KPI tiles map to: Revenue (KES) today/period, Expenses, Profit, Calls/Demos Booked, Demos Still To Happen, Clients in Onboarding/Delivery, Pipeline Conversion % (replaces chair occupancy), and MRR/Month Revenue. 'Upcoming appointments' becomes Upcoming demos/meetings with a 'View Calendar' link. 'In the chair right now' becomes Active implementations / in delivery with a 'View Delivery Board' link. 'Needs attention' becomes: Leads awaiting follow-up, Proposals pending, Invoices overdue, Retainers expiring, Tasks overdue, Automation errors. The 'Today' card becomes: Emails sent, Replies, New leads, No-shows, Avg deal size, Dues raised. 'Collected · Today' becomes payments by M-Pesa / Bank / Card / Stripe. The charts become: Revenue last 14 days, Setup fee vs retainer revenue donut, Money in by method, and Leads/outreach volume last 14 days. Keep the multi-color KPI tiles, the light/dark theme switcher and the KES currency.
+
+## #15 `download-15.png` — salon-system · Dashboard · Main dashboard, scrolled to mid-page. Visible: bottom of the top widget row (empty states, alert tiles, today stats, payment split), the 4-chart analytics row, and the top of the 3-card bottom row (Team on duty / This month / Top services MTD).
+- **Theme:** Light content area (#FFFFFF cards on a very light grey canvas #F5F5F7) with a dark sidebar (near-black/deep maroon gradient #1A0E0E to #2A1414). Accent is coral/red-orange (#F2654F / #EF5B4C): active nav pill, thin top borders on the bottom-row cards, and alert tile left borders. Chart colors: navy/steel blue line with light-blue area fill (#4A72B8 line, #C9D6EE fill), green donut (#3A7D32), bright blue bars (#2F6FE0). Red 'NOT MARKED' badges (#FDE2E2 background, #D33 text).
+- **Layout:** Fixed left sidebar of about 150px, dark, with a scrollbar. Main area is a scrollable grid of rounded white cards (radius about 8px, subtle shadow, 12-16px gaps). Row 1 (partially cut off at top) has 5 columns: [empty-state card: Calendar] [empty-state card: Live Floor] [2x3 alert tile grid] [today stats list] [payment method split vs previous]. Row 2 has 4 equal chart cards: Revenue line, Service vs product donut, Money in by method bars, Footfall bars. Row 3 has 3 equal cards, each with a coral top border, a title with an icon, and header actions (→ arrow and — collapse): Team on duty today, This month, Top services (MTD). There is a page scrollbar on the right edge.
+- **Sidebar:** Header: scissors icon + 'Salon ERP' wordmark, collapse button '<' at top right, Profile block: square logo avatar 'RAMEEZ' (dark navy/purple badge), name 'admin', pill badge 'Admin', Section label: GENERAL, Dashboard (active: coral filled pill, white text, line-chart icon), My Day (calendar icon), Section label: SALON, Front Desk (bell icon), Appointments (calendar icon), Customers (contact-card icon), POS / Billing (receipt icon), Services (scissors icon), Memberships (layered-cards icon), Section label: INVENTORY, Inventory (box icon), Purchases (cart icon), (list continues below the fold)
+- **Client 360:** none
+- **Components:**
+  - Empty-state card 1: grey calendar-check icon, text 'Nothing on the books right now', dark grey button with calendar icon 'View Calendar'.
+  - Empty-state card 2: grey sofa/chair icon, text 'No one is being served right now', dark grey button 'View Live Floor'.
+  - Alert tiles grid (2 columns x 3 rows). Each tile is a small bordered card with a big number at left, a colored icon, and a red label. Visible tiles: '1 … for a slot' (cut off, likely waitlist); '1 … requests' (cut off); '3 Payroll to settle' (red left border); '1 Open purchase orders' (truck icon); '1 Products below min' (red border); '1 Packages expiring' (yellow/amber left border #F2C230).
+  - Today stats list card (label left, value right-aligned bold, thin dividers): Walk-ins 0; New customers 0; No-shows / cancelled 0; Avg bill Rs 0; Tips collected Rs 0; Dues raised Rs 0.
+  - Payment split card (top cut off; shows a big value and '— 0% vs previous (Rs 0)'): Cash Rs 0; Card Rs 0; Bank Rs 0; Online Rs 0.
+  - Chart card 'Revenue · last 14 days' (red line-chart icon): line chart with area fill. Y axis 0–9,000 in 1,000 steps. X axis dates 08/27 to 08/09 (14 daily ticks, rotated labels). Flat at 0, with a spike to about 8,500 on 08/05 and a small point about 1,700 on 08/04. Markers on every point. Light grid.
+  - Chart card 'Service vs product revenue' (pie icon): donut chart, 100% green 'Other'. Legend below: ■ Services (navy), ■ Products (blue), ■ Other (green).
+  - Card 'Money in by method' (wallet icon): horizontal progress-bar rows, each 'Label [bar] 0% Rs 0' for Cash, Card, Bank, Online. Bars are empty grey tracks.
+  - Chart card 'Footfall · last 14 days' (people icon): vertical bar chart. Y axis 0–2.0 in steps of 0.2. Single blue bar of 2 on 08/05. Same date axis as the revenue chart.
+  - Card 'Team on duty today' (people icon, actions → and —): staff rows with a black circle avatar showing initials. Row 'S1': Staff 1 / Senior Stylist, red badge 'NOT MARKED', shift '10:00 – 19:00', '0/0 done', 'Rs 0', thin progress bar with '0% · 0m/9h'. Row 'S2': Staff 2 / Beautician, 'NOT MARKED', '10:00 – 19:00', '0/0 done', 'Rs 0'.
+  - Card 'This month' (chart icon, — action): Revenue (excl. tax) Rs 10,345; Avg bill value Rs 3,448; Gross profit Rs 9,995; Retention (2+ visits/90d) 0%.
+  - Card 'Top services (MTD)' (trophy icon, → and —): ranked rows 'Name — category' with '× count' and revenue. Facial – Gold ×1 Rs 0; Haircut – Classic ×1 Rs 0.
+  - Mouse cursor is visible over the revenue chart, which suggests hover tooltips.
+- **Features:**
+  - Operational home dashboard combining today's live state, alerts, and analytics
+  - Empty states with a CTA deep-linking to Calendar and Live Floor
+  - Actionable alert tiles: waitlist, requests, payroll due, open POs, low stock, expiring packages
+  - Daily KPIs: walk-ins, new customers, no-shows, avg bill, tips, dues
+  - Payment method breakdown with period-over-period comparison
+  - 14-day revenue trend and footfall charts
+  - Revenue mix (service / product / other)
+  - Staff attendance status (NOT MARKED), shift times, tasks done, revenue, and utilization progress (minutes vs 9h)
+  - Month-to-date P&L snapshot including gross profit and retention metric
+  - Top services leaderboard MTD
+  - Collapsible and expandable dashboard widgets (→ open full page, — collapse)
+  - Currency formatting 'Rs' (localize to KES)
+- **NAIM translation:** Becomes the NAIM COMMAND Home dashboard, in the same light card grid with a dark sidebar and coral accent, using KES. Map each widget as follows. (1) Empty states become 'No calls/demos booked right now' with a View Calendar button, and 'No active deliveries/onboardings in progress' with a View Delivery Board button. (2) Alert tiles become: follow-ups due, inbound demo requests, invoices to chase/commissions to pay, open proposals awaiting signature, retainers below usage/health threshold, and contracts/retainers expiring. (3) Today stats become: new leads, new clients, no-shows/cancelled calls, avg deal size, upsell/expansion revenue, and outstanding dues raised. (4) Payment split becomes M-Pesa / Bank / Card / Other, compared vs previous period. (5) Charts: Revenue last 14 days (line); Revenue mix as setup fees vs monthly retainers vs other/side-business (donut, with a business-unit filter for future side businesses); Money in by method (M-Pesa, bank); Outreach/meetings volume last 14 days (bars). (6) 'Team on duty' becomes Team today: each member's role, check-in status, tasks done/total, revenue attributed, and a utilization bar. (7) 'This month' becomes MRR/revenue excl. VAT, avg deal value, gross profit, and client retention. (8) 'Top services' becomes Top automation packages sold MTD (e.g., CV screening bot, candidate outreach automation) with count and revenue.
+
+## #16 `download-16.png` — salon-system · Dashboard · Dashboard scrolled to the middle and lower section. Shows the staff roster/attendance card with capacity stats, the month KPI metrics list with a Month pace card, the top services list (partial) with a Top clients (MTD) card, and the full-width Alerts strip with 8 alert tiles.
+- **Theme:** Light mode content area with a dark sidebar. Sidebar background is near-black charcoal (~#141416 to #1A1A1D). The accent is a coral/salmon red (~#F0645A to #EF5B4F), used for the active nav pill, the NOT MARKED badges, the card top borders and the Alerts section border. Content background is very light grey/white (~#F7F7F8); cards are white (#FFFFFF) with a thin coral top border and rounded corners (~10px). Primary text is near-black (#111). Secondary text is grey (#6B7280). Positive delta text is green (~#16A34A). Badge fills are light pink (~#FDE2E0) with coral-red text (~#E0483D). Big due counts are coral red. The Month pace card has a pale pink tint (~#FFF5F4).
+- **Layout:** Fixed left sidebar ~150px wide, dark, with a scrollbar. The main content is a vertical dashboard scroll. The upper row is a 3-column card grid (approx 2.8fr / 2.8fr / 2.8fr) and continues from a section above.
+- Column 1: staff roster card.
+- Column 2: KPI metrics list card.
+- Column 3: stacked cards — the bottom of a services list card, then the 'Top clients (MTD)' card.
+
+Below the grid is a full-width 'Alerts' card with a header (title, arrow, collapse) and a horizontal row of 8 equal-width alert tiles. Each tile has a header (icon + bold title + right arrow), content, and an optional action button. The page scrollbar is on the far right.
+- **Sidebar:** Brand header: scissors icon + 'Salon ERP', with a collapse button '<' (dark rounded square) at the top right, Profile block: square logo avatar 'RAMEEZ' (dark logo with a red underline), username 'admin', role pill 'Admin' (dark navy pill), Section label GENERAL, Dashboard (active: coral filled pill, line-chart icon), My Day (calendar icon), Section label SALON, Front Desk, Appointments, Customers, POS / Billing, Services (scissors icon), Memberships, Section label INVENTORY, Inventory, Purchases, (list continues below the fold; a sidebar scrollbar is visible)
+- **Client 360:** none (no Client 360 drawer/view visible on this screenshot)
+- **Components:**
+  - **Staff roster card (left)**
+- Rows show a circular dark avatar with initials ('S1', 'S2', 'S3'), staff name in bold and role underneath:
+  - Staff 1 – Senior Stylist
+  - Staff 2 – Beautician
+  - Staff 3 – Stylist
+- Each row has a 'NOT MARKED' attendance badge (pink pill, red uppercase text).
+- Each row shows the shift time '10:00 – 19:00', then a calendar icon + '0/0 done · Rs 0'.
+- Under each row is a thin grey progress bar with the right-aligned label '0% · 0m/9h'.
+  - **Capacity footer in the staff card** (3 stat columns separated by dividers)
+- 'Booked chair time' = 0m
+- 'Rostered capacity' = 27h
+- 'Occupancy' = 0%
+  - **KPI metrics list card (middle)**: two-column label/value rows separated by thin dividers, with values bold and right-aligned.
+- Revenue (excl. tax) Rs 10,345
+- Avg bill value Rs 3,448
+- Gross profit Rs 9,995
+- Retention (2+ visits/90d) 0%
+- Rebooking rate 0%
+- No-show rate 0%
+- Cancellation rate 0%
+- New customers 0
+- Active memberships 3
+- Inventory value Rs 8,050
+- Invoices 3
+- Loyalty points out 455
+  - **'Month pace' sub-card** inside the KPI card (pale pink background, small bar-chart icon at top right in coral)
+- Large value 'Rs 10,345'
+- Subtext 'vs Rs 0 same time last month'
+- Green trend-up icon + '+100%'
+  - **Top services list (right column, partial; top is cut off)**: rows with item name, grey quantity and bold amount.
+- 'Facial – Gold ×1 Rs 0'
+- 'Haircut – Classic ×1 Rs 0'
+  - **'Top clients (MTD)' card**
+- Header: crown icon + title, with a right-arrow '→' link and a collapse '–' icon.
+- Rows:
+  - 'Client 3 — 2 visits — Rs 9,845'
+  - 'Client 1 — 1 visit — Rs 500'
+- The visit count is grey and the amount is bold.
+  - **Alerts card (full width)**: header with a warning-triangle icon + 'Alerts', and a '→' plus '–' collapse at the right. The tiles are:
+1. 'Low stock' (box icon, →): row 'Hair Color Tube 11.5 / 15', button 'Restock' (pink outline/filled light red button).
+2. 'Expiring soon' (→): green check + 'Nothing expiring'.
+3. 'Attendance issues' (people icon, →): rows 'Staff 1 Not marked', 'Staff 2 Not marked', 'Staff 3 Not marked' (bold status).
+4. 'Birthdays & anniversaries' (→): green check + 'None this week'.
+5. 'Win these clients back' (→): green check + 'Nobody has drifted away'.
+6. 'Memberships expiring' (→): green check + 'None expiring in 30 days'.
+7. 'Invoices with dues': big coral number '2', button 'View Invoices'.
+8. 'Unpaid supplier bills' (truck icon): big coral number '1', button 'View POs'.
+  - **Interaction hints**
+- The arrow icons on each tile and card navigate to the full module.
+- '–' collapses a card.
+- Tile buttons deep-link to the relevant module (Inventory restock, Invoices filtered by dues, Purchase Orders unpaid).
+- **Features:**
+  - Daily staff roster with attendance status (Not marked / present) and shift times
+  - Per-staff utilisation: completed appointments vs booked (0/0 done), revenue generated, and a progress bar of booked minutes vs shift hours
+  - Capacity planning KPIs: booked chair time, rostered capacity, occupancy %
+  - Month-to-date business KPIs: revenue excl. tax, average bill, gross profit, retention, rebooking, no-show, cancellation, new customers, active memberships, inventory value, invoice count, loyalty liability
+  - Month pace comparison vs the same point last month, with a % delta
+  - Top services and top clients (MTD) leaderboards
+  - Alerts center covering: low stock with restock action, expiring items, attendance issues, birthdays/anniversaries, win-back of lapsed clients, expiring memberships, invoices with outstanding dues, unpaid supplier bills/POs
+  - Positive empty states with a green check (e.g. 'Nothing expiring', 'Nobody has drifted away')
+- **NAIM translation:** This maps to the NAIM COMMAND Dashboard, middle section.
+
+**(1) Team card**: each team member or closer gets a daily status (checked-in / not marked), working hours, calls or demos done vs scheduled ('3/5 done · KES 0 closed') and a utilisation bar (meeting minutes / available hours). The footer shows 'Booked meeting time', 'Available capacity' and 'Utilisation %'.
+
+**(2) KPI list (MTD)**:
+- Revenue (excl. VAT, KES)
+- Avg deal value
+- Gross profit
+- Client retention (renewals)
+- Upsell/renewal rate
+- Demo no-show rate
+- Deal loss/cancellation rate
+- New clients
+- Active retainers/subscriptions
+- Pipeline value
+- Invoices issued
+- Referral credits outstanding
+
+Include a 'Month pace' card comparing MTD revenue with the same day last month.
+
+**(3) Leaderboards**: 'Top packages sold' (e.g. AI Screening Bot, CV Parser automation) and 'Top clients (MTD)', meaning the recruitment agencies by revenue and number of projects.
+
+**(4) Alerts strip** (tiles with deep links and green-check empty states):
+- Low credits/API quota → Top up
+- Contracts/retainers expiring soon
+- Team attendance
+- Client anniversaries/onboarding dates
+- Win back churned or stalled leads (no touch in 30d), linked to the Leads Engine
+- Retainers expiring in 30 days
+- Invoices with dues → View Invoices
+- Unpaid vendor bills (SaaS/API subscriptions) → View Bills
+
+Keep a business switcher so side-businesses reuse the same widgets. Keep the dark sidebar plus light content, with a coral or brand accent from the theme palette.
+
+## #17 `download-17.png` — salon-system · Appointments · New Booking modal (create appointment form with Live Preview side panel), opened over the Appointments page
+- **Theme:** Dark app shell (near-black sidebar ~#141012, dark maroon/black header ~#1a0f10) with the page dimmed behind a dark overlay. The modal header is dark (~#1c1416) with white title text. The modal body is light: the form area is white (#ffffff) and the preview pane is a very light pink/cream (~#fdf3f2). The accent is red/coral: the active sidebar item 'Appointments' is a red pill (~#d9534f), the 'Phone' badge is coral (~#e85c5c), the notification bell badge is red, and the info callout has a pale blue fill (~#eef4fb) with a coral left border (~#e8a0a0). This is the red/coral theme palette, with the modal in light mode inside the dark shell.
+- **Layout:** Left sidebar of about 150px. The top header bar on the Appointments page contains: the page title 'Appointments' with a calendar icon, then the action buttons '+ New Booking', 'Walk In', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template' and 'Today', then a global search box 'Search everything...', a theme/palette icon, a brush icon, a notification bell with a red badge, and 'Welcome, admin'. Behind the overlay you can partly see a 'Waitlist' button, a red KPI or alert card at the top right, a 'Clear' button, a select dropdown and a 'Next' pagination button. The centered modal is about 900px wide. It has a dark header with the calendar-plus icon and the title 'New Booking' on the left, and an info (i) icon plus a close (X) on the right. The body is split into two columns. The left column (about 58%) is a scrollable form arranged in a 2-column grid, with a vertical scrollbar. The right column (about 42%) is a 'LIVE PREVIEW' summary panel with key/value rows, right-aligned bold values, a separator, and an Estimated total line.
+- **Sidebar:** Brand at top: 'Salon ERP' with a scissors icon, plus a collapse chevron button '<', A rounded blue-outlined element below the brand, probably a branch selector or avatar card (partly hidden), Section GENERAL: Dashboard (chart icon), My Day, Section SALON: Front Desk, Appointments (active, red pill), Customers, POS / ..., Services, Memberships, Section INVENTORY: Inventory, Purchases, Labels are truncated because the modal overlaps them
+- **Client 360:** none. This is the New Booking creation modal on the Appointments page, not a Client 360 view. No tabs are visible.
+- **Components:**
+  - Modal title: 'New Booking', with a calendar icon, an info button (i) and a close X
+  - Field 'Branch *' (store icon): select, value 'Branch 1 – Gulberg'
+  - Field 'Customer *' (user icon): searchable select, placeholder 'Search customer'
+  - Field 'Stylist *' (user icon): select, placeholder 'Select stylist'
+  - Field 'Station / Chair' (chair icon): select, value 'No station'
+  - Field 'Date *' (calendar icon): date input with a calendar picker icon, value '09/09/2026'
+  - Field 'Start Time *' (clock icon): time input with a clock icon, value '10:00 AM'
+  - Field 'Source' (signal/bars icon): select, value 'Phone'
+  - Field 'Advance / Deposit (Rs)' (money icon): number input, value '0'
+  - Field 'Services *' (scissors icon): full-width multi-select, placeholder 'Pick services'
+  - Info callout (blue info icon, pale blue fill, coral left border): 'Pick a stylist and a date — every open and taken time for that day shows up here.' This is the area where the availability slot grid will appear.
+  - Summary strip (pale pink, coral left accent): hourglass icon '30 min · ends 10:30', money-bag icon 'Rs 0'
+  - Field 'Consultation notes' (chat bubble icon): textarea, cut off at the bottom; the form scrolls further
+  - Live Preview header: eye icon 'LIVE PREVIEW'
+  - Preview card: black rounded-square icon with a calendar-check symbol, name placeholder '—' (customer not selected yet), and a coral badge 'Phone' (the source)
+  - Preview rows (label left in grey, value right in bold dark): Branch: 'Branch 1 – Gulberg'; Station: '—'; Date: '2026-09-09'; Start: '10:00'; Duration: '30 min'; Ends: '10:30'; Services: '—'; Deposit: 'Rs 0'
+  - Thick divider line, then bold 'Estimated total' with 'Rs 0' on the right
+  - Footnote (info icon, grey small text): 'Saving re-checks stylist overlap, station clash, shift window and leave before the slot is held.'
+  - No footer Save/Cancel buttons are visible; they are likely below the scroll area
+- **Features:**
+  - Multi-branch booking
+  - Customer search and select, with likely inline creation
+  - Staff (stylist) assignment
+  - Resource (station/chair) assignment with clash detection
+  - Date and start-time picking, with automatic end time computed from service durations
+  - Booking source tracking (Phone, Walk-in, etc.) for attribution
+  - Advance deposit capture
+  - Multi-service selection that drives duration and price
+  - Day availability grid showing open and taken slots once a stylist and date are chosen
+  - Live running summary and estimated total
+  - Server-side validation on save: staff overlap, resource clash, shift window and leave
+  - Consultation notes
+  - Related actions in the page header: walk-in quick add, CSV/PDF export, print, CSV import with template, jump to today, waitlist
+- **NAIM translation:** This maps to a 'New Meeting / Book Call' modal in NAIM COMMAND, used for discovery calls, demos and onboarding sessions with recruitment agencies. Field mapping: Branch → Business Unit (e.g. Naim Automation, plus future side-businesses); Customer → Lead/Account search (agency); Stylist → Owner/Consultant (sales rep or delivery engineer); Station/Chair → Resource (Zoom room, meeting room, or demo environment); Date/Start Time → slot, with the end time auto-computed from the meeting type duration; Source → lead source (LinkedIn, Referral, Cold Email, Phone, Website, WhatsApp); Advance/Deposit (Rs) → Deposit/Retainer (KES); Services → Offer/Package (e.g. CV-screening bot, candidate outreach automation, CRM integration, audit call), with duration and price feeding an Estimated deal value. Keep the two-column layout and its pieces: the form on the left, a sticky LIVE PREVIEW summary on the right with a source badge, the availability slot grid that appears after choosing an owner and date, the '30 min · ends 10:30 · KES 0' strip, and the save-time conflict checks (owner overlap, resource clash, working hours, leave). Consultation notes become Call agenda / pain points. Keep the header actions (New Booking, Quick Call as the 'Walk In' equivalent, CSV, PDF, Print, Import CSV, Template, Today, Waitlist) and the red accent theme as one selectable palette. Currency should be KES instead of Rs.
+
+## #18 `download-18.png` — salon-system · Appointments · New Booking modal (large two-pane modal over the Appointments page), filled-in state with a Live Preview panel on the right; Availability grid is loading (skeleton placeholders).
+- **Theme:** Modal is light: white body (#FFFFFF), very dark brown/black header bar (#1E0F0F to #241414) with white title and icons. The background app is dimmed under a dark overlay. The app's dark sidebar is #1A1A1A–#222. Accent is red/crimson: active nav item 'Appointments' and the 'Phone' badge are about #E5484D / #D9363E, and the blurred red KPI card behind the modal is about #E04848. Selected-service chip is near-black (#1F1A1A) with white text. Inputs have a light grey border (#D9D9D9) and 6–8px radius.
+- **Layout:** The underlying Appointments page has a top toolbar: page title 'Appointments' with a calendar icon, then the buttons '+ New Booking' (highlighted), 'Walk-in', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template' and 'Today'. To the right are a global search 'Search everything', theme/palette icons, a notification bell with a red dot, and 'Welcome, admin'. Behind the modal, a right-side 'Waitlist' button, a red KPI card, a '(0)' pill, a 'Clear' button, a dropdown and a 'Next' pager are faintly visible. The modal is about 90% of the viewport width and is split about 57/43. The LEFT side is a scrollable form in a 2-column grid of fields with a scrollbar. The RIGHT side is the 'LIVE PREVIEW' summary panel on an off-white/grey background (#F7F7F7).
+- **Sidebar:** Salon ERP (brand, scissors icon) + collapse '<' button, GENERAL: Dashboard, My Day, SALON: Front Desk, Appointments (active, red highlight), Customers, POS / ..., Services, Memberships, INVENTORY: Inventory, Purchases, (labels partially hidden behind modal)
+- **Client 360:** none — this is the New Booking modal on the Appointments page, not a client 360 view.
+- **Components:**
+  - Modal header: calendar-check icon + 'New Booking' title (white, bold) on dark bar; right side info 'i' circle button and close 'X'.
+  - Field 'Branch *' (building icon) select: value 'Branch 1 – Gulberg'.
+  - Field 'Customer *' (person icon) select: value 'Client 2 · 03001000012' (name · phone format).
+  - Field 'Stylist *' (person icon) select: value 'Staff 2 · Beautician' (name · role).
+  - Field 'Station / Chair' (chair icon) select: value 'Chair 2'.
+  - Field 'Date *' (calendar icon) native date input: '09/09/2026' with calendar picker icon.
+  - Field 'Start Time *' (clock icon) native time input: '10:30 AM' with clock icon (cursor hovering).
+  - Field 'Source' (signal-bars icon) select: value 'Phone'.
+  - Field 'Advance / Deposit (Rs)' (cash icon) number input: '500'.
+  - Field 'Services *' (scissors icon) multi-select: dark chip 'Hair Color – Full · 90m · Rs 2,500' with 'x' remove, and dropdown showing '1 selected'.
+  - Availability section card (light pink/grey tint #FBF6F6): calendar icon + 'Availability' title; legend with small squares 'Available', 'Booked', 'Chair held', 'Closed / past'; grey square refresh button (circular arrow); grid of light-blue/grey skeleton slot tiles (about 8 per row, loading state).
+  - Live Preview panel: eye icon + 'LIVE PREVIEW' small caps label. The card has a black rounded square calendar icon, bold title 'Client 2 · 03001000012', subtitle 'Staff 2 · Beautician' and a red pill badge 'Phone'.
+  - Preview key/value rows (label left grey, value right bold, thin dividers): Branch = Branch 1 – Gulberg; Station = Chair 2; Date = 2026-09-09; Start = 10:30; Duration = 90 min; Ends = 12:00; Services = Hair Color – Full; Deposit = Rs 500.
+  - Thick black divider then 'Estimated total' (bold) = 'Rs 2,500' (bold).
+  - Info note with 'i' icon: 'Saving re-checks stylist overlap, station clash, shift window and leave before the slot is held.'
+  - (Save/Cancel footer not visible — likely below scroll.)
+- **Features:**
+  - Multi-branch booking with branch selector
+  - Customer lookup by name + phone
+  - Staff/stylist assignment with role shown
+  - Resource (station/chair) allocation
+  - Date + start time scheduling; end time auto-computed from service durations
+  - Booking source tracking (Phone, Walk-in, etc.) shown as badge
+  - Advance/deposit capture
+  - Multi-service selection with duration and price per service; estimated total auto-sum
+  - Real-time availability grid with slot states (available, booked, chair held, closed/past) and refresh
+  - Live preview summary updating as form changes
+  - Server-side conflict validation on save: staff overlap, station clash, shift window, leave
+  - Slot hold/reservation concept
+  - Page-level bulk actions: CSV/PDF export, print, CSV import, template, Today jump, Walk-in quick add, waitlist
+- **NAIM translation:** This becomes NAIM COMMAND's 'New Meeting / Book Call' modal on the Appointments (Meetings) page. The fields map as follows: Branch → Business unit (Naim Automation core vs. side-businesses). Customer → Lead/Account (agency name · phone/WhatsApp). Stylist → Owner/closer or delivery engineer. Station/Chair → Meeting channel/room (Google Meet, Zoom, office, client site). Source → Lead source (Phone, WhatsApp, LinkedIn, Referral, Inbound form, Leads Engine). Advance/Deposit (KES) → Discovery/setup deposit. Services → Offerings with duration and price (e.g. 'Discovery Call · 30m · KES 0', 'AI Recruitment Automation Audit · 90m', 'Implementation Workshop'). The estimated total feeds the pipeline value. The Availability grid shows owner calendar slots (free, booked, tentatively held, outside hours/past). The Live Preview gives a summary card with a source badge, computed end time and total. Save-time validation checks owner double-booking, room/link clash, working hours (EAT timezone) and leave. The same toolbar is kept: New Meeting, Walk-in/quick log, CSV/PDF export, import, template, Today and waitlist (follow-up queue).
+
+## #19 `download-19.png` — salon-system · Appointments · New Booking modal (scrolled to the lower half of the form) with a Live Preview side panel and an availability conflict warning
+- **Theme:** Light-mode modal over a dimmed dark app shell. Modal header bar is near-black/dark maroon (#1E0F0F to #2A1414) with white title text. The form body is white (#FFFFFF). The Live Preview panel is a very pale pink (#FDF3F3). The accent is crimson/red (#D93A3A to #E04848). It is used for the 'Phone' source badge, the warning row and the left accent bars on the info strips. Primary button is dark/black (#1A1A1A). Cancel button is grey (#7A7F85). Input borders are light grey (#D0D4D8). Background app shell is a dark theme (#1A1A1A) with a red accent card visible behind the modal at the right.
+- **Layout:** The app shell has a left dark sidebar of about 150px and a top bar. The page title 'Appointments' carries a calendar icon. The top action toolbar holds the buttons '+ New Booking' (active/dark), 'Walk-In', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template' and 'Today'. Next to the toolbar are a global search 'Search everything', a theme/brush icon, a notification bell with a red badge, and the text 'Welcome, admin'. Behind the modal at the right are a 'Waitlist' button, a red card, 'Clear', a pagination 'Next' and a dropdown. A large centered modal (about 90% width) has a dark header bar containing a calendar-plus icon, the title 'New Booking', an info (i) icon and a close (X) icon. The modal body is split into two columns. The left column (about 57%) holds the scrollable form with its own vertical scrollbar and uses a 2-column field grid. The right column (about 43%) is the sticky 'LIVE PREVIEW' summary panel. Action buttons sit at the bottom-left of the form column.
+- **Sidebar:** Brand: 'Salon ERP' with a scissors icon and a collapse '<' button, Group label: GENERAL, Dashboard, My Day, Group label: SALON, Front Desk, Appointments (active, red highlight), Customers, POS / Billing (truncated), Services, Memberships (truncated), Group label: INVENTORY, Inventory, Purchases (truncated)
+- **Client 360:** none. This is the New Booking modal, not a client 360 view. No tabs are visible.
+- **Components:**
+  - Modal header: icon + 'New Booking'; right side: info circle icon, close X
+  - Field 'Date *' (calendar icon label): date input value '09/09/2026' with a native calendar picker icon
+  - Field 'Start Time *' (clock icon label): time input value '10:30 AM' with a clock icon
+  - Field 'Source' (signal-bars icon): select value 'Phone' with a chevron
+  - Field 'Advance / Deposit (Rs)' (cash icon): number input value '500'
+  - Field 'Services *' (scissors icon): multi-select with a selected chip above it, rendered as a dark pill with an x remove control: 'Hair Color – Full · 90m · Rs 2,500'
+  - The multi-select control shows the placeholder/summary '1 selected' with a chevron
+  - Availability panel (light pink background) labelled 'Availability' with a calendar icon and the summary text 'Staff 2 · Sep 09, 2026 · shift 10:00–19:00 · 0 of 16 open'
+  - The availability panel has legend checkboxes/swatches: 'Available', 'Booked', 'Chair held' and 'Closed / past'
+  - The availability panel has a grey refresh icon button at the right
+  - Warning alert row inside the availability panel: red triangle icon + red text 'Staff 2 is not set up for Hair Color – Full', with a red left border and a pale red background
+  - Info strip with a red left accent bar: hourglass icon '90 min · ends 12:00', money bag icon 'Rs 2,500'
+  - Field 'Consultation notes' (speech bubble icon): resizable textarea with value 'Demo booking 2'
+  - Primary button: dark 'Book Appointment' with a calendar icon
+  - Secondary button: grey 'Cancel' with an x icon
+  - LIVE PREVIEW panel: eye icon and caption 'LIVE PREVIEW' in small uppercase grey
+  - Preview header card: black rounded-square icon with a calendar-check glyph, bold 'Client 2 · 03001000012', subtext 'Staff 2 · Beautician', and a red pill badge 'Phone'
+  - Preview key-value list with labels left-aligned grey and values right-aligned bold dark: Branch = 'Branch 1 – Gulberg'
+  - Preview key-value: Station = 'Chair 2'
+  - Preview key-value: Date = '2026-09-09'
+  - Preview key-value: Start = '10:30'
+  - Preview key-value: Duration = '90 min'
+  - Preview key-value: Ends = '12:00'
+  - Preview key-value: Services = 'Hair Color – Full'
+  - Preview key-value: Deposit = 'Rs 500'
+  - Divider line, then a bold total row: 'Estimated total' with value 'Rs 2,500'
+  - Footnote with info icon: 'Saving re-checks stylist overlap, station clash, shift window and leave before the slot is held.'
+- **Features:**
+  - Appointment booking with date, start time, booking source (Phone, Walk-in, etc.) and an advance deposit
+  - Multi-service selection where each service carries a duration and a price, and the end time and total are auto-calculated
+  - Real-time availability check per staff member and day, showing the shift window and open slot count with a legend: available, booked, chair held, closed/past
+  - Skill/service eligibility validation that warns when the staff member is not configured for the chosen service
+  - Resource allocation: branch and station/chair assignment
+  - Live preview summary panel that updates as the form changes and shows an estimated total
+  - Server-side conflict re-check on save (staff overlap, station clash, shift window, leave) before the slot is held
+  - Consultation notes on the booking
+  - Page-level tools: walk-in quick add, CSV/PDF export, print, CSV import with template, jump to Today, waitlist
+- **NAIM translation:** Map this to a NAIM COMMAND 'New Meeting / Book Discovery Call' modal (or 'Schedule Delivery Session').
+
+Form fields:
+- Date and Start Time.
+- Source: LinkedIn, Referral, Cold Email, Phone, Inbound Web. Use the same red pill badge in the preview.
+- Deposit: becomes 'Setup fee / Advance (KES)'.
+- Services: becomes a multi-select of packages, each a chip with duration and price. Examples: 'CV Screening Bot · 60m · KES 150,000', 'WhatsApp Candidate Intake Automation', 'Audit & Demo'.
+- Consultation notes: becomes 'Discovery notes'.
+- Buttons: 'Book Meeting' and 'Cancel'.
+
+Availability panel:
+- Checks the assigned consultant/engineer's calendar ('Naim · Sep 09 · 09:00–18:00 · 5 of 16 open').
+- Legend: Available, Booked, Tentative hold, Closed/past.
+- Includes a refresh button.
+
+Eligibility warning:
+- Fires when the assigned team member isn't skilled for the selected service ('Engineer X is not set up for ATS Integration').
+- Station/Chair maps to meeting room or channel (Zoom/Google Meet/On-site Nairobi).
+- Branch maps to business unit, so future side-businesses can share the same engine.
+
+Live Preview panel:
+- Header: Client company + contact phone, owner/role, source badge.
+- Rows: Business unit, Channel, Date, Start, Duration, Ends, Services, Advance, plus 'Estimated total (KES)'.
+- Keep the save-time conflict re-check footnote: 'Saving re-checks consultant overlap, room/link clash, working hours and leave.'
+
+Toolbar parity:
+- + New Meeting, Quick Call (walk-in equivalent), CSV, PDF, Print, Import CSV, Template, Today, Waitlist (becomes the lead queue awaiting a slot).
+
+Theme:
+- Supports dark shell + light modal, with a theme-able accent (default crimson #D93A3A) per the palette system.
+
+## #20 `download-20.png` — salon-system · Appointments · Walk-In Check-In modal, launched from the 'Walk-In' toolbar button on the Appointments page. It is a two-pane form with a live preview, shown over a dimmed Appointments page.
+- **Theme:** Dark app shell. The sidebar and page behind are near-black (#121212 to #1a1a1a) and dimmed by the overlay. The modal header is dark charcoal/near-black (#1c1414) with white text. The form body is white (#ffffff) with light grey bordered inputs (#dcdcdc). The live-preview pane has a very pale blush/pink tint (#fdf3f2). The accent is red/coral (#e5534b to #e74c3c), used for the 'Walk_in' badge pill, the red card behind the modal and the pinkish summary strip. Black (#111) is used for the preview icon tile.
+- **Layout:** Full app layout: a left sidebar about 150px wide, a top bar holding the page title and toolbar, and content below. A large centered modal sits on top, about 905px wide, inset roughly 60px from the left edge of the viewport and starting near y=30. Modal structure: (1) A dark header bar about 42px tall. It shows a walking-person icon and the bold white title 'Walk-In Check-In' on the left, and an info (i) circle icon plus an X close icon on the right. (2) The body is split about 58/42. The left pane is a 2-column form grid with label-above-input fields and roughly 24px row gaps. The left pane scrolls; a vertical scrollbar is visible at its right edge. The right pane is the 'LIVE PREVIEW' summary card as a key/value list with right-aligned values, a divider and a bold total row. Behind the modal on the right, Appointments page fragments are visible: a 'Waitlist' button, a red KPI/alert card with an X icon, a '(0)' badge, a 'Clear' button, a select dropdown, a dark bar and a 'Next' pagination button.
+- **Sidebar:** Brand: 'Salon ERP' with a scissors icon, plus a collapse chevron '<' button, Section GENERAL: Dashboard (line-chart icon); My Day, Section SALON: Front Desk; Appointments (active, red/coral highlighted pill); Customers; POS / ...; Services; Memberships, Section INVENTORY: Inventory; Purchases, Labels are partly hidden behind the modal; the visible fragments are 'Dashbo', 'My Da', 'Front D', 'Appoint', 'Custom', 'POS /', 'Servic', 'Memb', 'Invent', 'Purcha'.
+- **Client 360:** none. This is a Walk-In Check-In modal on the Appointments page, not a Client 360 view, so no client tabs are visible.
+- **Components:**
+  - Page header behind the modal: calendar icon + 'Appointments' title.
+  - Toolbar buttons behind the modal, left to right: '+ New Booking' (dark filled), 'Walk-In' (walking icon; cursor hovering), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template', 'Today'.
+  - Global search input with placeholder 'Search everything...'.
+  - Top-right icons: palette/theme icon, brush icon, notification bell with a red dot badge, and the text 'Welcome, admin'.
+  - Modal header: walking icon + 'Walk-In Check-In', an info (i) button and a close (X) button.
+  - Field 'Branch *' (building icon): select with value 'Branch 1 – Gulberg'.
+  - Field 'Customer *' (person icon): searchable select with placeholder 'Search customer'.
+  - Field 'Stylist *' (person icon): select with placeholder 'Select stylist'.
+  - Field 'Station / Chair' (chair icon): select with value 'No station'.
+  - Field 'Date *' (calendar icon): date input with value '09/09/2026' and a calendar picker icon.
+  - Field 'Start Time *' (clock icon): time input with value '01:33 AM' and a clock icon.
+  - Field 'Source' (signal-bars icon): select with value 'Walk-In'.
+  - Field 'Advance / Deposit (Rs)' (cash icon): number input with value '0'.
+  - Field 'Services *' (scissors icon): full-width multi-select with placeholder 'Pick services'.
+  - Info callout in a light blue box (#eaf2fb) with a blue (i) icon: 'Pick a stylist and a date — every open and taken time for that day shows up here.' This is a placeholder for an availability slot grid.
+  - Summary strip in pale pink (#fdecea) with a red left accent. Text: '⏳ 30 min · ends 02:03 · 💰 Rs 0 · 🚶 checks in immediately'.
+  - Field 'Consultation notes' (speech icon): label is visible; the textarea is cut off below.
+  - Right pane header: eye icon + 'LIVE PREVIEW' (small caps, grey).
+  - Preview identity block: a black square tile with a white walking icon, the name shown as '—' (no customer chosen yet) and a red pill badge 'Walk_in'.
+  - Preview key/value rows:
+  - Branch: 'Branch 1 – Gulberg'
+  - Station: '—'
+  - Date: '2026-09-09'
+  - Start: '01:33'
+  - Duration: '30 min'
+  - Ends: '02:03'
+  - Services: '—'
+  - Deposit: 'Rs 0'
+  - A thick dark divider, then the bold row 'Estimated total' with 'Rs 0' on the right.
+  - Footnote with an (i) icon, small grey text: 'Saving re-checks stylist overlap, station clash, shift window and leave before the slot is held.'
+- **Features:**
+  - Quick walk-in check-in that creates an appointment starting now and sets status to checked-in immediately.
+  - Multi-branch support, with branch selection on each booking.
+  - Customer search and select, likely with inline create.
+  - Staff (stylist) assignment.
+  - Resource (station/chair) assignment.
+  - Booking source tracking (Walk-In, plus other likely options such as Phone, Online, Referral).
+  - Advance/deposit capture in local currency (Rs).
+  - Multi-service selection that drives duration and price.
+  - Automatic end-time calculation from service durations; a default of 30 min is shown.
+  - Day availability view for the chosen stylist and date, showing open versus taken slots.
+  - A live preview summary that updates in real time and shows an estimated total.
+  - Server-side conflict validation on save: staff overlap, station clash, shift window and leave/time-off.
+  - Consultation notes on the booking.
+  - Appointments toolbar: New Booking, Walk-In, CSV/PDF export, Print, Import CSV, Template, Today navigation.
+  - A waitlist feature (Waitlist button visible behind the modal).
+  - Theme switching (palette icon).
+- **NAIM translation:** Map this to a 'Quick Log / Instant Meeting' modal in NAIM COMMAND, launched from a 'Walk-In'-style toolbar button on the Meetings/Calls page. It is for logging an unscheduled discovery call or inbound enquiry that starts now. Field mapping: Branch becomes Business Unit (NAIM Automation, or a future side-business). Customer becomes Lead/Account, a searchable select over recruitment agencies with inline create. Stylist becomes Owner/Sales rep or delivery engineer. Station/Chair becomes Channel/Room (Zoom, Google Meet, phone, office). Date and Start Time stay the same. Source becomes Lead Source (Inbound, Referral, LinkedIn, Cold outreach, Walk-in/Event). Advance/Deposit becomes Deposit/Retainer (KES). Services becomes Offer/Package (e.g., CV-screening bot, candidate WhatsApp automation, ATS integration), which drives meeting duration and deal value. The availability callout becomes the rep's calendar slots for the day. Keep the right-hand LIVE PREVIEW panel showing Business Unit, Channel, Date, Start, Duration, Ends, Packages, Deposit and a bold 'Estimated deal value' in KES. Show a source badge (e.g., 'Inbound') in place of 'Walk_in'. Keep the save-time conflict check: rep double-booking, room/channel clash, working hours and leave. Consultation notes become discovery notes or pain points. Keep the same dark shell, white form pane and tinted preview pane, with NAIM's accent colour replacing coral.
+
+## #21 `download-21.png` — salon-system · Customers · Add Customer modal (large two-pane form with Live Preview side panel), opened from Customers page header '+ Add Customer' button. Form is pre-filled with demo record 'Client 1' (looks like edit/duplicate of demo data, but title says Add Customer).
+- **Theme:** Mixed: dark app chrome (sidebar near-black #1a1214 / #1f1a1c, modal header bar dark #1c1416 with white title text) with light modal body (form pane white #ffffff, preview pane very light pink/cream #fdf3f2). Accent: coral/red-orange active nav item (~#e8553f / #d9534f). Status 'Active' badge red/coral pill (~#e5484d) with white text. Page behind modal partially visible with yellow card (~#f5c518) and red bar (~#e04848) at right edge. Inputs: white with light grey border #d9d9d9, rounded ~6px. Labels dark grey #333 with small leading icons.
+- **Layout:** Left fixed dark sidebar (~150px) with section headings in small caps. Top bar: page title 'Customers' with icon, then action button group (+ Add Customer, CSV, PDF, Print, Import CSV, Template), global search 'Search everything', icons (palette/theme, brush, notification bell with red badge), 'Welcome, admin'. Centered large modal (~900px wide, ~90% height) with dark header strip containing person-plus icon + 'Add Customer', right-side info (i) circle icon and close X. Modal body split: left ~60% scrollable form in 2-column grid of labeled fields (vertical scrollbar visible), right ~40% sticky 'LIVE PREVIEW' panel showing card + key/value list that updates as you type. Background page dimmed by overlay.
+- **Sidebar:** Brand: scissors icon + 'Salon ERP' with collapse chevron button '<', (logo/avatar block below brand, partially hidden), Section GENERAL: Dashboard, My Day, Section SALON: Front Desk, Appointments, Customers (active, coral highlight), POS / Billing, Services, Memberships, Section INVENTORY: Inventory, Purchases, (labels truncated by modal overlay: 'Dashb…', 'My Da…', 'Front D…', 'Appoin…', 'Custom…', 'POS / …', 'Service…', 'Membe…', 'Invent…', 'Purcha…')
+- **Client 360:** none (this is the Add Customer form modal with live preview, not a Client 360 view; no tabs visible)
+- **Components:**
+  - Top bar buttons: '+ Add Customer' (dark filled), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template' (each with small icon), search input placeholder 'Search everything', theme/palette icon, brush icon, bell with red notification dot, text 'Welcome, admin'
+  - Modal header: icon + 'Add Customer'; right: info icon (white circle 'i'), close 'X'
+  - Field 'Name *' (person icon) – value 'Client 1'
+  - Field 'Mobile *' (phone icon) – value '03001000001'
+  - Field 'Email' (envelope icon) – value 'client1@demo.com'
+  - Field 'Gender' (gender icon) – select, value 'Female' (cursor hovering)
+  - Field 'Date of Birth' (calendar icon) – date input '02/11/1991' with calendar picker icon
+  - Field 'Anniversary' (heart icon) – date input placeholder 'mm/dd/yyyy'
+  - Field 'Preferred Branch' (building icon) – select placeholder 'Select branch'
+  - Field 'Preferred Stylist' (person icon) – select placeholder 'Select stylist'
+  - Field 'Status' (toggle icon) – select value 'Active' (single field in row, right column empty)
+  - Field 'Allergies / sensitivities' (warning triangle icon) – text placeholder 'Ammonia, PPD...'
+  - Field 'Last Patch Test' (eyedropper icon) – date input 'mm/dd/yyyy'
+  - Field 'How did they find us?' (megaphone icon) – cut off at bottom
+  - Field 'Referred By' (people icon) – cut off at bottom
+  - Further fields implied below scroll (Source, Marketing emails, Tags, Preferences, Internal Notes, Formula) based on preview
+  - LIVE PREVIEW panel header: eye icon + 'LIVE PREVIEW' (small caps grey)
+  - Preview card: black rounded-square avatar with white person icon, name 'Client 1' bold, mobile '03001000001', red pill badge 'Active'
+  - Preview key/value rows (label left grey, value right bold, '—' when empty, divider lines): Allergies —; Last patch test —; Formula —; Email client1@demo.com; Gender female; Date of Birth 1991-02-11; Anniversary —; Source —; Marketing emails Not allowed; Tags —; Preferred Branch —; Preferred Stylist —; Preferences Prefers evening slots; Internal Notes Demo record 1
+  - Footer hint (info icon): 'Name and mobile are required; mobile is also the duplicate key on import.'
+  - Background (dimmed) right edge: yellow card with illustration, red bar, 'Clear' button, a select dropdown, 'Next' pagination button
+- **Features:**
+  - Customer creation with rich CRM profile (contact, demographics, dates for birthday/anniversary marketing)
+  - Live preview of record as you type
+  - Required fields Name + Mobile; mobile acts as unique/duplicate key for CSV import dedupe
+  - Bulk import via CSV with downloadable Template; export CSV/PDF/Print
+  - Preferred branch and preferred staff assignment (multi-branch)
+  - Status lifecycle (Active etc.)
+  - Health/safety fields: allergies, last patch test, formula
+  - Acquisition tracking: How did they find us? (source), Referred By (referrals)
+  - Marketing consent flag (Marketing emails: Allowed/Not allowed)
+  - Tags, preferences, internal notes
+  - Global search, notifications, theme switcher
+- **NAIM translation:** Becomes 'Add Lead / Add Account' modal in NAIM COMMAND Leads/Clients module. Map: Name -> Contact name + Company (recruitment agency); Mobile* -> Phone/WhatsApp (dedupe key for CSV import, also add email/domain dedupe); Gender/DOB/Anniversary -> drop or replace with Company founded/contract renewal date; Preferred Branch -> Business unit (Naim Automation vs side-businesses); Preferred Stylist -> Account owner/assigned rep; Status -> Lead stage (New, Contacted, Demo, Proposal, Won, Lost, Active client); Allergies/Patch test/Formula -> Pain points, current ATS/tools stack, automation scope; How did they find us?/Referred By -> Lead source & referrer (LinkedIn, cold email, referral); Marketing emails -> outreach consent/opt-out; Tags, Preferences, Internal Notes retained. Keep the two-pane layout with right-side sticky Live Preview card + key/value list, dark header modal, info footer about required fields/duplicate key, and the page-header actions (+ Add, CSV, PDF, Print, Import CSV, Template).
+
+## #22 `download-22.png` — salon-system · Customers · Add Customer modal (large two-pane form with Live Preview). Scrolled to the lower section of the form and pre-filled with a demo record (Client 1).
+- **Theme:** Dark app shell dimmed behind a modal overlay. The modal header bar is near-black maroon (~#1E0F12) with white text and icons. The modal body is light: white form pane (#FFFFFF) and a very light grey preview pane (~#F7F7F8). The accent is crimson/red (~#C0392B / #D9363E), seen on the active sidebar item 'Customers' and the 'Active' badge (~#E5484D). The Save button is dark (~#1F1A1C); the Cancel button is grey (~#8A8F98). A yellow card is partially visible behind the modal (~#F2C94C).
+- **Layout:** Full-screen app with a left dark sidebar (~170px) and a top header showing page title 'Customers' and action buttons. A centered modal covers about 88% of the width. The modal header shows the title on the left and info and close icons on the right. The modal body is a two-column split. The left form pane (~60%) is scrollable and uses a 2-column field grid; full-width textareas follow, then a sticky footer with Save and Cancel. The right 'LIVE PREVIEW' pane (~40%) shows an avatar card at the top, then a key/value list with labels left and values right-aligned in bold, then a footnote.
+- **Sidebar:** Brand: 'Salon ERP' with scissors icon, plus a collapse chevron button '<', Section GENERAL: Dashboard, My Day, Section SALON: Front Desk, Appointments, Customers (active, red pill), POS / Billing, Services, Memberships, Section INVENTORY: Inventory, Purchases (truncated)
+- **Client 360:** none. This is the Add Customer create/edit modal, not a 360 view. No tabs are visible.
+- **Components:**
+  - Background top bar (dimmed): page title 'Customers' with icon; buttons '+ Add Customer', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template'; global search 'Search everything'; palette icon, brush/theme icon, notification bell with red badge; 'Welcome, admin'.
+  - Background right edge: yellow card with a user icon, a red button, a dark 'Clear' button, a select dropdown, a dark bar, 'Next' pagination, and partial text 'RAHEEB ...'.
+  - Modal header: user-plus icon and 'Add Customer'; a circular info (i) icon; a close X icon.
+  - Form field 'Allergies / sensitivities' (warning icon): text input, placeholder 'Ammonia, PPD...'.
+  - Form field 'Last Patch Test' (pen icon): date input 'mm/dd/yyyy' with calendar icon.
+  - Form field 'How did they find us?' (megaphone icon): select, placeholder 'Select source'.
+  - Form field 'Referred By' (users icon): select, value 'No referral'.
+  - Form field 'Marketing Emails' (envelope icon): select, value 'No'.
+  - Form field 'Tags' (tag icon): text input, placeholder 'vip, bride, student'.
+  - Form field 'Colour / treatment formula' (flask icon): full-width textarea, placeholder '7.3 + 20 vol · 35 min'.
+  - Form field 'Preferences (style, timing)' (scissors icon): full-width textarea, value 'Prefers evening slots'.
+  - Form field 'Internal Notes' (note icon): full-width textarea, value 'Demo record 1'.
+  - Footer buttons: 'Save' (dark, floppy icon) and 'Cancel' (grey, X icon).
+  - Live Preview header: eye icon and 'LIVE PREVIEW' in small caps.
+  - Live Preview card: black square avatar with a white person icon; name 'Client 1'; phone '03001000001'; red pill badge 'Active'.
+  - Live Preview key/values (dash = empty): Allergies —; Last patch test —; Formula —; Email client1@demo.com; Gender female; Date of Birth 1991-02-11; Anniversary —; Source —; Marketing emails 'Not allowed'; Tags —; Preferred Branch —; Preferred Stylist —; Preferences 'Prefers evening slots'; Internal Notes 'Demo record 1'.
+  - Footnote with info icon: 'Name and mobile are required; mobile is also the duplicate key on import.'
+- **Features:**
+  - Rich customer profile capture: allergies, patch test date, treatment formula, preferences, internal notes
+  - Acquisition source tracking ('How did they find us?') and referral linkage to an existing customer (referral program)
+  - Marketing consent flag (Marketing Emails Yes/No, shown as 'Not allowed'/'Allowed')
+  - Free-form comma-separated tags for segmentation
+  - Live preview pane mirrors form values in real time
+  - Profile also holds Gender, DOB, Anniversary, Preferred Branch and Preferred Stylist (upper part of form scrolled out of view)
+  - Validation rule: name and mobile are required
+  - Mobile number is the dedupe key for CSV import; Import CSV and Template download exist
+  - Export to CSV/PDF/Print from the list page
+  - Active/inactive status badge
+- **NAIM translation:** Becomes the 'Add Lead / Add Account' modal in NAIM COMMAND, used for recruitment agencies and side-business clients. Keep the two-pane design: a scrollable form on the left and a LIVE PREVIEW record card on the right. Map the fields as follows:
+- Allergies → 'Pain points / sensitivities' (e.g. 'burned by previous vendor, GDPR concerns').
+- Last Patch Test → 'Last Demo / Discovery Call date'.
+- How did they find us? → Lead Source (LinkedIn outbound, referral, website, event, Leads Engine scrape).
+- Referred By → link to an existing client (referral tracking/commission).
+- Marketing Emails → outreach consent flag (GDPR/Kenya DPA compliant).
+- Tags → 'staffing, IT-recruitment, high-volume, Nairobi'.
+- Colour/treatment formula → 'Proposed automation stack / package' (e.g. 'CV parser + WhatsApp screening bot · 3 wks').
+- Preferences → 'Communication preferences' (e.g. 'Prefers WhatsApp, afternoons EAT').
+- Internal Notes → internal notes.
+- Preferred Branch/Stylist → Business Unit (Naim Automation vs side-business) and Account Owner.
+- Anniversary → contract renewal date.
+The preview card shows company name, phone/email and a status badge (Lead/Prospect/Active/Churned). Use the footnote rule 'Company name + primary phone/email required; email domain is the duplicate key on CSV import', reusing the Leads Engine import. Keep the toolbar actions: Add, CSV, PDF, Print, Import CSV, Template.
+
+## #23 `download-23.png` — salon-system · Customers · Customer 360 View modal (large centered overlay) for 'Client 1', Visits tab active
+- **Theme:** Light mode content with near-black/dark maroon header and accents. Modal header bar ~#1E1012 (very dark brown-black). Page backdrop dimmed. Left profile panel tinted very light pink ~#FDF5F5. Active tab red/coral ~#E04B3A with underline. Table header row dark ~#1E1012 with white text. Status badge green ~#2E7D32 with white uppercase text. ACTIVE pill green ~#2E7D32. Primary button 'Edit Customer' dark ~#1E1012; destructive 'Delete' coral-red ~#E5533D. KPI icon tiles: Visits dark maroon ~#2A1215, Lifetime Value green ~#3FA34D, Avg Ticket gradient blue/pink-purple ~#6C7BD9/#E06C9F, Points yellow ~#F2B705. Background app sidebar is dark (#1A1A1A-ish) with red active item ~#E04B3A.
+- **Layout:** Background page: Customers module with top bar (page title 'Customers' with icon at left; right toolbar buttons). Overlaid by a wide modal (~92% viewport width, nearly full height) with dark header bar containing person icon + 'Client 1' bold + small '· 360 View' subtitle on left and white '×' close at right. Modal body is two columns: left fixed profile panel (~20% width, light pink background) with avatar, name, status, key-value list, 2x2 KPI card grid, and stacked full-width action buttons; right content area (~80%) with horizontal tab bar and a full-width data table beneath.
+- **Sidebar:** (partially hidden behind modal) Brand: 'Salon ERP' with scissors icon and collapse '<' button, Section GENERAL: Dashboard, My D... (My Day/My Dashboard), Section SALON: Front... (Front Desk), Appo... (Appointments), Customers (active, red highlight), POS, Serv... (Services), Mem... (Memberships), Section INVENTORY: Inven... (Inventory), Purc... (Purchases)
+- **Client 360:** customers-5tab: Visits (active), Invoices, Memberships, Packages, Preferences — this is the CUSTOMERS page 360 view (not the Appointments 3-tab Services/Notes/Timeline version).
+- **Components:**
+  - Background top bar (dimmed): title 'Customers'; buttons '+ Add Customer' (dark filled), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template'; search input 'Search everything'; icons palette/theme, brush, notification bell with red badge; 'Welcome, admin'
+  - Background page glimpses: yellow KPI card at right edge, red button, 'Clear' button, dropdown, dark table header, 'Next' pagination
+  - Modal header: user icon + 'Client 1' + '· 360 View'; close '×' button top-right
+  - Left panel avatar: black circle with white person silhouette
+  - Name: 'Client 1' (bold) with green pill badge 'ACTIVE'
+  - Profile key-value list (label left grey, value right dark, thin dividers): Mobile: 03001000011; Email: client1@demo.com; Gender: Male; Date of Birth: Mar 12, 1994; Anniversary: —; Pref. Branch: Branch 1 – Gulberg; Pref. Stylist: Staff 1; No-Shows: 0; Customer Since: Aug 12, 2026
+  - KPI mini-cards 2x2 (white cards with colored rounded icon tile, small uppercase label, bold value): VISITS 1 (scissors icon, dark); LIFETIME VALUE Rs 525 (money bag icon, green); AVG TICKET Rs 525 (receipt icon, blue/pink); POINTS 120 (star icon, yellow)
+  - Button 'Edit Customer' with pencil icon, full width, dark filled, white text
+  - Button 'Delete' with trash icon, full width, coral-red filled, white text
+  - Tab bar (icon + label): 'Visits' (active, red text + red underline, calendar icon), 'Invoices' (document icon), 'Memberships' (id-card icon), 'Packages' (box/ticket icon), 'Preferences' (note icon)
+  - Visits table: dark header row with columns Date | Time | Services | Stylist | Status
+  - Row 1: Sep 05, 2026 | 11:00–11:30 | Haircut – Classic | Staff 1 | green pill 'COMPLETED'
+- **Features:**
+  - Customer 360 profile modal opened from Customers list
+  - Customer master data: contact, gender, DOB, anniversary, preferred branch, preferred staff, no-show counter, customer-since date
+  - Customer status (Active/Inactive)
+  - Computed customer KPIs: visit count, lifetime value, average ticket, loyalty points
+  - Visit history with services, staff and status
+  - Linked invoices, memberships, prepaid packages and preferences per customer
+  - Multi-branch support
+  - Loyalty points program
+  - Edit and delete customer from 360 view
+  - Currency Rs (PKR) formatting
+  - List-level CSV/PDF/Print export, CSV import with template
+- **NAIM translation:** Becomes the 'Client/Account 360' modal on NAIM COMMAND's Clients page (recruitment agencies). Left panel: agency logo/avatar, agency name, status pill (Active/Prospect/Churned); fields: Primary contact phone (+254), Email, Industry/Niche, Founded/Onboarded date, Contract renewal date (replaces Anniversary), Assigned office/Business unit (replaces Pref. Branch; supports side-businesses), Account manager (replaces Pref. Stylist), Missed meetings count (replaces No-Shows), Client Since. KPI cards: Engagements/Projects count, Lifetime Value (KES), Avg Deal Size (KES), Health score or referral points. Buttons: Edit Client, Delete (with confirm). Tabs: Engagements (projects/meetings with Date, Time, Service e.g. 'CV Screening Automation', Owner, Status pill), Invoices, Retainers/Subscriptions (Memberships), Packages (automation bundles/prepaid hours), Preferences (communication channel, tools stack, notes). Keep dark header + coral accent styling and theme-palette support; currency KES.
+
+## #24 `download-24.png` — salon-system · Customers · Customer 360 modal (Client 1 – 360 View), Invoices tab active; the Customers list page is visible but dimmed behind it.
+- **Theme:** Light-mode content with a near-black/dark-maroon chrome. The modal header bar and table header are very dark maroon/brown (~#1E0E0E / #2A1414), and the content area is white (#FFFFFF). The left profile panel has a faint pink tint (~#FFF7F6). The primary accent is red/coral: active tab underline and icon ~#E8473B, and the Delete button ~#E74C3C. Badges are green (ACTIVE and PAID, ~#2E7D32). The KPI icon tiles are dark (#1E0E0E), green (#43A047), pink/purple gradient (~#E57373→#7E57C2) and amber (#F4B400). Behind the overlay, the app sidebar is dark (~#1A1A1A) and the active nav item 'Customers' is red (~#E8473B).
+- **Layout:** The app shell has a left dark sidebar of about 150px. The top bar holds the page title 'Customers' with a person icon. Its right side contains a toolbar: + Add Customer (dark button), CSV, PDF, Print, Import CSV, Template. Next come the search field 'Search everything...', a palette icon, a brush icon, a notification bell with a red badge, and 'Welcome, admin'. A large centered modal covers about 90% of the width over a dimmed backdrop. Modal header: dark bar with a user icon, the title 'Client 1' and a small subtitle '- 360 View', plus a white X close button at the right. The modal body is a 2-column grid: the left profile column is about 200px (~25%) and the right column is about 75% with tabs and a table. Behind the modal, faint remnants of the customers page are visible on the right: a yellow card, a red bar, a 'Clear' button, a dropdown, a dark bar, and a 'Next' pagination link.
+- **Sidebar:** Salon ERP (logo with scissors icon, collapse '<' button), GENERAL section: Dashboard, My Day (partially visible: 'My D…'), SALON section: Front Desk (partially 'Fron…'), Appointments ('Appo…'), Customers (active, red highlight), POS, Services ('Serv…'), Memberships ('Mem…'), INVENTORY section: Inventory ('Inve…'), Purchases ('Purc…')
+- **Client 360:** customers-5tab: Visits, Invoices (active), Memberships, Packages, Preferences — this is the CUSTOMERS page Client 360 (not the 3-tab Appointments version).
+- **Components:**
+  - Modal header: user icon + 'Client 1' (bold white) + '- 360 View' (small, grey/white); close 'X' at top-right
+  - Profile avatar: black circle with a white generic person icon, centered
+  - Name 'Client 1' (bold), with a green pill badge 'ACTIVE' below it
+  - Key–value list (label left in grey, value right in dark; thin row dividers):
+  - Key–value rows: Mobile: 03001000011 | Email: client1@demo.com | Gender: Male | Date of Birth: Mar 12, 1994
+  - Key–value rows (cont.): Anniversary: — | Pref. Branch: Branch 1 – Gulberg | Pref. Stylist: Staff 1 | No-Shows: 0 | Customer Since: Aug 12, 2026
+  - 2x2 KPI mini-cards (white, rounded ~10px, soft shadow, colored rounded-square icon left, small caps label + bold value):
+  - KPI mini-card: VISITS 1 (dark tile, scissors icon)
+  - KPI mini-card: LIFETIME VALUE Rs 525 (green tile, money bag icon)
+  - KPI mini-card: AVG TICKET Rs 525 (pink/purple tile, receipt icon)
+  - KPI mini-card: POINTS 120 (amber tile, star icon; the text appears text-selected/highlighted blue in the screenshot)
+  - Button 'Edit Customer': full-width, dark (#1E0E0E), pencil icon, white text
+  - Button 'Delete': full-width, red (#E74C3C), trash icon, white text
+  - Tab bar (icon + label): Visits (calendar icon), Invoices (document icon, ACTIVE – red text + red underline), Memberships (id-card icon), Packages (box/ticket icon), Preferences (note icon); a mouse cursor is hovering over Invoices
+  - Invoices table: dark header row (#1E0E0E, white bold text)
+  - Invoices table columns: Invoice | Date | Total | Paid | Due | Status
+  - Invoices table row 1: INV-2026-001 | Sep 05, 2026 | Rs 525 | Rs 525 | — | PAID (green pill badge)
+  - Large white empty space below the single row; no pagination shown inside the modal
+- **Features:**
+  - Full customer 360 profile accessible from the Customers list (modal overlay)
+  - Customer status (ACTIVE/inactive)
+  - Contact + demographic fields: mobile, email, gender, DOB, anniversary
+  - Preferences: preferred branch (multi-branch support), preferred stylist/staff
+  - No-show tracking and a 'Customer Since' date
+  - Computed KPIs: visit count, lifetime value, average ticket, loyalty points
+  - Per-customer invoice history with paid/due amounts and payment status badges
+  - Tabs for visits history, memberships, prepaid packages and preferences
+  - Edit and delete customer actions
+  - Global toolbar on the list page: add, CSV/PDF export, print, CSV import, import template download
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** This becomes the 'Account 360' modal on the NAIM COMMAND Clients/Accounts page, for recruitment-agency clients. Left panel: agency logo/avatar, agency name and a status badge (ACTIVE/Prospect/Churned). Fields: decision-maker phone (Kenyan format), email, industry/niche, company size, signed date ('Client Since'), assigned account manager (in place of Pref. Stylist), business unit/side-business (in place of Pref. Branch), and missed meetings (in place of No-Shows). KPI mini-cards: Engagements/Projects, Lifetime Value (KES), Avg Deal Size (KES) and Health Score or Referral Points. Keep the Edit and Delete buttons. Tabs: Meetings/Activities (in place of Visits) and Invoices, which keeps the exact table Invoice | Date | Total | Paid | Due | Status with KES amounts and PAID/PARTIAL/OVERDUE badges. Then Retainers/Subscriptions (in place of Memberships), Packages/Automation bundles (e.g., CV screening bot, outreach automation) and Preferences (communication channel, WhatsApp vs email, tech stack). Keep the list-page toolbar (Add, CSV, PDF, Print, Import CSV, Template), plus the dark maroon/red accent theme as one palette option.
+
+## #25 `download-25.png` — salon-system · Customers · Customer 360 View modal (large centered overlay), Memberships tab active
+- **Theme:** Light-mode modal over a dimmed app. Modal header bar is near-black/deep maroon (#1E0F0F to #2A1414) with white title text. Left profile panel has a very pale pink/cream tint (#FFF7F5). Content area is white (#FFFFFF). Accent is coral-red (#E8483B to #E74C3C): active tab underline and text, Delete button. Table header row is near-black (#1A1010) with white bold text. Status badges are green pills (#2E7D32) with white uppercase text. The app topbar behind is light gray/white, and the sidebar behind is dark (#1A1A1A). A yellow card (#F5C518) and a coral bar are partly visible behind the overlay at the right edge.
+- **Layout:** The app topbar sits behind the overlay. It shows the page title 'Customers' with a person icon. Its right-aligned buttons are '+ Add Customer' (dark filled), 'CSV', 'PDF', 'Print', 'Import CSV' and 'Template', followed by a 'Search everything...' input. At the far right are a palette icon, a brush icon, a bell with a red badge, and 'Welcome, admin'.
+
+The modal is about 90% of the viewport width and nearly full height, with rounded corners. Its header bar spans the full width: a person icon, 'Client 1' in bold white, and a small subtitle '360 View'. A white '✕' close button sits at the far right.
+
+The modal body has two columns:
+- Left profile column (about 20% width), stacked vertically:
+  - avatar
+  - name
+  - status badge
+  - key-value detail list
+  - a 2x2 KPI tile grid
+  - full-width action buttons
+- Right column (about 80% width):
+  - a horizontal tab bar with icons, using an underline-style active indicator
+  - a full-width data table for the active tab
+- **Sidebar:** (behind overlay, dimmed and truncated) Brand: scissors icon + 'Salon ERP' with collapse chevron '<', GENERAL section: Dash[board], My D[ay], SALON section: Fron[t Desk], Appo[intments], Cust[omers] (active, highlighted with a coral/red pill), POS, Serv[ices], Mem[berships], INVENTORY section: Inve[ntory], Purc[hases]
+- **Client 360:** customers-5tab: Visits | Invoices | Memberships (active) | Packages | Preferences. This is the CUSTOMERS-page Client 360, not the 3-tab Appointments version (Services, Notes, Timeline).
+- **Components:**
+  - Modal header: user icon + 'Client 1' + subtitle '360 View'. Close 'X' at top right.
+  - Avatar: black circle (about 34px) with a white person silhouette, centered.
+  - Name: 'Client 1' (bold, centered).
+  - Status badge: green pill 'ACTIVE'.
+  - Detail list (label left in gray small text, value right-aligned in dark text, thin row separators):
+- Mobile: 03001000011
+- Email: client1@demo.com
+- Gender: Male
+- Date of Birth: Mar 12, 1994
+- Anniversary: —
+- Pref. Branch: Branch 1 – Gulberg
+- Pref. Stylist: Staff 1
+- No-Shows: 0
+- Customer Since: Aug 12, 2026
+  - KPI tiles: 2x2 grid of white rounded cards with a soft shadow. Each has a colored rounded-square icon on the left, then a small uppercase label above a bold value.
+- VISITS: 1. Black icon with a scissors glyph.
+- LIFETIME VALUE: Rs 525. Green (#43A047) icon with a money bag.
+- AVG TICKET: Rs 525. Gradient pink/purple-blue icon with a receipt.
+- POINTS: 120. Amber/yellow (#F4B400) icon with a star.
+  - Button '✎ Edit Customer': full width, near-black fill (#1E0F0F), white text, pencil icon.
+  - Button '🗑 Delete': full width, coral-red fill (#E74C3C), white text, trash icon.
+  - Tab bar, each tab with a small leading icon:
+- 'Visits' (calendar icon)
+- 'Invoices' (document icon)
+- 'Memberships' (ID-card icon). Active: coral-red text with a coral underline; the mouse cursor is hovering it.
+- 'Packages' (box/card icon)
+- 'Preferences' (list icon)
+  - Memberships table:
+- Dark header row with columns: Plan | Start | Expiry | Paid | Status
+- Row 1: Gold Card | Jul 22, 2026 | Jul 22, 2027 | Rs 8,000 | ACTIVE (green pill badge)
+- No pagination is shown. The remaining space is empty white.
+  - Behind the modal (partially visible at the right): a yellow card with an icon, a coral/red bar, a 'Clear' button (dark gray), a dropdown with a chevron, a dark block, and 'Next' pagination at the bottom right.
+- **Features:**
+  - Customer 360 profile modal opened from the Customers list.
+  - Customer master data: contact details, demographics (DOB, anniversary for marketing), and preferred branch and stylist (multi-branch, staff assignment).
+  - Reliability metric: No-Shows count.
+  - Customer tenure: 'Customer Since'.
+  - Computed KPIs: visits count, lifetime value, average ticket, loyalty points.
+  - Membership subscriptions per customer with plan name, start and expiry dates (12-month term), amount paid, and status badge.
+  - Prepaid packages tab, invoice history tab, visit history tab, and a preferences tab.
+  - Inline edit and delete of the customer (Delete is destructive and red; likely needs a confirm).
+  - Currency shown as 'Rs' (PKR). Dates shown in 'Mon DD, YYYY' format.
+  - Page-level bulk tools: Add, CSV/PDF export, Print, Import CSV, Import Template, and global search.
+- **NAIM translation:** This becomes the 'Account 360' modal on the NAIM COMMAND Clients page, for recruitment-agency clients.
+
+Left panel field mapping:
+- Agency name
+- Status badge: ACTIVE / ONBOARDING / CHURNED
+- Primary contact mobile (+254 format)
+- Email
+- Contact role (replaces Gender)
+- Company founded date (replaces DOB)
+- Contract anniversary or renewal date (replaces Anniversary)
+- Owning business unit or side-business (replaces Pref. Branch)
+- Account manager or assigned engineer (replaces Pref. Stylist)
+- Missed meetings (replaces No-Shows)
+- Client Since
+
+KPI tiles:
+- Projects / Deployments (replaces Visits)
+- Lifetime Value in KES (replaces Lifetime Value)
+- Avg Deal Size (replaces Avg Ticket)
+- Health Score or Referral Credits (replaces Points)
+
+Keep the 'Edit Client' and 'Delete' buttons.
+
+Tabs:
+- Projects / Engagements (replaces Visits)
+- Invoices (KES, M-Pesa / bank status)
+- Subscriptions / Retainers (replaces Memberships)
+  - Table columns: Plan (e.g. 'AI Recruiter Automation – Pro'), Start, Renewal, Paid (KES), Status.
+  - Status badges: ACTIVE / EXPIRING / LAPSED.
+- Bundles / Credits (replaces Packages): prepaid automation hours or candidate-screening credits.
+- Preferences: communication channel, ATS used, integrations, SLA tier.
+
+Styling and actions:
+- Keep the dark header bar, coral active-tab underline, dark table headers, and green status pills, applied through the theme palette system.
+- Keep the page toolbar: + Add Client, CSV, PDF, Print, Import CSV, Template, and global search.
+
+## #26 `download-26.png` — salon-system · Appointments · Appointment 'Client 1 · #1 · 360 View' modal (large centered overlay), Services tab active, over a dimmed Appointments page
+- **Theme:** Light-mode modal over a dimmed app shell. Modal header is near-black maroon (~#1E0C0C / #200E0E). Accent color is red/coral (~#E8483B): active tab underline and text, Delete button, the dimmed red card behind the modal. The left panel is a very light pink/cream (~#FFF5F3). The table header row is near-black (~#1A0B0B) with white text. The 'COMPLETED' badge is green (~#2E9E4F) with white uppercase text. Page background is white. The app's top bar is black (~#0F0A0A) with a red progress/accent line at the very top.
+- **Layout:** The app shell has a dark left sidebar (~150px) and a dark top bar. The top bar contains the page title 'Appointments' with a calendar icon, an action button row, a search box, and a user area. A large modal (~92% of the viewport width, ~90% of its height) is centered over a dimmed backdrop. The modal has a dark header bar with the title on the left and a white 'X' close button on the right. The modal body is split into two columns. The left column (~25%) is a pink-tinted profile/detail panel: centered avatar, name, and status badge, then a key-value list, a 2x2 stat card grid, and a full-width Delete button. The right column (~75%) has a tab bar and the active tab's content, here a full-width table. Behind the modal, these partially visible elements suggest the Appointments page: a 'Waitlist' button, a red KPI card, a 'Clear' filter button, a dropdown, a dark bar, and a 'Next' pagination link.
+- **Sidebar:** Salon ERP (logo with scissors icon, plus a '<' collapse button), GENERAL section: Dashboard, My D... (truncated, likely My Day), SALON section: Front Desk (truncated 'Fron...'), Appointments (active, red pill highlight), Customers (truncated 'Cust...'), POS, Services (truncated 'Serv...'), Memberships (truncated 'Mem...'), INVENTORY section: Inventory (truncated 'Inve...'), Purchases (truncated 'Purc...')
+- **Client 360:** appointments-3tab: This is the APPOINTMENTS page 360 view (title 'Client 1 · #1 · 360 View'). It has exactly 3 tabs: 'Services' (active), 'Notes', 'Timeline'. It is NOT the Customers 5-tab view.
+- **Components:**
+  - Top bar buttons (dark chips, icon + label): '+ New Booking' (primary, slightly highlighted), 'Walk-In' (lightning icon), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template', 'Today'
+  - Global search input with placeholder 'Search everything...' and a magnifier icon
+  - Top-right icons: palette (theme picker), brush, and bell with a red notification dot; text 'Welcome, admin'
+  - Modal header: calendar-check icon, bold white 'Client 1 · #1', small grey suffix '· 360 View', white close 'X' at the right
+  - Left panel avatar: black circle (~56px) with a white calendar-check icon
+  - Name: 'Client 1 · #1' (bold, centered)
+  - Status badge: green pill 'COMPLETED'
+  - Key-value list (label left in grey, value right-aligned in bold dark text, thin row separators): Date = 'Sep 05, 2026'; Time = '11:00–11:30'; Stylist = 'Staff 1'; Station = 'Chair 1'; Branch = 'Branch 1 – Gulberg'; Source = 'Phone'; Deposit = '—'; No-Show Fee = '—'; Booked On = 'Sep 04, 03:09 AM'
+  - 2x2 stat cards (white, rounded, soft shadow, each with a colored rounded-square icon on the left, a tiny uppercase grey label, and a bold value): SERVICES = '1' (black icon, scissors); EST. AMOUNT = 'Rs 500' (green icon, money bag); DURATION = '30m' (purple-red gradient icon, hourglass); INVOICE = '#1' (yellow/amber icon, document)
+  - Full-width red button with a trash icon: 'Delete'
+  - Tab bar (3 tabs): 'Services' (scissors icon, active, red text with red underline), 'Notes' (note icon), 'Timeline' (timeline/branch icon)
+  - Services table, dark header row: columns 'Service' | 'Duration' | 'Price'
+  - Services table row: 'Haircut – Classic' | '30 min' | 'Rs 500'
+  - Services table total row (bold): 'Total' | '30 min' | 'Rs 500'
+  - Background (dimmed, partial): 'Waitlist' button, red card with an X icon, 'Clear' button, a select dropdown, 'Next' pagination link
+- **Features:**
+  - Appointment detail 360 modal opened from the appointments list or calendar
+  - Appointment status lifecycle with colored badge (e.g., Completed)
+  - Appointment metadata: date, time slot, assigned staff (stylist), resource (station/chair), branch (multi-branch support), booking source channel (Phone), deposit, no-show fee, booking timestamp
+  - Summary KPIs per appointment: service count, estimated amount, total duration, linked invoice number
+  - Line-item services with duration and price, plus a computed total row
+  - Notes tab for appointment-specific notes
+  - Timeline tab showing an audit/activity history of the appointment
+  - Delete appointment action
+  - Global actions: New Booking, Walk-In quick add, CSV/PDF export, Print, Import CSV with template, jump to Today
+  - Global search, theme palette switcher, notifications
+  - Waitlist management (button visible behind the modal)
+- **NAIM translation:** Map this to a 'Meeting/Engagement 360' modal on NAIM COMMAND's Meetings/Calls (Appointments) page, keeping the same two-column layout. Left panel: header shows the lead/agency name plus meeting #. The status badge becomes Scheduled / Completed / No-Show / Rescheduled. The key-value list becomes Date; Time; Owner (sales rep, replacing Stylist); Channel/Room (Zoom/Google Meet/In-office, replacing Station); Market/Branch (Nairobi, etc.); Source (LinkedIn, Referral, Cold Email, Phone); Deposit (commitment/setup fee); No-Show Fee (or no-show flag); Booked On. The stat cards become SERVICES → Solutions pitched (count); EST. AMOUNT → Est. Deal Value (KES); DURATION → meeting length; INVOICE → linked proposal/invoice #. Keep the full-width red Delete button, or swap it for Cancel/Archive. Keep exactly 3 tabs. 'Services' becomes the 'Solutions' line items table (Solution e.g. 'AI CV Screening Bot', 'WhatsApp Candidate Follow-up', with Setup Time and Price in KES, plus a Total row). 'Notes' holds meeting notes and objections. 'Timeline' shows activity history (booked, reminder sent, completed, proposal sent). The top bar actions map to: + New Meeting, Quick Call (Walk-In), CSV/PDF export, Print, Import CSV leads with a Template, and Today. Keep a separate, richer 5-tab Client 360 for the Clients/Accounts page (e.g., Engagements, Invoices, Retainers/Subscriptions, etc.). Make the module business-agnostic so future side-businesses can reuse it. Retain the theme palette switcher, with dark headers and a red/coral accent as one palette option.
+
+## #27 `download-27.png` — salon-system · Customers · Customer 360 View modal (large centered overlay over the Customers page) with the 'Preferences' tab active
+- **Theme:** Light-mode content inside the modal, with a dark/near-black header and sidebar (approx #1a1012 to #2a1416, a warm very dark maroon-black). The accent is coral-red: the Delete button is about #e5533d and the active tab underline and label are about #e04a3a. Note rows have a pale pink background (about #fdf3f2) with a coral left border. The page behind the modal is dimmed by a dark overlay (rgba(0,0,0,0.6)). KPI icon tiles are multi-colored: dark maroon #2b1214, green #3fa45b, red/blue gradient #e0605a, and yellow #f2b705.
+- **Layout:** The background app has a dark left sidebar of about 150px and a top bar. The top bar shows the page title 'Customers' with an icon, followed by the action buttons [+ Add Customer] (dark filled), CSV, PDF, Print, Import CSV and Template. To the right are a global search 'Search everything', a theme/palette icon, a brush icon, a notification bell with a red badge, and 'Welcome, admin'. Over this sits a large modal of about 90% width and about 95% height. The modal has a dark header bar, with a user icon and 'Client 1' in bold white plus the small subtitle '· 360 View' on the left, and a white '×' close button on the right. The modal body is split into two columns. The left profile column is about 200px wide on a light grey background. The right content area is white, with a horizontal tab bar on top and the tab content below.
+- **Sidebar:** (brand) Salon ERP with a scissors icon and a collapse '<' button, GENERAL section: Dashboard (chart icon), My D... (partially hidden, likely My Day/My Dashboard), SALON section: Front... (Front Desk, home icon), Appo... (Appointments), Customers (active, highlighted with coral/red pill), POS, Serv... (Services, scissors icon), Mem... (Memberships), INVENTORY section: Inve... (Inventory), Purc... (Purchases)
+- **Client 360:** customers-5tab: Visits, Invoices, Memberships, Packages, Preferences (Preferences active). This is the CUSTOMERS-page 360 view, not the 3-tab Appointments one (Services/Notes/Timeline).
+- **Components:**
+  - Modal header (dark): person icon + 'Client 1' + small '360 View' label; close 'X' at top-right
+  - Left panel: circular black avatar with a white person silhouette, centered
+  - Name 'Client 1' (bold) with a green status pill 'ACTIVE' (green #2e9e4f on white text) below it
+  - Key-value detail list (label left in grey, value right-aligned in dark text):
+  - Mobile: 03001000011
+  - Email: client1@demo.com
+  - Gender: Male
+  - Date of Birth: Mar 12, 1994
+  - Anniversary: —
+  - Pref. Branch: Branch 1 – Gulberg
+  - Pref. Stylist: Staff 1
+  - No-Shows: 0
+  - Customer Since: Aug 12, 2026
+  - 2x2 KPI mini-card grid (white cards, rounded, colored square icon on the left, small uppercase label and bold value):
+  - VISITS: 1 (dark maroon tile, scissors icon)
+  - LIFETIME VALUE: Rs 525 (green tile, money-bag icon)
+  - AVG TICKET: Rs 525 (red/purple gradient tile, receipt icon)
+  - POINTS: 120 (yellow tile, star icon)
+  - Full-width button 'Edit Customer' with a pencil icon (dark #1f0f10, white text)
+  - Full-width button 'Delete' with a trash icon (coral-red #e5533d, white text)
+  - Right panel tab bar, each tab with an icon: Visits (calendar), Invoices (document), Memberships (id card), Packages (box), Preferences (active, coral text with coral underline)
+  - Preferences tab content, section 1: heading with a heart icon 'Preferences'. Below it a note block (pink bg, coral left border) reading 'Layered cut, allergic to ammonia color'
+  - Preferences tab content, section 2: heading with an edit icon 'Internal Notes'. Below it a note block reading 'No notes.' (empty state)
+  - Rest of the right panel is blank white space
+  - Background (dimmed) partial elements: a yellow KPI card at the top right, a red button, a 'Clear' filter button, a dropdown, a dark table header and a 'Next' pagination link
+- **Features:**
+  - Customer 360 profile modal opened from the Customers list
+  - Customer status (Active/Inactive)
+  - Customer demographics: DOB and anniversary, for birthday/anniversary marketing
+  - Preferred branch (multi-branch support) and preferred stylist (staff assignment)
+  - No-show tracking
+  - Customer-since date
+  - Computed KPIs: visit count, lifetime value, average ticket, loyalty points
+  - Loyalty points program
+  - Per-customer tabs for visit history, invoices, memberships, packages, and preferences/notes
+  - Free-text preferences (allergies/likes) kept separately from internal staff notes
+  - Edit/Delete customer from the 360 view
+  - Customers list bulk actions: Add, Export CSV/PDF, Print, Import CSV, Download import template
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** Map this to the 'Account 360' modal on the NAIM COMMAND Clients/Accounts page, for recruitment agencies that are clients or prospects.
+
+Left panel:
+- Agency logo/avatar and agency name, with a status pill: ACTIVE / PROSPECT / CHURNED.
+- Key-value details: primary contact phone, email, contact person / decision maker, city/country, owner (assigned NAIM rep, replacing Pref. Stylist), business line/branch (NAIM Automation vs side-business, replacing Pref. Branch), missed meetings (replacing No-Shows), client since, and contract renewal date (replacing Anniversary).
+- 2x2 KPIs: Projects/Engagements count, Lifetime Value (KES), Avg Deal Size (KES), and Health Score or Referral points.
+- Buttons: Edit Account and Delete.
+
+Right tabs, keep 5:
+1. Engagements/Meetings (replacing Visits).
+2. Invoices (KES, M-Pesa/bank status).
+3. Retainers/Subscriptions (replacing Memberships).
+4. Packages/Automation bundles purchased (e.g. CV-screening bot, WhatsApp follow-up).
+5. Preferences & Notes. This holds client requirements/constraints (e.g. 'uses Bullhorn ATS, no WhatsApp outreach', mirroring the allergy note) plus Internal Notes with a 'No notes.' empty state.
+
+Keep the dark header, the coral active-tab accent, the pink note blocks with left border, and the dimmed-overlay modal pattern. Top-bar actions on the list page: + Add Client, CSV, PDF, Print, Import CSV, Template.
+
+## #28 `download-28.png` — salon-system · Customers · Customer 360 View modal (Client 1), Packages tab active
+- **Theme:** Light mode with a dark maroon/near-black brand palette. Modal header bar and Edit Customer button ~#2A0F12 to #1E0B0D. Active tab underline and label are coral-red ~#E5533D. Delete button is solid red-orange ~#E8503A. ACTIVE badges are green ~#2E9E44 with white text. Left profile panel has a very light pink tint ~#FDF5F5. Table header row is near-black ~#1A1A1A with white text. Page behind the modal is dimmed by a dark overlay. Top app bar is dark ~#1C1416.
+- **Layout:** The background page is Customers. Its top bar has the page title 'Customers' on the left. On the right are buttons: '+ Add Customer' (dark), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template', then a 'Search everything' input, theme/palette and brush icons, a notification bell with a red badge, and 'Welcome, admin'. A large centered modal (~90% width) sits over a dimmed backdrop. The modal header is a dark maroon bar with a person icon, the title 'Client 1', the subtitle '- 360 View' and a white X close button on the right. The modal body is split into two columns. The left column (~25%, light pink) is the profile panel. The right column (~75%, white) holds a horizontal tab bar with a table below it.
+- **Sidebar:** Salon ERP (logo with scissors icon, collapse '<' button), GENERAL section: Dashboard (partially hidden), My D... (My Day?), SALON section: Front Desk (Fron...), Appointments (Appo...), Customers (active, red highlight), POS, Services (Serv...), Memberships (Mem...), INVENTORY section: Inventory (Inve...), Purchases (Purc...)
+- **Client 360:** customers-5tab: Visits, Invoices, Memberships, Packages (active), Preferences. This is the CUSTOMERS page 360 view, not the Appointments 3-tab view.
+- **Components:**
+  - Modal header: user icon + 'Client 1' (bold white) + '360 View' (small, muted) + close 'X' at top-right
+  - Profile panel avatar: black circle with a white person silhouette
+  - Profile name: 'Client 1' (bold) with a green 'ACTIVE' pill badge below it
+  - Key-value list with labels left (grey) and values right (bold dark):
+  -   Mobile: 03001000011
+  -   Email: client1@demo.com
+  -   Gender: Male
+  -   Date of Birth: Mar 12, 1994
+  -   Anniversary: —
+  -   Pref. Branch: Branch 1 – Gulberg
+  -   Pref. Stylist: Staff 1
+  -   No-Shows: 0
+  -   Customer Since: Aug 12, 2026
+  - 2x2 stat card grid; each card is white, rounded, with a colored square icon:
+  -   VISITS = 1 (dark maroon icon, scissors)
+  -   LIFETIME VALUE = Rs 525 (green icon, money bag)
+  -   AVG TICKET = Rs 525 (pink/purple gradient icon, receipt)
+  -   POINTS = 120 (yellow icon, star)
+  - Full-width 'Edit Customer' button: dark maroon, pencil icon
+  - Full-width 'Delete' button: red-orange, trash icon
+  - Tab bar with icons: Visits, Invoices, Memberships, Packages (active, coral-red text and underline), Preferences
+  - Packages table with a dark header row. Columns: Package | Bought | Expires | Sessions left | Status
+  - Row 1: Package 'Grooming Monthly' (bold) with sub-line 'Haircut – Classic 1/4' (small grey) | Bought: Aug 24, 2026 | Expires: Sep 23, 2026 | Sessions left: 3 | Status: green 'ACTIVE' pill
+  - Row 1 has a light hover tint (~#F3F6FA); the mouse cursor is over the Bought cell
+  - Background page (partially visible through the overlay): a yellow KPI card at top-right, a red button, a 'Clear' button, a dropdown, a dark table header and a 'Next' pagination link
+- **Features:**
+  - Customer 360 profile combining demographics, preferences (branch, stylist), no-show tracking and tenure
+  - Customer KPIs: visit count, lifetime value, average ticket, loyalty points
+  - Prepaid session packages per customer: purchase date, expiry, remaining sessions, status, and per-service usage counter (1/4)
+  - Tabs covering visit history, invoices, memberships, packages and preferences
+  - Inline edit and delete of the customer record
+  - Customer list supports bulk export (CSV/PDF/Print), CSV import with template, and global search
+  - Loyalty points program
+  - Multi-branch support
+- **NAIM translation:** Map this to a Client/Account 360 modal on the NAIM COMMAND Clients page, opened from the client list. Left panel: company or contact profile with status badge (ACTIVE/Prospect/Churned), primary contact phone/email, industry (recruitment agency), country/city, account owner (replaces Pref. Stylist), source lead, 'Client Since', and missed meetings (replaces No-Shows). Stat cards: Projects/Engagements (replaces Visits), Lifetime Value (KES), Avg Deal Size (replaces Avg Ticket), and Health/Referral Score (replaces Points). Map the 5 tabs as follows: Visits → Meetings/Activity; Invoices → Invoices; Memberships → Retainers/Subscriptions (monthly automation maintenance plans); Packages → Service Packages / Prepaid Hours. The Packages table becomes, for example, 'AI Recruiter Automation Pack', sub-line 'CV Screening Bot 1/4 builds', with Bought, Expires, Sessions/Hours left and Status. Preferences → communication channel, WhatsApp/email, timezone and tech stack (ATS used). Keep the Edit and Delete buttons. Keep the Add Client, CSV, PDF, Print, Import CSV, Template and global search actions on the list page. The design should be multi-business aware so future side-businesses reuse the same 360 layout.
+
+## #29 `download-29.png` — salon-system · Appointments · Appointment 'Client 1 · #1 · 360 View' modal, Notes tab active, opened over the Appointments page. This is the 3-tab appointment-level 360, not the Customers 360.
+- **Theme:** Light-mode modal over a dimmed dark-overlay app. The app shell header and sidebar are near-black (~#1a1a1a) in this palette. The modal header is a very dark maroon/black bar (~#1c0f10) with white text. The left summary panel is a pale blush/pink (~#fdf1f0) and the right content area is white (#ffffff). The accent is red/coral (~#e5483b) for the active tab underline and the Delete button. The 'COMPLETED' badge is green (~#2e7d32) with white uppercase text. The Save Notes button is near-black (~#1a1a1a).
+- **Layout:** The app shell has a left dark sidebar (~150px) and a top header bar. Header contents, left to right: 'Appointments' title with calendar icon; action buttons '+ New Booking' (dark pill), 'Walk-In', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template', 'Today'; a 'Search everything...' input; theme and paint/brush icons; a notification bell with red badge; and 'Welcome, admin'. A large centered modal (~92% width) overlays the page, with the background dimmed. Background remnants show a 'Waitlist' button, a red card, a 'Clear' button, a dropdown, and 'Next' pagination. The modal has three parts. (1) A dark header bar showing a calendar icon, 'Client 1 · #1' in bold, a small '360 View' subtitle, and a white X close button at right. (2) A left column (~25%) on a blush background: a centered avatar circle (black with white calendar-check icon), the name, a status badge, a key-value detail list (labels left in grey, values right-aligned in bold dark text), a 2x2 grid of mini stat cards, and a full-width red Delete button. (3) A right content pane (~75%) with a tab bar at the top and a form below.
+- **Sidebar:** Salon ERP (logo with scissors icon, plus a collapse '<' button), GENERAL section: Dashboard (partially hidden, reads 'Dash…'), My D… (likely My Day), SALON section: Front… (Front Desk), Appointments (active, highlighted with a red/coral pill), Customers, POS, Services, Memberships, INVENTORY section: Inventory, Purchases (partially visible)
+- **Client 360:** appointments-3tab: tabs visible are exactly 'Services', 'Notes' (active), 'Timeline'. This is the APPOINTMENTS 360 view (title 'Client 1 · #1 · 360 View'), not the Customers 5-tab 360.
+- **Components:**
+  - Modal header: calendar icon, 'Client 1 · #1', subtitle '360 View', close 'X' icon at right.
+  - Avatar: black circle (~44px) with white calendar-check icon.
+  - Name heading: 'Client 1 · #1'.
+  - Status badge: 'COMPLETED' (green pill, uppercase, small).
+  - Detail list rows (label: value): Date: Sep 05, 2026; Time: 11:00–11:30; Stylist: Staff 1; Station: Chair 1; Branch: Branch 1 – Gulberg; Source: Phone; Deposit: —; No-Show Fee: —; Booked On: Sep 04, 03:09 AM.
+  - Stat card 'SERVICES': value '1', black square icon with scissors.
+  - Stat card 'EST. AMOUNT': value 'Rs 500', green square icon with money bag.
+  - Stat card 'DURATION': value '30m', purple/pink gradient square icon with hourglass.
+  - Stat card 'INVOICE': value '#1', yellow/amber square icon with document.
+  - Stat card styling: white cards with rounded corners and a soft shadow; label is small uppercase grey text, value is bold.
+  - Delete button: full-width, red (~#e5483b), white trash icon, label 'Delete'.
+  - Tab bar: 'Services' (scissors icon), 'Notes' (notepad icon, ACTIVE, red text with red underline), 'Timeline' (activity/timeline icon).
+  - Field label 'Consultation (before)' with speech-bubble icon, followed by a textarea (resizable, rounded, light grey border) containing 'Regular trim', with the text cursor shown in it.
+  - Field label 'Service notes (after)' with clipboard icon, followed by a textarea containing 'Next visit 4 weeks'.
+  - Primary button 'Save Notes': black, white floppy-disk icon, rounded, left-aligned below the fields.
+- **Features:**
+  - Per-appointment 360 detail modal opened from the appointments list or calendar.
+  - Appointment status lifecycle (COMPLETED badge; others likely Booked, Confirmed, No-show, Cancelled).
+  - Appointment metadata: date and time slot, assigned staff, station/resource, branch (multi-branch), booking source channel (Phone), deposit, no-show fee, booked-on timestamp.
+  - Quick stats: number of services, estimated amount in Rs (configurable currency), duration, linked invoice number.
+  - Before/after notes (consultation vs service notes) with an explicit save.
+  - Timeline tab giving an audit history of appointment events.
+  - Services tab listing the line items of the appointment.
+  - Delete appointment action.
+  - Page-level actions: New Booking, Walk-In, CSV/PDF export, Print, Import CSV, Template download, Today filter, Waitlist, global search.
+- **NAIM translation:** Map this to a 'Meeting / Engagement 360' modal on the NAIM COMMAND Meetings (or Discovery Calls / Demos) page. The header becomes 'Agency Name · #ID · 360 View', and the status badge uses meeting states: SCHEDULED / COMPLETED / NO-SHOW / CANCELLED / WON-NEXT-STEP. The detail rows translate as follows: Date and Time; Owner (in place of Stylist, the sales rep or founder); Channel/Room (in place of Station, e.g. Google Meet, Zoom, or Office); Branch becomes Business Unit (Naim Automation vs. future side-businesses); Source (LinkedIn, Referral, Cold email, Phone); Deposit becomes Setup Fee / Retainer Paid; No-Show Fee becomes Reschedule count or penalty; Booked On. The 2x2 stat cards become: Services → Solutions Pitched (e.g. CV-screening bot, WhatsApp follow-up agent); Est. Amount → Deal Value (KES/USD); Duration → Meeting length; Invoice → linked Proposal/Invoice #. The three tabs keep the same structure: 'Services' becomes Solutions/Line items (packages scoped in this engagement); 'Notes' keeps the before/after split as 'Pre-call research (before)' and 'Call outcome / next steps (after)', with a Save Notes button; 'Timeline' is the activity log (created, rescheduled, reminder sent, completed, proposal sent). Keep the red Delete button and the black primary button styling. Page actions map as: '+ New Booking' → '+ New Meeting'; 'Walk-In' → 'Quick Log Call'; CSV/PDF/Print/Import/Template and Today/Waitlist stay (Waitlist becomes Follow-up queue). This view should link to the separate Client (Agency) 360 on the Clients page, which carries the 5-tab history.
+
+## #30 `download-30.png` — salon-system · Appointments · Client 360 modal (Appointments variant), Timeline tab active. Large centered modal over a dimmed Appointments page.
+- **Theme:** Light-mode content panels inside a dark-chrome modal. Modal header bar is near-black maroon (#1E0F12 to #2A1215). Left profile panel has a very light pink tint (#FDF1F1). Table header row is near-black (#1A0B0E) with white text. Accent red/coral (#E5483F) is used for the active tab underline/icon, the Delete button and the background highlights. Status pill is green (#2E7D32) with white uppercase text. The app shell behind is dark: sidebar #111, topbar dark.
+- **Layout:** The app shell sits behind: a left dark sidebar of about 150px and a top bar. The topbar holds the page title 'Appointments' with a calendar icon, then the action buttons: '+ New Booking' (dark filled), 'Walk-In', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template', 'Today'. These are followed by the search box 'Search everything...', a palette icon, a brush icon, a bell with a red badge, and 'Welcome, admin'. Partially visible behind the overlay on the right are a 'Waitlist' button, a red card, a 'Clear' button, a dropdown, a dark bar, and 'Next' pagination. The modal is about 90% width with a dark header strip. Its body is a 2-column split. The left column is about 200px: a profile card with key/value list, a 2x2 stat tiles grid and a Delete button. The right column holds a tabs row and a full-width table.
+- **Sidebar:** (behind overlay, partially visible) Salon ERP logo with scissors icon + collapse '<' button, GENERAL section: Dashboard, My D… (My Day/My Dashboard), SALON section: Front… (Front Desk), Appointments (active, red highlight), Customers, POS, Services, Mem… (Memberships), INVENTORY section: Inventory, Purch… (Purchases)
+- **Client 360:** appointments-3tab: Services, Notes, Timeline (Timeline active). This is the APPOINTMENTS Client 360 modal, not the 5-tab Customers 360.
+- **Components:**
+  - Modal header: calendar-check icon + 'Client 1 · #1' (bold white) + small grey subtitle '360 View'; white '×' close button at far right
+  - Left panel avatar: black circle with white calendar-check icon
+  - Name: 'Client 1 · #1' (bold, centered)
+  - Status pill: 'COMPLETED' (green, uppercase, rounded)
+  - Key/value list (label left grey, value right bold): Date: Sep 05, 2026 | Time: 11:00–11:30 | Stylist: Staff 1 | Station: Chair 1 | Branch: Branch 1 – Gulberg | Source: Phone | Deposit: — | No-Show Fee: — | Booked On: Sep 04, 03:09 AM
+  - Stat tile 'SERVICES': value '1'; black rounded-square icon with scissors
+  - Stat tile 'EST. AMOUNT': value 'Rs 500'; green icon with money bag
+  - Stat tile 'DURATION': value '30m'; red/purple gradient icon with hourglass
+  - Stat tile 'INVOICE': value '#1'; amber/yellow icon with document
+  - Stat tiles are white cards with small uppercase grey labels and bold values
+  - Full-width red button with trash icon: 'Delete'
+  - Tabs (exactly 3): 'Services' (scissors icon), 'Notes' (note icon), 'Timeline' (timeline/flow icon, ACTIVE: red text + red underline)
+  - Timeline table header (dark bar): 'Step' | 'When'
+  - Timeline row 1: 'Booked' | 'Sep 04, 03:09 AM'
+  - Timeline row 2: 'Checked in' | 'Sep 05, 01:09 AM' (hover-highlighted row, light grey)
+  - Timeline row 3: 'Checked out' | 'Sep 05, 02:09 AM'
+  - Timeline row 4: 'Last update' | '—'
+  - Table rows have thin dividers and light zebra/hover shading
+- **Features:**
+  - Appointment-level 360 detail modal opened from the appointments list
+  - Appointment lifecycle status (Completed) with badge
+  - Lifecycle audit timeline: Booked → Checked in → Checked out → Last update, with timestamps
+  - Assignment metadata: stylist, station/resource, branch (multi-branch)
+  - Booking source tracking (Phone, Walk-in, etc.)
+  - Deposit and no-show fee tracking
+  - Linked invoice number and estimated amount (currency Rs)
+  - Service count and duration summary
+  - Destructive Delete action on the appointment
+  - Notes tab for appointment notes; Services tab for line items
+- **NAIM translation:** Map this to a 'Meeting/Engagement 360' modal on NAIM COMMAND's Bookings/Meetings page, such as discovery calls, demos and onboarding sessions with recruitment agencies. The mappings are:
+- **Header:** Agency name + meeting #.
+- **Status pill:** Scheduled / Held / No-show / Completed.
+- **Key/values:**
+  - Date and Time.
+  - Owner (sales rep, replacing Stylist).
+  - Channel/Room (Zoom/Google Meet/Office, replacing Station).
+  - Business unit (replacing Branch; Naim Automation core vs future side-businesses).
+  - Source (LinkedIn, Referral, Leads Engine, Phone).
+  - Deposit (commitment fee/setup deposit in KES).
+  - No-show fee (optional).
+  - Booked On.
+- **Stat tiles:** Services → Automations/packages scoped; Est. Amount → deal value (KES); Duration → meeting length; Invoice → linked invoice/proposal #.
+- **Tabs:** keep exactly 3.
+  - Services: proposed automation packages/line items.
+  - Notes: call notes, AI summary.
+  - Timeline: Booked → Confirmed → Held/Joined → Ended → Proposal sent → Last update, with timestamps.
+
+Keep the red Delete button, optionally adding Reschedule/Convert to Deal. The full account history (deals, invoices, retainers/subscriptions) belongs in the separate Customers 5-tab 360.
+
+## #31 `download-31.png` — salon-system · Appointments · Appointments – Calendar view (Day mode, staff/resource columns), filters expanded, empty day (0 appointments). Cursor hovering the 'Calendar' toggle.
+- **Theme:** Light mode content area (page bg ~#F3F3F5, white cards ~#FFFFFF) with dark sidebar (~#1E1416 / near-black warm maroon). Primary accent coral/red (~#F0574A) for active nav item. Dark buttons (~#1A1A1A) for primary actions and active toggles. KPI cards use gradient palette: dark maroon (#2A1A1E→#5A2A35), coral→blue (#F06A6A→#6A9BE0), mustard yellow (#E8B92A), red (#D6302B). A thin red progress/loading line at the very top of the viewport (~#E53935).
+- **Layout:** Fixed left sidebar (~150px, dark). Top header bar (white, rounded card) with page title on left and action buttons + global search + icons on right. Main content: (1) section header row 'Appointments' with view toggle segmented control on right; (2) 4-column KPI card row of equal width, ~70px tall, rounded corners, big number top-left, label beneath, large semi-transparent icon bottom-right; (3) full-width chevron/arrow status pipeline strip of 8 segments; (4) Filters card with 3-column grid (Day / Branch / Stylist); (5) Day/Week toggle; (6) resource calendar grid: time column on left + one column per staff member, black header row, 30-min slot rows.
+- **Sidebar:** Brand header: scissors icon + 'Salon ERP' + collapse button '<' (dark square), Logo avatar (rounded square, 'RAMEEZ' brand logo, blue border), User name 'admin' + role pill 'Admin' (dark blue-gray pill), Section GENERAL: Dashboard (line-chart icon), My Day (calendar icon), Section SALON: Front Desk (bell/desk icon), Appointments (ACTIVE – coral filled pill ~#F0574A, white text), Customers, POS / Billing, Services (scissors icon), Memberships, Section INVENTORY: Inventory, Purchases (list continues below fold; vertical scrollbar visible)
+- **Client 360:** none
+- **Components:**
+  - Header title: calendar icon + 'Appointments' (bold)
+  - Header button '+ New Booking' (black filled, white text, primary)
+  - Header button 'Walk-In' (white/light gray, walking icon)
+  - Header button 'Import CSV' (light, file icon)
+  - Header button 'Template' (light, download icon)
+  - Header button 'Today' (light, calendar icon)
+  - Global search input with magnifier: placeholder 'Search everything...'
+  - Icon button: palette (theme switcher)
+  - Icon button: brush (customize/appearance)
+  - Notification bell with red badge count '0'
+  - Text 'Welcome, admin'
+  - Section title: calendar icon + 'Appointments'
+  - Segmented view toggle (bordered): 'List' (list icon), 'Calendar' (ACTIVE – black fill, white text), 'Queue' (people/chair icon), 'Waitlist' (hourglass icon)
+  - KPI card 1: '0' / 'Appointments' – dark maroon gradient, calendar-check icon
+  - KPI card 2: '0' / 'Upcoming' – coral-to-blue gradient, clock icon
+  - KPI card 3: '0' / 'In Salon' – mustard yellow, salon chair icon
+  - KPI card 4: '0' / 'No-Shows' – red, user-with-X icon
+  - Status pipeline chevrons (clickable filter chips, each with count): 'ALL (0)' dark charcoal #3A3236 (active), 'BOOKED (0)' light blue #7EA8E8, 'CONFIRMED (0)' periwinkle/violet #8F8FE8, 'CHECKED IN (0)' peach/orange #F2B77A, 'IN PROGRESS (0)' lavender #B48FE8, 'COMPLETED (0)' sage green #8DBF8A, 'CANCELLED (0)' gray #A8A8A8, 'NO SHOW (0)' salmon/pink #E88A8A
+  - Filters card: funnel icon + 'Filters' title, underline divider, 'Clear' button (dark gray #5A5A5A, x-circle icon) top-right
+  - Filter field 'DAY' (calendar icon label): date input value '09/09/2026' with calendar picker icon
+  - Filter field 'BRANCH' (building icon label): select 'All branches'
+  - Filter field 'STYLIST' (person icon label): select 'All stylists'
+  - Toggle 'Day' (ACTIVE black) / 'Week' (white bordered)
+  - Calendar grid header (black bar, white text): clock icon column, 'Staff 1', 'Staff 2', 'Staff 3', 'Raheem'
+  - Time slots left column: 10:00, 10:30, 11:00, 11:30, 12:00 (continues, scrollable); all slot cells empty (no bookings)
+- **Features:**
+  - Multiple appointment views: List, Calendar, Queue (live walk-in queue), Waitlist
+  - Resource/staff-column day calendar and week calendar
+  - Quick create booking and walk-in registration
+  - Bulk import appointments via CSV with downloadable template
+  - Jump to today
+  - Live KPIs: total appointments, upcoming, currently in salon, no-shows
+  - Status lifecycle pipeline as filter: Booked → Confirmed → Checked In → In Progress → Completed, plus Cancelled / No Show
+  - Filter by day, branch (multi-branch), stylist; clear filters
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** Becomes NAIM COMMAND 'Meetings / Calls' (discovery calls, demos, onboarding sessions). Buttons: '+ New Meeting', 'Quick Call' (instead of Walk-In, log ad-hoc call), 'Import CSV', 'Template', 'Today'. Views: List, Calendar, Queue (today's call queue / follow-ups due), Waitlist (prospects awaiting a slot). KPIs: Meetings, Upcoming, In Progress/Live, No-Shows. Status pipeline: Booked → Confirmed → Joined → In Progress → Completed / Cancelled / No-Show (auto-trigger no-show follow-up automation). Filters: Day, Business unit (replaces Branch – AI automation agency vs future side-businesses), Owner/Rep (replaces Stylist). Calendar columns = team members (founder, sales reps, implementation engineers). Keep the same visual system: dark sidebar, coral active accent, gradient KPI cards, colored chevron status strip.
+
+## #32 `download-32.png` — salon-system · Appointments · Appointments page – Queue view (live 'in salon' queue + chair/room occupancy panel), empty state
+- **Theme:** Light content area (#FFFFFF cards on #F3F4F6 page) with a dark sidebar (#1A1414 near-black/very dark brown). Accent is coral-red #F05A4F, used for the active sidebar item. KPI cards use gradients: dark maroon/charcoal #3A1F22→#5A2E33; coral→blue #F0605A→#6A9BE0; mustard/golden #E8B820→#D9A514; red #E0302A→#C62828. Status pipeline chevrons: dark #3A2A2D (ALL), light blue #7FA8E8 (BOOKED), periwinkle #8FA0F0 (CONFIRMED), peach/amber #F5C26B (CHECKED-IN), lavender/violet #B98AF0 (IN PROGRESS), green #7FC08A (COMPLETED), grey #A0A0A0 (CANCELLED), salmon/pink #E88A8A (NO SHOW). Primary buttons are black (#111).
+- **Layout:** Fixed left sidebar (~150px, dark) + main content area. Top app bar (a white rounded card) shows the page title with an icon on the left and action buttons plus global search and icons on the right. Below it sits a large white panel: section header 'Appointments' on the left and a segmented view switcher on the right. Next comes a 4-column KPI card grid (equal widths, ~70px tall, rounded ~8px, each with a large faded icon at bottom-right). Then a full-width 8-step chevron status pipeline (arrow-shaped segments). Then a Filters card (light grey #F1F2F4 background, dark underline under the header) with a 3-column field grid. Below that is a 2-column area: the left column is wide (~75%) and holds the queue list (currently an empty state, centered); the right column is narrow (~165px) and holds a stacked list of resource cards (chairs/rooms) with status.
+- **Sidebar:** Header: scissors icon + 'Salon ERP' + collapse button '<' (dark square), Brand logo tile 'RAMEEZ' (square, rounded, dark blue with a colored stripe), User name 'admin' + role pill 'Admin', Section GENERAL: Dashboard (line-chart icon), My Day (calendar-check icon), Section SALON: Front Desk, Appointments (ACTIVE – coral pill #F05A4F), Customers, POS / Billing, Services (scissors icon), Memberships, Section INVENTORY: Inventory, Purchases (truck icon)… (the list continues below the fold, with a scrollbar)
+- **Client 360:** none – no client 360 drawer or panel is visible in this screenshot
+- **Components:**
+  - Top bar title: calendar icon + 'Appointments' (bold)
+  - Top bar buttons: '+ New Booking' (black filled, white text), 'Walk-In' (walking icon, light grey), 'Import CSV' (upload icon), 'Template' (download icon), 'Today' (calendar icon). All are small rounded buttons.
+  - Global search input with magnifier icon, placeholder 'Search everything...'
+  - Icon buttons: palette/theme icon (opens theme palettes), brush icon (appearance), bell with red badge showing '0'
+  - Text 'Welcome, admin'
+  - Section header: calendar icon + 'Appointments'
+  - View switcher (bordered segmented control): 'List' (list icon), 'Calendar' (calendar icon), 'Queue' (people/queue icon – ACTIVE, black filled with white text), 'Waitlist' (hourglass icon)
+  - KPI card 1: '0' / 'Appointments' – dark maroon gradient, calendar-check icon
+  - KPI card 2: '0' / 'Upcoming' – coral-to-blue gradient, clock icon
+  - KPI card 3: '0' / 'In Salon' – golden yellow, salon chair icon
+  - KPI card 4: '0' / 'No-Shows' – red, user-with-x icon
+  - Status chevron pipeline (clickable filters, uppercase, each with a count): 'ALL (0)', 'BOOKED (0)', 'CONFIRMED (0)', 'CHECKED-IN (0)', 'IN PROGRESS (0)', 'COMPLETED (0)', 'CANCELLED (0)', 'NO SHOW (0)'
+  - Filters card: funnel icon + 'Filters' header; 'Clear' button at right (grey #6B7280, x-circle icon)
+  - Filter field 'DAY' (calendar icon label): date input with value '09/09/2026' and a calendar picker icon
+  - Filter field 'BRANCH' (building icon): select dropdown 'All branches'
+  - Filter field 'STYLIST' (person icon): select dropdown 'All stylists'
+  - Queue empty state (centered): grey coffee-cup icon + text 'Nobody in the salon right now'
+  - Resource occupancy panel (right): stacked white bordered cards, each showing a name on the left and a status on the right: 'Chair 1 – Free', 'Chair 2 – Free', 'Chair 3 – Free', 'Room 1 – Free', 'Chair 1 – Free' (a second branch's chair; the list continues)
+- **Features:**
+  - Multiple appointment views: List / Calendar / Queue / Waitlist
+  - Live in-salon queue showing currently checked-in or in-progress clients
+  - Resource (chair/room) occupancy tracking with Free/Busy status per branch
+  - Appointment lifecycle statuses: Booked → Confirmed → Checked-In → In Progress → Completed, plus Cancelled and No Show
+  - Clickable status pipeline used as a filter with counts
+  - KPIs: total appointments, upcoming, in salon, no-shows
+  - Quick walk-in creation, new booking, CSV import with downloadable template, and a jump-to-Today shortcut
+  - Filtering by day, branch and stylist (multi-branch, multi-staff)
+  - Global search, notifications, and theme/appearance customization
+- **NAIM translation:** Map this to a NAIM COMMAND 'Meetings & Delivery' module. The views become List / Calendar / Queue (live 'In Progress' work) / Waitlist (prospects waiting for a demo slot). The KPIs become: Meetings Today, Upcoming Demos, Active Engagements (the equivalent of 'In Salon'), and No-Shows. The status pipeline becomes Booked → Confirmed → Joined/Checked-In → In Progress (discovery or demo running) → Completed (→ proposal), plus Cancelled and No Show. The resource panel (chairs/rooms) becomes capacity slots: team members, build/delivery slots, or a meeting room/Zoom room, each showing Free/Busy. The filters become Day, Business Unit (in place of Branch, to support future side-businesses), and Owner/Consultant (in place of Stylist). 'Walk-In' becomes 'Quick Log Call/Inbound Lead'. Keep Import CSV + Template for bulk-loading agency meetings. The empty state could read 'No live sessions right now'.
+
+## #33 `download-33.png` — salon-system · Appointments · Appointments page, Waitlist view ('Waiting for a slot' list with one waitlist entry); the cursor is hovering 'Mark booked'
+- **Theme:** Light main content with a dark sidebar (near-black, about #1a1214 with a subtle maroon tint). Main background is off-white, about #f4f4f5, with white cards. The active nav item is coral-red, about #f0564a. KPI cards use gradients: dark maroon/black (#2a1a1c to #5a2a30), coral-to-blue (#f0605a to #6a9ae8), mustard yellow (#e0b020), and red (#d83030). Primary buttons are black (#111).
+- **Layout:** Fixed left sidebar, about 150px wide. It holds the brand 'Salon ERP' with a scissors icon and a collapse '<' button, then a square logo tile 'RAMEEZ', then the user 'admin' with an 'Admin' role pill. Below that are section-grouped nav items with icons. The main area has a top header bar card. Below it is a page card containing, in order: section title with view switcher; a 4-column KPI card row; a full-width status chevron pipeline; a Filters card with a 3-column grid; a Waitlist card; and the waitlist entry rows.
+- **Sidebar:** GENERAL: Dashboard, GENERAL: My Day, SALON: Front Desk, SALON: Appointments (active, coral highlight), SALON: Customers, SALON: POS / Billing, SALON: Services, SALON: Memberships, INVENTORY: Inventory, INVENTORY: Purchases, (the list continues below the fold)
+- **Client 360:** none — no client 360 view is visible in this screenshot; it shows the Waitlist view of the Appointments page.
+- **Components:**
+  - Top bar left: calendar icon with title 'Appointments'.
+  - Top bar buttons: '+ New Booking' (black, primary), 'Walk-in' (walking icon), 'Import CSV', 'Template', and 'Today' (calendar icon).
+  - Global search input with placeholder 'Search everything...'.
+  - Top bar icon buttons: theme palette icon, brush/customize icon, and a notification bell with red badge '6'.
+  - Top bar greeting text: 'Welcome, admin'.
+  - Section header 'Appointments' with a segmented view switcher: 'List', 'Calendar', 'Queue', and 'Waitlist'. 'Waitlist' is active, shown as a black fill with an hourglass icon.
+  - KPI card 1: '0' 'Appointments', dark maroon gradient, calendar-check watermark icon.
+  - KPI card 2: '0' 'Upcoming', coral-to-blue gradient, clock icon.
+  - KPI card 3: '0' 'In Salon', yellow, chair icon.
+  - KPI card 4: '0' 'No-Shows', red, user-x icon.
+  - Status pipeline of arrow/chevron tabs with counts:
+  - Pipeline tab 'ALL (0)', dark/black, active.
+  - Pipeline tab 'BOOKED (0)', light blue (#7aa8f0).
+  - Pipeline tab 'CONFIRMED (0)', periwinkle (#8f9cf5).
+  - Pipeline tab 'CHECKED-IN (0)', peach (#f5b46a).
+  - Pipeline tab 'IN PROGRESS (0)', lavender (#b48af0).
+  - Pipeline tab 'COMPLETED (0)', green (#6abf7a).
+  - Pipeline tab 'CANCELLED (0)', grey (#a0a4a8).
+  - Pipeline tab 'NO SHOW (0)', salmon (#e88080).
+  - Filters card header: funnel icon with 'Filters', and a grey 'Clear' button on the right.
+  - Filter 'DAY': date input with value '09/09/2026' and a calendar picker.
+  - Filter 'BRANCH': select with value 'All branches'.
+  - Filter 'STYLIST': select with value 'All stylists'.
+  - Waitlist card header: hourglass icon with 'Waiting for a slot', and a black '+ Add to waitlist' button (user-plus icon).
+  - Waitlist info hint: 'When a booking is cancelled the hourly job checks these entries and emails whoever fits the freed slot first.'
+  - Waitlist entry row, left side: orange-brown left border accent. Bold name 'Client 2' followed by grey phone '03001000012'.
+  - Waitlist entry meta line: calendar icon 'Sep 06, 2026 · 17:00–20:00', person icon 'Staff 1 · Branch 1 – Gulberg'.
+  - Waitlist entry notes line: 'Haircut – Classic · Wants the late slot with Staff 1'.
+  - Waitlist entry row, right side: badge 'WAITING' (burnt orange #b8641a, white text).
+  - Waitlist entry row, right side: grey button 'Book' (calendar icon).
+  - Waitlist entry row, right side: grey button '✓ Mark booked', shown with the hover cursor.
+  - Waitlist entry row, right side: red trash icon to delete.
+- **Features:**
+  - Waitlist management: capture a desired date, time window, staff, branch, service and a free-text preference.
+  - Automated slot-freed notification: an hourly background job matches cancellations to waitlist entries and emails the first fit.
+  - Convert a waitlist entry to a booking ('Book') or manually mark it as booked.
+  - Waitlist entry status badges (WAITING, and presumably BOOKED/EXPIRED).
+  - Multiple appointment views: List, Calendar, Queue, Waitlist.
+  - Status pipeline filter with counts across the full appointment lifecycle, including no-shows.
+  - Day, branch and staff filters.
+  - Quick actions: new booking, walk-in, CSV import, template download, jump to today.
+  - Global search, theme switching, notifications.
+- **NAIM translation:** Map this screen to NAIM COMMAND's Meetings/Discovery Calls module, which gets a 'Waitlist' (call-slot queue) tab. Keep the same view switcher: List, Calendar, Queue, Waitlist.
+
+Waitlist entry: the recruitment-agency prospect name and phone, a preferred date/time window, the preferred closer/consultant, the market/branch (e.g. Nairobi), the offer (e.g. 'AI Screening Bot demo'), and a note.
+
+Automation: an hourly n8n/cron job detects cancelled demo slots and emails or WhatsApps the best-matching waiting prospect first.
+
+Row actions:
+- 'Book' converts the entry into a scheduled demo.
+- 'Mark booked' is the manual override.
+- Delete removes the entry.
+
+KPI cards become: Meetings Today, Upcoming, In Progress/Live Calls, No-Shows.
+
+Pipeline chevrons become the meeting lifecycle: All, Booked, Confirmed, Joined, In Progress, Completed, Cancelled, No-Show.
+
+Filters become: Day, Business Unit (Naim Automation vs. side businesses), and Owner/Rep.
+
+Top actions become: + New Meeting, Instant Call (instead of Walk-in), Import CSV, Template, Today.
+
+## #34 `download-34.png` — salon-system · My Day · Staff personal day view: staff profile header, 4 KPI cards, and today's chair schedule (empty state)
+- **Theme:** Hybrid. The sidebar is dark (near-black maroon #1A0A0C / #200E10) and the content area is light (very pale pink-white #FBF3F3 / #FDF6F6). Accent palette is red/coral: active nav pill #F25C54 / #EF5B4F, primary red #D32F2F. KPI cards use gradients: dark maroon #2A0E12→#5A1E24, red #D63A32→#E04A3C, coral-to-blue #F05A5A→#5B7FD6, and green #2E9E44→#43A047. Headings are dark charcoal text (#222).
+- **Layout:** Fixed left sidebar about 150px wide, dark. Main area has a top bar (white rounded card spanning full width) with the page title on the left and utilities on the right. Below the top bar is a full-width white card with the staff profile header. Below that is a 4-column equal-width KPI card row (rounded corners about 8px, soft shadow). Below the KPI row is a full-width white card 'Staff 1's chairs · Sep 09, 2026' with a red top border accent and a collapse '−' control at the top right. The body of that card shows a centered empty state. The rest of the page is empty pale pink background.
+- **Sidebar:** Brand header: scissors icon + 'Salon ERP' + collapse button '<' (dark rounded square), Logo tile: 'RAMEEZ' brand image (navy square, rounded) above user name 'admin' and role badge 'Admin' (small navy pill), Section label: GENERAL, Dashboard (line-chart icon), My Day (clipboard/badge icon), ACTIVE: coral pill #F25C54 with white text, Section label: SALON, Front Desk (bell/counter icon), Appointments (calendar icon), Customers (address-book icon), POS / Billing (register icon), Services (scissors icon), Memberships (id-card icon), Section label: INVENTORY, Inventory (boxes icon), Purchases (truck icon), (sidebar scrolls; more items below the fold, with a thin scrollbar visible at the right edge of the sidebar)
+- **Client 360:** none
+- **Components:**
+  - Top bar left: clipboard-user icon + title 'My Day' (bold, about 18px)
+  - Top bar right: button '📄 Commission' (light grey chip with doc icon); search input 'Search everything...' with magnifier icon (rounded, light grey fill); palette icon button (theme switcher); brush icon button (appearance/customize); bell icon with red badge '6' (notifications); text 'Welcome, admin'
+  - Staff header card: circular black avatar with white user silhouette (about 36px); name 'Staff 1' (bold); subline 'Senior Stylist · shift 10:00–19:00 · 14 leave days left' (grey, small); line 'Commission target Rs 120,000 — 0% there'; thin grey progress bar below (0% filled)
+  - Staff header right: dropdown select 'Staff 1 · Senior Stylist' (chevron); date input '09/09/2026' with calendar icon
+  - KPI card 1 (dark maroon gradient): value '0', label 'Appointments Today', faded calendar-check icon at right, footer link 'More info ➜' (darker band)
+  - KPI card 2 (red gradient): value '0%', label 'Chair Utilization', faded gauge/speedometer icon. No footer.
+  - KPI card 3 (coral→blue gradient): value 'Rs 68', label 'Commission MTD (1 lines)', faded percent icon, footer link 'More info ➜'
+  - KPI card 4 (green gradient): value 'Rs 50', label 'Tips MTD', faded hand-holding-dollar icon. No footer.
+  - KPI value style: large bold white text (about 18–20px); label is small, bold, and white
+  - Schedule card: header 'Staff 1's chairs · Sep 09, 2026' with clipboard icon; collapse '−' at the right; red/coral top border line
+  - Empty state: grey coffee-cup icon centered, with text 'Nothing booked on this chair.' (grey, small)
+- **Features:**
+  - Personal 'My Day' cockpit per staff member, with a staff selector (an admin can view any staff member) and a date picker to view any day
+  - Staff profile meta: role/title, shift hours, leave balance
+  - Commission target with a progress bar (target Rs 120,000, % achieved)
+  - KPIs: today's appointments count, chair/resource utilization %, commission month-to-date (with line count), tips month-to-date
+  - 'More info' drill-down links on some KPI cards (to appointments and the commission report)
+  - Per-staff chair/resource schedule for the selected date, with a friendly empty state
+  - Global search, notifications with count badge, theme palette switcher, appearance customizer, and a Commission quick-access button in the top bar
+  - Role-based sidebar (Admin badge) with grouped nav sections
+- **NAIM translation:** Becomes the NAIM COMMAND 'My Day' page for each team member (founder, SDRs, delivery engineers). The header shows name, role, working hours, leave balance, and a monthly target, for example 'Revenue/commission target KES X — Y% there' with a progress bar. The staff selector and date picker let the founder inspect anyone's day. The KPI cards map as follows: 'Calls/Meetings Today' (discovery calls and demos with recruitment agencies), 'Capacity Utilization' (booked hours vs available for delivery/build work), 'Commission MTD' (sales commission from closed automation deals, with deal count), and 'Bonuses/Upsells MTD' (in place of tips). Keep the 'More info' drill-downs into the Meetings and Commission pages. The 'chairs' schedule becomes 'Today's agenda/calendar' listing booked meetings, onboarding sessions, and delivery tasks, with the empty state 'Nothing scheduled today.' Keep the top bar: global search across leads, clients, and deals; notifications; theme palette switcher (support dark and light themes plus accent palettes); and a quick 'Commission' button. Currency should be KES. Sidebar groups would be GENERAL (Dashboard, My Day), SALES (Leads, Pipeline, Meetings, Clients), DELIVERY (Projects, Automations, Support), and FINANCE/OPS (Invoices, Expenses), with a future-business switcher for side ventures.
+
+## #35 `download-35.png` — salon-system · My Day · My Day (staff personal daily dashboard) with the 'Whose day?' staff-selector dropdown open; cursor hovering 'Staff 2 - Beautician'
+- **Theme:** Light main content area (white/very light pink #FDF7F7 background, white cards) with a dark sidebar (#1A1A1A to #222). Accent is coral/red-orange: active nav item #F0624D to #E8553F. KPI cards use gradients: dark maroon/black (#2A0E10 to #3B1416), red (#C8302B to #E0453A), red-to-blue/purple (#D9534F to #6C7BD6), green (#3DBE6A to #4CC27A). Palette likely 'Coral/Red' theme.
+- **Layout:** Left fixed dark sidebar ~150px wide. Main area: top header bar card (page title left, utilities right). Below it, a full-width staff profile card (avatar + name + meta + progress bar on left, 'Whose day?' select + date picker on right). Then a 4-column row of gradient KPI cards (equal widths, rounded ~8px, each with a large faded icon top-right and a 'More info →' footer strip). Below that a collapsible section card titled 'Staff 1's chairs · Sep 09, 2026' with a '–' collapse control at right.
+- **Sidebar:** Brand header: scissors icon + 'Salon ERP' + collapse button '<' (dark rounded square), Logo tile: 'RAMEEZ' brand logo in a rounded square, User name 'admin' + badge pill 'Admin' (dark navy pill), Section label: GENERAL, Dashboard (line-chart icon), My Day (clipboard/badge icon), ACTIVE, coral filled rounded pill, Section label: SALON (items below cut off)
+- **Client 360:** none
+- **Components:**
+  - Page header: clipboard icon + title 'My Day' (bold, dark)
+  - Header right: button 'Commission' (small, light gray, with doc icon)
+  - Global search input, placeholder 'Search everything...' with magnifier icon
+  - Icon button: palette (theme switcher)
+  - Icon button: brush/broom (clear cache or customize)
+  - Notification bell with red badge '6'
+  - Text 'Welcome, admin'
+  - Staff profile card: black circular avatar with white user silhouette; name 'Staff 1' (bold); subline 'Senior Stylist · shift 10:00–19:00 · 14 leave days left'; line 'Commission target Rs 120,000 — 0% there'; thin gray progress bar (0% filled) under it
+  - Select 'Whose day?' (coral border when focused, chevron up) — OPEN dropdown options: 'Whose day?' (placeholder), 'Staff 1 - Senior Stylist' (highlighted, black background, white text — currently selected/focused), 'Staff 2 - Beautician' (hovered), 'Staff 3 - Stylist', 'Raheem - Beautician'; dropdown has coral border
+  - Date input '09/09/2026' with calendar icon
+  - KPI card 1 (dark maroon gradient): value '0', label 'Appointments Today', calendar-check icon, footer 'More info →'
+  - KPI card 2 (red gradient): value '0%', label 'Chair Utilization', speedometer/gauge icon (no footer visible)
+  - KPI card 3 (red→blue gradient): value 'Rs 68', label 'Commission MTD (1 lines)', footer 'More info →' (icon partially hidden by dropdown)
+  - KPI card 4 (green gradient): hand-with-dollar icon, value/label hidden behind dropdown (likely tips or earnings)
+  - Section card: clipboard icon + 'Staff 1's chairs · Sep 09, 2026', collapse '–' button right
+- **Features:**
+  - Per-staff daily cockpit (My Day) selectable by admin via 'Whose day?' picker, with any date
+  - Staff profile meta: role, shift hours, remaining leave balance
+  - Commission target tracking with progress bar and % achieved
+  - KPIs: today's appointments, chair utilization %, commission month-to-date with line count, earnings/tips
+  - Per-staff chair/resource schedule for the selected day
+  - Drill-down 'More info' links from KPI cards
+  - Global search, notifications, theme palette switcher, Commission shortcut
+- **NAIM translation:** Becomes 'My Day' for each team member (founder, SDRs, delivery engineers). 'Whose day?' selector lists team members with roles (e.g. 'Naim - Founder', 'SDR 1 - Outreach', 'Engineer 1 - Automation Builder'). Profile card shows role, working hours, leave balance, and a monthly target (e.g. 'Revenue/commission target KES 500,000 — X% there' or 'Meetings booked target'). KPI cards map to: Appointments Today → Calls/Demos Today; Chair Utilization → Capacity Utilization (billable hours booked vs available); Commission MTD → Commission/Revenue Closed MTD (with deal count); green card → Payments Collected / Retainers. 'Staff 1's chairs' section → 'Today's agenda' timeline of discovery calls, demos, follow-ups, and delivery tasks for recruitment-agency clients. Keep date picker for viewing any day, and the 'Commission' header shortcut for the commission ledger.
+
+## #36 `download-36.png` — salon-system · POS / Billing · POS catalogue with 'Products' tab active, empty cart/bill panel (walk-in customer, Branch 1 – Gulberg)
+- **Theme:** Light content area (white/very light warm grey #F7F5F5 background, white cards) with dark sidebar (near-black/dark maroon #1A1414). Accent coral/red #F0605A for active sidebar item, prices and code input border. Dark pill (#111) for active tab and 'New Sale' button. 'Settled' in green #2E9E4F.
+- **Layout:** Fixed dark left sidebar (~150px) with icon+label items grouped by uppercase section headers; scrollbar on sidebar. Top header bar (white rounded card) with page icon + title 'POS / Billing' left, actions + global search + icons + greeting right. Main body split into two columns: left ~75% catalogue area (tab pills row, search/scan/code input row, helper hint, product tile grid of 4 per row, ~120px wide tiles), right ~25% bill/cart panel (white card, full height) with branch/customer selectors, empty-cart state, totals block, tips, payments, and a footer 'Paid / Settled' line.
+- **Sidebar:** Dashboard, My Day, SALON (section header), Front Desk, Appointments, Customers, POS / Billing (active, coral highlight), Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll, Cash Till, HR (section header), Staff (partially visible, list continues below/scrollable)
+- **Client 360:** none
+- **Components:**
+  - Header title: cash-register icon + 'POS / Billing'
+  - Header button 'New Sale' (black filled, with icon)
+  - Header button 'Invoices' (light grey, document icon)
+  - Header button 'Clear Cart' (light grey, undo/refresh icon)
+  - Global search input 'Search everything...' with magnifier icon
+  - Icon button: palette (theme picker)
+  - Icon button: brush (appearance/customize)
+  - Notification bell with red badge '6'
+  - Text 'Welcome, admin'
+  - Catalogue tab pills: 'Services' (scissors icon), 'Products' (box icon, ACTIVE black pill), 'Packages' (gift/box icon), 'Memberships' (card icon)
+  - Input 'Search catalogue...' with magnifier icon (wide)
+  - Input 'Scan barcode / SKU → Enter' with barcode icon
+  - Input with '#' prefix, placeholder 'Code + Enter' — focused, coral/red border
+  - Helper hint with keyboard icon: 'Type an item's number in Code and hit Enter to add it — 3*7 adds 3 × code 7.'
+  - Product tile 1: number badge '1' (black square), 'Shampoo 250ml', 'PRD-001', price 'Rs 250' (coral)
+  - Product tile 2: '2', 'Hair Color Tube', 'PRD-002', 'Rs 0'
+  - Product tile 3: '3', 'Developer 1L', 'PRD-003', 'Rs 0'
+  - Product tile 4: '4', 'Face Mask Gold', 'PRD-004', 'Rs 450'
+  - Right panel label 'Branch' (building icon) with select 'Branch 1 – Gulberg' (chevron)
+  - Right panel label 'Customer' (person icon) with select 'Walk-in' (chevron)
+  - Empty cart state: grey shopping basket icon + text 'Tap catalogue items to build the bill'
+  - Row 'Subtotal' — 'Rs 0'
+  - Row 'Discount' — numeric input value '0'
+  - Row 'Tax %' — empty numeric input
+  - Row 'Tax amount' — 'Rs 0'
+  - Divider then bold row 'Total' — 'Rs 0'
+  - Row 'Tips (pass-through, not revenue)' with hand icon + grey button '+ Add'
+  - Row 'Payments' with cash icon + grey button '+ Add'
+  - Footer row 'Paid Rs 0' left, 'Settled' green right
+- **Features:**
+  - Point-of-sale billing with tabbed catalogue (services, products, packages, memberships)
+  - Three item-entry methods: text search, barcode/SKU scan, numeric quick-code with quantity multiplier syntax (qty*code)
+  - Numbered quick-pick tiles with SKU codes and prices
+  - Multi-branch selling (branch selector per sale)
+  - Customer attach or walk-in sale
+  - Discount and tax % with computed tax amount
+  - Tips tracked separately as pass-through (excluded from revenue)
+  - Split/multiple payments added to a bill; paid vs settled status
+  - New Sale / Clear Cart / Invoices quick actions
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** Becomes NAIM COMMAND 'Quotes / Billing' (deal invoicing) module. Catalogue tabs map to: Services → automation services (e.g. 'AI CV Screening Setup', 'WhatsApp Recruiter Bot'), Products → software licences/add-ons, Packages → bundled retainer packages (Starter/Growth/Enterprise), Memberships → monthly SaaS/retainer subscriptions. Branch selector → business unit (Naim Automation core vs future side-businesses). Customer selector → recruitment agency client from CRM (instead of Walk-in, 'Prospect/One-off'). Quick-code entry and SKU codes become service codes (SRV-001). Discount, Tax % (Kenya VAT 16%), currency KES instead of Rs. Tips → 'Pass-through costs' (e.g. third-party API/WhatsApp fees, not revenue). Payments → M-Pesa, bank transfer, card, with partial payments; 'Settled' / 'Balance due' status. Invoices button → invoice list; New Sale → New Quote/Invoice.
+
+## #37 `download-37.png` — salon-system · POS / Billing · POS catalogue on the 'Packages' tab, with an empty cart/bill panel. The cursor is hovering over the 'Memberships' tab.
+- **Theme:** Light content area (off-white #F7F7F8 page, white #FFFFFF cards, subtle gray borders #E5E7EB) with a dark sidebar (near-black/very dark brown #1A1414). The accent is coral/salmon red #F26B5B, used on the active sidebar item, prices and the code-input border. Active tab pill is black #111. 'Settled' text is green #2E9E4F. Add buttons are slate gray #5F6670 with white text.
+- **Layout:** There is a fixed left dark sidebar about 150px wide, with icon + label items and uppercase gray section headers; a scrollbar is visible. At the top is a white header bar with rounded corners. The main area is a two-column grid. The left column (~75%) holds the catalogue: tab row, search/scan row, hint line, and a product grid of small cards about 115px wide, arranged in a row. The right column (~22%) is the cart/bill panel, full height: branch/customer selectors at the top, an empty-state cart in the middle, then the totals section, Tips and Payments, and a footer showing paid status.
+- **Sidebar:** Dashboard, My Day, SALON (section header), Front Desk, Appointments, Customers, POS / Billing (active, coral highlighted pill), Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll, Cash Till, HR (section header, items cut off below)
+- **Client 360:** none — no Client 360 view is shown; only a Customer select (Walk-in) in the cart.
+- **Components:**
+  - Header title: register/cash icon + 'POS / Billing' (bold).
+  - Header buttons:
+  -   • 'New Sale' (black filled, receipt icon)
+  -   • 'Invoices' (outlined, doc icon)
+  -   • 'Clear Cart' (outlined, undo icon)
+  - Global search input: 'Search everything...'.
+  - Header icon buttons:
+  -   • Palette icon (theme switcher)
+  -   • Brush icon (appearance/customize)
+  -   • Bell with a red badge showing '6'
+  - Header greeting: 'Welcome, admin'.
+  - Catalogue tab pills:
+  -   • 'Services' (scissors icon)
+  -   • 'Products' (box icon)
+  -   • 'Packages' (gift icon; ACTIVE, black filled pill)
+  -   • 'Memberships' (card icon; hover state)
+  - Input 'Search catalogue...' (magnifier icon).
+  - Input 'Scan barcode / SKU → Enter' (barcode icon).
+  - Quick code input with a '#' prefix and 'Code + Enter' placeholder. It has a coral/red border, shown as focused.
+  - Hint line (keyboard icon): 'Type an item's number in Code and hit Enter to add it — 3*7 adds 3 × code 7'.
+  - Package card 1: number badge '1' (black square), title 'Bridal Glow Package', price 'Rs 5,500' (coral).
+  - Package card 2: badge '2', title 'Grooming Monthly', price 'Rs 1,600' (coral).
+  - Cart panel, 'Branch' label (building icon): select 'Branch 1 – Gulberg' with a chevron.
+  - Cart panel, 'Customer' label (person icon): select 'Walk-in' with a chevron.
+  - Empty cart state: gray shopping-basket icon + 'Tap catalogue items to build the bill'.
+  - Totals:
+  -   • 'Subtotal' Rs 0
+  -   • 'Discount' numeric input with value 0
+  -   • 'Tax %' empty input
+  -   • 'Tax amount' Rs 0
+  -   • Thick divider, then 'Total' Rs 0 (bold)
+  - 'Tips (pass-through, not revenue)' row with a hand-coin icon and a '+ Add' gray button.
+  - 'Payments' row with a cash icon and a '+ Add' gray button.
+  - Footer: 'Paid Rs 0' (left) and 'Settled' (green, right).
+- **Features:**
+  - Unified POS that sells Services, Products, Packages and Memberships from tabbed catalogues.
+  - Bundled packages with fixed prices.
+  - Item numbering for keyboard quick-add using Code + Enter, with quantity multiplier syntax (qty*code).
+  - Barcode/SKU scanning.
+  - Catalogue search.
+  - Multi-branch billing via a branch selector.
+  - Customer attach, defaulting to Walk-in.
+  - Discount amount and tax % with computed tax amount.
+  - Tips tracked separately as pass-through, excluded from revenue.
+  - Split/multiple payments via Add Payment.
+  - Paid vs settled status.
+  - Quick actions: New Sale, Invoices list, Clear Cart.
+  - Notification badge count, theme palette switcher and global search.
+- **NAIM translation:** Map this screen to NAIM COMMAND 'Quote / Billing' (deal invoicing) for selling AI automation to recruitment agencies.
+
+Catalogue tabs:
+• Services → one-off builds (e.g. CV parser bot, WhatsApp candidate screener setup)
+• Products → licenses/add-ons/hardware
+• Packages → bundles (e.g. 'Recruiter Starter Automation Pack' KES X)
+• Memberships → monthly retainers/SaaS subscriptions
+
+Cart panel:
+• Branch selector → business unit selector (Naim Automation core vs future side-businesses)
+• Customer → client agency picker (default 'Prospect/Unassigned'), linked to leads converted from the Leads Engine
+
+Other mappings:
+• Keep the number-code quick add and SKU search for fast quote building.
+• Use Rs → KES currency.
+• Discount and Tax % → VAT 16% Kenya.
+• Tips row → pass-through costs such as third-party API/WhatsApp fees, excluded from revenue.
+• Payments → M-Pesa/bank/card split payments with deposits/milestones; the 'Settled' status tracks invoice payment.
+• New Sale/Invoices/Clear Cart → New Quote/Invoice, Invoices list, Reset.
+
+Also reuse the dark sidebar + light content layout, the coral accent theme option, and the notification bell.
+
+## #38 `download-38.png` — salon-system · POS / Billing · POS catalogue with the Memberships tab active and an empty cart (Walk-in customer, Branch 1 – Gulberg). The Code + Enter quick-add input is focused (red border).
+- **Theme:** Hybrid: dark sidebar (~#1A0F0F to #120A0A, near-black with a warm tint) with a light content area (white cards on a very light warm-gray/pinkish background, ~#FAF5F5). Accent is coral/red-orange (~#F0654F / #EF5B4B), used for the active nav item, focused input border, price text (~#D9412F) and notification badge. Primary buttons are black pills (~#111111) with white text. Secondary Add buttons are gray (~#6B6B6B) with white text. 'Settled' text is green (~#2E9E3E).
+- **Layout:** The fixed left sidebar is about 150px wide and dark, with a scrollbar. White uppercase gray section labels (SALON, INVENTORY, FINANCE, HR) group the items, and each item has an icon plus a label.
+
+The top header bar is a white rounded card. It holds:
+- the page title 'POS / Billing' with a cash-register icon on the left;
+- on the right: the buttons [New Sale] (black), [Invoices] and [Clear Cart] (light outline), a global 'Search everything...' input, a palette (theme) icon button, a brush icon button, a bell with a red badge showing '6', and the text 'Welcome, admin'.
+
+The main body is split into two columns:
+- **Left (~75%):** the catalogue workspace.
+- **Right (~25%):** a cart/bill panel in a white card with full height.
+- **Sidebar:** Dashboard (line-chart icon), My Day (person/badge icon), SALON (section label), Front Desk, Appointments, Customers, POS / Billing (ACTIVE, coral filled rounded pill, white text), Services (scissors icon), Memberships (card icon), INVENTORY (section label), Inventory, Purchases (truck icon), FINANCE (section label), Expenses, Finance (pie icon), Payroll, Cash Till, HR (section label), Staff (cut off at the bottom)
+- **Client 360:** none
+- **Components:**
+  - **Catalogue category tabs (pill toggles):**
+- 'Services' (scissors icon)
+- 'Products' (box icon)
+- 'Packages' (gift icon)
+- 'Memberships' (card icon, ACTIVE, black filled pill with white text)
+- Inactive tabs are white pills with a light border.
+  - **Input row with three fields:**
+- 'Search catalogue...' (magnifier icon, widest)
+- 'Scan barcode / SKU → Enter' (barcode icon)
+- A small '# Code + Enter' input, focused with a coral/red border
+  - Helper hint text below the inputs, with an info icon: 'Type an item's number in **Code** and hit **Enter** to add it — **3*7** adds 3 × code 7.'
+  - **Catalogue item cards (small white bordered tiles, ~2 per row):**
+- Number badge '1' (black square), 'Silver Card', price 'Rs 3,000' in coral bold
+- Number badge '2', 'Gold Card', price 'Rs 8,000'
+  - **Right panel selectors:**
+- 'Branch' label (building icon) with a dropdown set to 'Branch 1 – Gulberg'
+- 'Customer' label (person icon) with a dropdown set to 'Walk-in'
+  - Cart empty state: a gray shopping-basket icon centered above the text 'Tap catalogue items to build the bill'.
+  - **Totals section:**
+- 'Subtotal' Rs 0
+- 'Discount' with a numeric input (value 0)
+- 'Tax %' with an empty input
+- 'Tax amount' Rs 0
+- A dark divider line
+- **'Total' Rs 0** in bold
+  - 'Tips (pass-through, not revenue)' row with a hand icon and a gray '+ Add' button.
+  - 'Payments' row with a cash icon and a gray '+ Add' button (supports split/multiple payment lines).
+  - Footer of the right panel: 'Paid Rs 0' on the left and 'Settled' in green bold on the right.
+- **Features:**
+  - Unified POS that sells services, products, packages and memberships from tabbed catalogues.
+  - Three quick-add methods: text search, barcode/SKU scan, and numeric code entry with a quantity multiplier syntax (qty*code).
+  - Each catalogue item has a numbered short code for fast keyboard entry.
+  - Multi-branch billing, with the branch selected per sale.
+  - Customer attach on each sale, defaulting to a 'Walk-in' option.
+  - Discount (amount) and tax % with a computed tax amount.
+  - Tips are tracked separately as pass-through, not revenue (for payroll/staff payout).
+  - Split/multiple payments via '+ Add' payment lines.
+  - Paid amount vs total shown with a settlement status (Settled / balance due).
+  - Header actions: New Sale (reset/start), Invoices (history), and Clear Cart.
+  - Global search, a theme palette switcher, notifications with a count badge, and the user greeting.
+- **NAIM translation:** This becomes the NAIM COMMAND 'Quote / Invoice Builder' (Billing).
+
+**Catalogue tabs map as follows:**
+- Services → automation services (e.g., CV screening bot setup, WhatsApp candidate outreach, ATS integration)
+- Products → software licenses/add-ons
+- Packages → bundled offerings (Starter / Growth / Enterprise automation packs)
+- Memberships → monthly retainers/SaaS subscriptions (e.g., 'Silver Retainer KES X/mo', 'Gold Retainer')
+
+**Inputs and parties:**
+- Use KES instead of Rs.
+- Keep numbered codes for fast entry, plus SKU search.
+- The Branch selector becomes the Business Unit/Entity selector (Naim Automation core vs future side-businesses).
+- The Customer selector becomes a Client (recruitment agency) picker linked to CRM leads, with the default 'Walk-in' replaced by 'New/Prospect'.
+
+**Totals and payments:**
+- Keep Discount and Tax % (Kenya VAT 16% default).
+- Tips (pass-through) becomes 'Reimbursables/Pass-through costs' (e.g., API/LLM usage, WhatsApp fees billed at cost, not revenue).
+- Payments supports split methods (M-Pesa, bank transfer, card) and deposits/milestones.
+- The Paid / Settled indicator becomes the invoice status (Draft / Partially Paid / Settled).
+
+**Header and visual style:**
+- Header buttons become New Quote, Invoices, and Clear.
+- Keep the dark sidebar, light content and coral accent style, or swap the accent via the theme palette.
+
+## #39 `download-39.png` — salon-system · POS / Billing · Invoice 360 View modal (INV-2026-004) opened over the POS / Billing page, with the Items tab active
+- **Theme:** Light-mode content with a dark maroon/near-black accent palette. Modal header bar is very dark maroon-brown (#2a1212 to #1f0f0f). Table header row uses the same dark maroon (#2b1414) with white text. The left summary panel has a pale pink/blush background (#fdf3f2). The active tab underline and icon are red (#d9433a). The DUE badge is a red pill (#c62828) with white text. KPI icon tiles are dark maroon (Total, #3a1a1a), green (Paid, #43a047), red (Due, #d32f2f) and amber/yellow (Tips, #f2b01e). The main body is white (#ffffff). Behind the modal, the app sits under a dark dimmed overlay. The background sidebar is dark (#1a1a1a) and its active item, POS, is a red/pink highlight (#c94f4f).
+- **Layout:** The background page is POS / Billing. Its top bar shows the page title 'POS / Billing' with an icon, then buttons for 'New Sale' and 'Invoices' (the latter dark and active), a search box with the placeholder 'Search everything…', theme and palette icons, a notification bell with a red badge, and 'Welcome, admin'. The page is dimmed by a dark overlay. A large centered modal takes up about 90% of the width and most of the height. It has a full-width dark maroon header bar with a receipt icon, the bold white title 'INV-2026-004', a small grey subtitle '· 360 View' and a white X close button at the far right. The modal body is a two-column grid. The left column is a fixed-width summary panel (about 20% width) with a pink background, which scrolls vertically (a scrollbar is visible). The right column is the main area (about 80% width) with a horizontal tab bar on top and tab content below.
+- **Sidebar:** Dashboard, My Day (partially hidden as 'My Da…'), SALON (section label), Front… (Front Desk, truncated), Appo… (Appointments, truncated), Cust… (Customers, truncated), POS (active, red highlight), Serv… (Services, truncated), Mem… (Memberships, truncated), INVENTORY (section label), Inve… (Inventory, truncated), Purc… (Purchases, truncated), FINANCE (section label), Expe… (Expenses, truncated), Fina… (Finance, truncated), Payr… (Payroll, truncated), Cash… (Cash register/Cashbook, truncated), HR (section label), Staff… (Staff, truncated)
+- **Client 360:** none. This is an INVOICE 360 view (POS / Billing), not a client 360. Its tabs are Items, Payments, Tips & Commissions and Stock Posted.
+- **Components:**
+  - Modal header: receipt icon + 'INV-2026-004' + '· 360 View' subtitle + close 'X' at the right
+  - Left panel avatar: a black circle holding a white receipt/document icon, centered
+  - Bold invoice number 'INV-2026-004' under the avatar
+  - Status badge: red pill reading 'DUE'
+  - Key-value detail list (label on the left in grey, value on the right in bold, thin divider lines between rows): Customer = Walk-in; Branch = Branch 1 – Gulberg; Date = Sep 09, 01:36 AM; Subtotal = Rs 4,800; Discount = —; Membership disc. = —; Tax (5%) = Rs 240; Points earned = 0; Points redeemed = 0; Refunded = —; Appointment = —
+  - 2x2 grid of mini KPI cards (white rounded cards, each with a colored square icon on the left): TOTAL Rs 5,040 (dark maroon money-bag icon); PAID Rs 0 (green cash icon); DUE Rs 5,040 (red hourglass icon); TIPS Rs 0 (yellow hand/coin icon)
+  - Full-width dark button with a printer icon: 'Print Receipt'
+  - Full-width grey button with a cash icon: 'Receive Payment' (partially cut off at the bottom; the panel scrolls)
+  - Tab bar with 4 tabs, each with an icon: 'Items' (active, red text with a red underline, list icon); 'Payments' (cash icon); 'Tips & Commissions' (percent icon); 'Stock Posted' (box/archive icon)
+  - Items table: dark maroon header row with the columns Item | Type | Staff | Qty | Price | Disc | Net. Net values are bold and the rows are separated by light dividers.
+  - Items table row 1: Haircut – Classic | Service | Staff 1 | 1 | Rs 500 | 0 | Rs 500
+  - Items table row 2: Hair Color – Full | Service | Staff 2 | 1 | Rs 2,500 | 0 | Rs 2,500
+  - Items table row 3: Facial – Gold | Service | Staff 1 | 1 | Rs 1,800 | 0 | Rs 1,800
+  - Behind the overlay: a POS cart area with a 'Clear' button and a dark bar at the right, plus 'Next' pagination text at the bottom right
+- **Features:**
+  - Invoice 360 detail view opened from the Invoices list in POS
+  - Invoice statuses (DUE, and presumably PAID, PARTIAL and REFUNDED)
+  - Multi-branch invoicing (Branch 1 – Gulberg)
+  - Walk-in customer support or a linked customer
+  - Tax computed as a percentage (5%) on the subtotal
+  - Discount and membership discount fields
+  - Loyalty points earned and redeemed per invoice
+  - Refund tracking
+  - Optional link from an invoice to an appointment
+  - Line items that each carry a type (Service or Product), the staff member assigned, quantity, price, discount and net
+  - Payments tab showing multiple or partial payments against an invoice
+  - Tips & Commissions tab calculating per-staff commission from the line items
+  - Stock Posted tab showing inventory deductions caused by the sale
+  - Print Receipt and Receive Payment actions (collecting money on a due invoice)
+  - Summary KPIs: Total, Paid, Due, Tips
+  - Currency shown as Rs
+- **NAIM translation:** In NAIM COMMAND this becomes a Finance > Invoices > 'Invoice 360' modal. The header shows the invoice number (for example NAIM-INV-2026-004) with a status badge: DRAFT, SENT, DUE, PARTIAL, PAID or OVERDUE. The left panel lists Client (the recruitment agency), Business unit/Brand (in place of Branch, to support future side-businesses), Issue date and Due date, Subtotal, Discount, Retainer/package discount (in place of membership disc.), VAT 16% (Kenya), Linked deal/project (in place of Appointment), and Credit notes/Refunded. It keeps the same Total, Paid, Due and Tips KPI tiles, with 'Tips' renamed to 'Sales Commission', and amounts are shown in KES. The left panel ends with the buttons Print/Download PDF, Send via Email/WhatsApp, and Record Payment (M-Pesa, bank or card). The right side has four tabs. 'Items' lists line items such as Setup fee, Monthly automation retainer and AI agent build, with columns for Type (Setup/Recurring/Add-on), Owner/rep, Qty, Price, Disc and Net. 'Payments' shows the M-Pesa reference, method, date and amount. 'Commissions' shows the rep or partner split per line. 'Delivery Posted' replaces Stock Posted and shows the project tasks or hours created when the invoice was issued. The dark maroon header and table-header style should be reproduced as a theme token so the founder's palette system can swap the accent.
+
+## #40 `download-40.png` — salon-system · POS / Billing · Invoice 360 View modal (INV-2026-004), Payments tab active, empty state 'Nothing received yet'
+- **Theme:** Light-mode content with a dark maroon/near-black header palette. Modal header bar is about #2A1210 (very dark brown-maroon) with white text. Content background is white #FFFFFF. The left summary panel has a faint pink tint, about #FFF5F5. The active tab accent is red, about #D32F2F. The DUE badge is red, about #D93025, with white text. Primary button is dark maroon, about #2A1210. Secondary button is grey, about #8A8A8A. KPI icon tiles are dark maroon (Total), green #3FA34D (Paid), red #D32F2F (Due) and amber #F2B01E (Tips). The page behind the modal is dimmed by a dark overlay. The app sidebar is dark, about #1E1E1E, and the active item (POS) is highlighted in red-maroon.
+- **Layout:** The underlying page is POS / Billing. Its top bar holds the page title on the left with a register icon, then buttons 'New Sale' and 'Invoices' (Invoices dark/active), a search box 'Search everything...', icon buttons (theme palette, brush, notifications bell with a red badge) and 'Welcome, admin'. A large centered modal (~92% width) overlays the page. The modal has a dark header bar showing a document icon, 'INV-2026-004' in bold white, a small muted '· 360 View' suffix, and a white X close button on the right. The modal body is split in two columns. The LEFT column (~25%, its own scroll, light pink background) holds the invoice identity, a key-value list, a 2x2 KPI grid and action buttons. The RIGHT column (~75%) has a horizontal tab bar at the top with icon+label tabs, a red underline on the active tab, and a content area beneath. Behind the modal, the right edge of the POS page shows a partially visible blue card, a 'Clear' button, inputs, a black button and 'Next' pagination.
+- **Sidebar:** Dashboard, My D... (My Day, truncated), SALON (section label), Front... (Front Desk, truncated), Appo... (Appointments), Custo... (Customers), POS (active, red highlight), Servi... (Services), Mem... (Memberships), INVENTORY (section label), Inven... (Inventory), Purch... (Purchases), FINANCE (section label), Expe... (Expenses), Finan... (Finance), Payr... (Payroll), Cash... (Cash register / Cashbook), HR (section label), Staff
+- **Client 360:** none — this is an INVOICE 360 view on the POS/Billing page, not a client 360. Its tabs are Items, Payments (active), Tips & Commissions and Stock Posted.
+- **Components:**
+  - Modal header: document icon + 'INV-2026-004' + '· 360 View' + close 'X'
+  - Avatar circle (dark, ~48px) with a white receipt/document icon
+  - Invoice number title 'INV-2026-004' (bold, centered)
+  - Status pill badge 'DUE' (red background, white uppercase text)
+  - Key-value rows (label left in grey, value right in bold dark): Customer: Walk-in | Branch: Branch 1 – Gulberg | Date: Sep 09, 01:36 AM | Subtotal: Rs 4,800 | Discount: — | Membership disc.: — | Tax (5%): Rs 240 | Points earned: 0 | Points redeemed: 0 | Refunded: — | Appointment: —
+  - KPI mini-card TOTAL: Rs 5,040 (dark maroon icon tile, money bag icon)
+  - KPI mini-card PAID: Rs 0 (green icon tile, cash icon)
+  - KPI mini-card DUE: Rs 5,040 (red icon tile, hourglass icon)
+  - KPI mini-card TIPS: Rs 0 (amber icon tile, hand/coin icon)
+  - Primary full-width button 'Print Receipt' (dark maroon, printer icon)
+  - Secondary full-width button 'Receive Payment' (grey, cash icon; partially cut off at the bottom)
+  - Tabs: 'Items' (list icon) | 'Payments' (cash icon, ACTIVE, red text + red underline) | 'Tips & Commissions' (percent/coins icon) | 'Stock Posted' (box/inventory icon)
+  - Empty state in the Payments tab: grey cash icon centered at the top + text 'Nothing received yet'
+  - Mouse cursor hovering near the 'Tips & Commissions' tab
+- **Features:**
+  - Invoice 360 drill-down from the POS Invoices list
+  - Invoice status lifecycle (DUE / PAID / partial / refunded)
+  - Partial payment tracking (Total vs Paid vs Due)
+  - Tax calculation (5%) shown as a line item
+  - Membership discount applied to invoices
+  - Loyalty points earned and redeemed per invoice
+  - Refund tracking
+  - Link between an invoice and its originating appointment
+  - Multi-branch billing (Branch 1 – Gulberg)
+  - Walk-in customers (no customer profile)
+  - Tips captured per invoice, plus staff commissions breakdown
+  - Inventory deduction audit trail ('Stock Posted')
+  - Print receipt
+  - Receive payment action (opens payment collection)
+  - Currency formatting 'Rs'
+- **NAIM translation:** Map this to NAIM COMMAND > Billing > Invoice 360 modal (e.g. 'INV-2026-004 · 360 View') for invoices sent to recruitment-agency clients. The left panel should show: Client (agency name instead of Walk-in), Business unit/side-business (instead of Branch), Issue date, Due date, Subtotal, Discount, Retainer/package discount (instead of Membership disc.), VAT 16% (Kenya, instead of Tax 5%), Paid, Refunded/Credit note, and Linked Deal/Project (instead of Appointment). Keep the TOTAL / PAID / DUE KPI tiles; replace TIPS with 'Commission' or 'Balance overdue days'. Currency should be KES. Tabs: 'Line Items' (setup fee, monthly automation retainer, add-ons); 'Payments' (M-Pesa, bank transfer and card receipts, with the empty state 'Nothing received yet'); 'Commissions' (sales rep/partner referral commissions); and 'Delivery Posted' (replacing Stock Posted: linked project milestones/hours or usage credits consumed). Status badges: DRAFT / SENT / DUE / PARTIAL / PAID / OVERDUE. Buttons: 'Print/Download PDF Receipt', 'Receive Payment' (records payment and updates DUE), and optionally 'Send Reminder'. Rebuild it as a modal with a dark header, a scrollable left summary column and a tabbed right column, matching the active palette.
+
+## #41 `download-41.png` — salon-system · POS / Billing · Invoices list view (Invoices tab active) with KPI cards, status chevron filter bar, date/search filters and DataTables-style invoice table; 'Receipt' tooltip shown on hover of print icon in first row
+- **Theme:** Light content area (page bg ~#F1F2F4, cards white #FFFFFF) with dark sidebar (~#1E1A1C, near-black with slight warm/maroon tint). Active nav item coral/red pill (~#F05A4F). KPI cards use gradient fills: dark maroon (~#3A1A22 to #5A2A33), green (~#3FA34D), amber/yellow (~#F2B71F), red-to-blue gradient (~#F0505A to #5B7BE0). Table header black (~#111111) with white text.
+- **Layout:** Fixed left dark sidebar (~150px) with icon+label items grouped under small uppercase gray section headers. Main area: top white rounded header bar with page title + icon on left ('POS / Billing'), right-side toolbar. Below: row of 4 equal KPI cards (4-col grid, ~125px tall, rounded ~8px, large watermark icon bottom-right). Below: full-width row of 6 chevron/arrow-shaped status filter segments. Below: Filters card (light gray bg) with header row 'Filters' + 'Clear' button, divider line, then 3-column grid of inputs (From, To, Search). Below: DataTables-style table with 'Show N entries' left and 'Search:' right above, black header row, zebra-free white rows with light dividers, footer 'Showing X to Y of Z entries' left and pagination right.
+- **Sidebar:** Dashboard, My Day, SALON (section header), Front Desk, Appointments, Customers, POS / Billing (active, coral highlight), Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll, Cash Till, HR (section header), Staff (partially visible, list continues below; sidebar scrollable)
+- **Client 360:** none
+- **Components:**
+  - Page header: briefcase/cash-register icon + 'POS / Billing' bold title
+  - Header toolbar buttons: 'New Sale' (light/white button with cart icon), 'Invoices' (black filled button with doc icon, active state)
+  - Global search input with magnifier icon, placeholder 'Search everything...'
+  - Icon buttons: palette/theme icon (dark circle), paintbrush icon, notification bell with red badge '6'
+  - Text 'Welcome, admin'
+  - KPI card 1 (dark maroon): value '4', label 'Invoices', watermark receipt icon
+  - KPI card 2 (green): value 'Rs 15,902', label 'Billed', watermark money bag icon
+  - KPI card 3 (amber): value 'Rs 5,877', label 'Outstanding', watermark hourglass icon
+  - KPI card 4 (red→blue gradient): value 'Rs 50', label 'Tips', watermark hand-holding-dollar icon
+  - Status chevron filter bar (each segment arrow-shaped, uppercase label with count): 'ALL (4)' dark charcoal ~#3A3436 (selected), 'PAID (1)' green ~#2E9E44, 'PARTIAL (2)' orange ~#F5A623, 'DUE (1)' red ~#D7282F, 'REFUNDED (0)' lavender ~#B79CF2, 'VOID (0)' gray ~#B5B5B5
+  - Filters card: funnel icon + 'Filters' title; 'Clear' button (dark gray ~#5A6570, white text, circle-x icon) on right
+  - Filter input 'FROM' (calendar icon label) date picker value '08/10/2026'
+  - Filter input 'TO' date picker value '09/09/2026'
+  - Filter input 'SEARCH' (magnifier label) text input placeholder 'Invoice, customer...'
+  - Table controls: 'Show [10 ▾] entries' dropdown; 'Search:' text input on right
+  - Table columns (sortable arrows each): Invoice | Date (currently sorted desc, darker shaded column) | Customer | Branch | Total | Paid | Due | Method | Status | Actions
+  - Row 1: INV-2026-004 | Sep 09, 01:36 AM | Walk-in | Branch 1 – Gulberg | Rs 5,040 | Rs 0 | Rs 5,040 (red bold) | — | DUE (red pill) | view eye icon, print icon (hover tooltip 'Receipt'); row highlighted gray on hover
+  - Row 2: INV-2026-003 | Sep 05, 05:09 PM | Client 3 | Branch 1 – Gulberg | Rs 8,400 | Rs 8,000 | Rs 400 (red) | cash | PARTIAL (orange pill) | eye, print
+  - Row 3: INV-2026-001 | Sep 05, 02:09 AM | Client 1 | Branch 1 – Gulberg | Rs 525 | Rs 525 | — | cash | PAID (green pill) | eye, print
+  - Row 4: INV-2026-002 | Sep 04, 12:09 AM | Client 3 | Branch 1 – Gulberg | Rs 1,937.25 | Rs 1,500 | Rs 437.25 (red) | card | PARTIAL (orange pill) | eye, print
+  - Footer: 'Showing 1 to 4 of 4 entries'; pagination 'Previous' [1] 'Next'
+- **Features:**
+  - Invoice listing with KPI summary (count, billed, outstanding, tips) reacting to filters
+  - Status-based quick filter with counts: All/Paid/Partial/Due/Refunded/Void
+  - Date range filter and invoice/customer text search, Clear filters
+  - Partial payments tracking (Total vs Paid vs Due), due highlighted red
+  - Payment method recording (cash, card, none)
+  - Multi-branch support (Branch column)
+  - Walk-in vs registered customers
+  - View invoice and print receipt actions
+  - Toggle between New Sale (POS) and Invoices views
+  - Theme switcher and notifications in header
+- **NAIM translation:** Becomes NAIM COMMAND 'Billing / Invoices' module: KPI cards = Invoices issued, Billed (KES), Outstanding (KES), plus replace 'Tips' with 'Retainers/MRR' or 'Collected this period'. Status chevrons: All/Paid/Partial/Due(Overdue)/Refunded/Void (add 'Draft' and 'Sent'). Columns: Invoice # (NAS-2026-xxx), Date, Client (recruitment agency), Business Unit (replaces Branch – e.g., Automation Agency vs side-businesses), Total, Paid, Due, Method (M-Pesa, bank transfer, card, cash), Status, Actions (view, print/PDF receipt, send via email/WhatsApp, record payment). 'New Sale' → 'New Invoice/Quote' builder for setup fees + monthly automation retainers. Currency KES instead of Rs. Keep date range + search filters and the outstanding-in-red treatment for collections follow-up.
+
+## #42 `download-42.png` — salon-system · POS / Billing · Invoice 360 View modal (INV-2026-004), 'Tips & Commissions' tab active
+- **Theme:** Light-mode content with a dark maroon/near-black accent palette. Modal header bar is very dark burgundy-black (#1E0F10 to #2A1215), and the table header row uses the same dark tone (#1A0E0F) with white text. The left summary panel has a pale pink tint (#FBEFEF). Active tab underline and text are red (#C0392B). The DUE badge is red (#D9363E) with white text. KPI icon tiles: TOTAL is dark maroon (#3A1A1C), PAID is green (#2E9E4F), DUE is red (#D63A3A), TIPS is amber (#E8B21A). The page behind is dimmed by an overlay, and its sidebar is dark (#2B1A1C) with a red active pill on POS (#C0392B).
+- **Layout:** The background page is POS / Billing with a left dark sidebar and a top bar. The top bar has the page title 'POS / Billing' with a register icon, a '+ New Sale' button, an 'Invoices' button (dark, active), a 'Search everything' input, a theme/palette icon, a brush icon, a notification bell with a red badge, and 'Welcome, admin'. Behind the overlay you can glimpse a 'Clear' button and 'Next' pagination. On top sits a large centered modal (~95% width, ~95% height). The modal has a dark header bar with a receipt icon, the title 'INV-2026-004', a muted subtitle '· 360 View', and a white '×' close button at top right. The modal body has two columns: a left summary panel (~25% width, pink-tinted, vertically scrollable) and a right content area (~75%, white) with a horizontal tab bar and tab content below.
+- **Sidebar:** Dashboard, My Day (partially hidden: 'My D…'), SALON (section label), Front Desk (partially hidden: 'Fron…'), Appointments (partially hidden: 'Appo…'), Customers (partially hidden: 'Cust…'), POS (active, red highlight), Services (partially hidden: 'Serv…'), Memberships (partially hidden: 'Mem…'), INVENTORY (section label), Inventory (partially hidden: 'Inve…'), Purchases (partially hidden: 'Purc…'), FINANCE (section label), Expenses (partially hidden: 'Expe…'), Finance (partially hidden: 'Fina…'), Payments/Payroll (partially hidden: 'Pay…'), Cash (partially hidden: 'Cash…'), HR (section label), Staff (partially hidden: 'Staf…')
+- **Client 360:** none — this is an Invoice 360 View inside POS / Billing, not a client 360. Its tabs are Items, Payments, Tips & Commissions, Stock Posted.
+- **Components:**
+  - Modal header: receipt icon + 'INV-2026-004' + '· 360 View' subtitle + close '×' button
+  - Left panel avatar: black circle containing a white receipt/document icon, centered
+  - Invoice number 'INV-2026-004' in bold, centered
+  - Status badge 'DUE' (red pill, white uppercase text)
+  - Key-value list (label left in muted gray, value right in dark text):
+  - Customer: Walk-in
+  - Branch: Branch 1 – Gulberg
+  - Date: Sep 09, 01:36 AM
+  - Subtotal: Rs 4,800
+  - Discount: —
+  - Membership disc.: —
+  - Tax (5%): Rs 240
+  - Points earned: 0
+  - Points redeemed: 0
+  - Refunded: —
+  - Appointment: —
+  - 2x2 KPI mini-card grid (white cards, rounded, colored square icon on left, small uppercase label above a bold value):
+  - KPI card TOTAL: Rs 5,040 (dark maroon money-bag icon)
+  - KPI card PAID: Rs 0 (green cash icon)
+  - KPI card DUE: Rs 5,040 (red hourglass icon)
+  - KPI card TIPS: Rs 0 (amber hand/coin icon)
+  - Primary button 'Print Receipt' (full-width, dark maroon/black, printer icon)
+  - Secondary button 'Receive Payment' (full-width, gray, cash icon; partially cut off at bottom)
+  - Tab bar with 4 tabs: 'Items' (list icon), 'Payments' (cash icon), 'Tips & Commissions' (percent icon; active, red text with red underline), 'Stock Posted' (box/warehouse icon)
+  - Section heading '% Commission snapshot'
+  - Commission table with a dark header row. Columns: Staff | Kind | Basis | % | Amount
+  - Row 1: Staff 1 | Service | Net of cost | 15% | Rs 67.5 (bold)
+  - Row 2: Staff 2 | Service | Net of cost | 10% | Rs 227.3 (bold)
+  - Row 3: Staff 1 | Service | Net of cost | 15% | Rs 232.5 (bold)
+  - Section heading 'Tips (pass-through)' with a hand icon
+  - Empty state: centered gray text 'No tips'
+  - Background (dimmed): sidebar, top bar with 'New Sale', 'Invoices', 'Search everything', palette and brush icons, notification bell with badge, 'Welcome, admin', a 'Clear' button, and 'Next' pagination
+- **Features:**
+  - Invoice 360 drill-down modal opened from the Invoices list
+  - Invoice status tracking (DUE / paid / partial)
+  - Walk-in vs named customer invoices
+  - Multi-branch billing (Branch 1 – Gulberg)
+  - Tax calculation (5%) and discount/membership discount lines
+  - Loyalty points earned and redeemed per invoice
+  - Refund tracking
+  - Linking an invoice to an appointment
+  - Per-line staff commission snapshot, frozen at time of sale, with kind (Service/Product), basis (Net of cost), percentage, and amount
+  - Tips recorded as pass-through to staff, separate from revenue
+  - Stock posting audit (inventory consumed by the invoice)
+  - Payments history tab
+  - Print receipt and receive (partial) payment actions
+  - Customizable theme palette (palette and brush icons)
+  - Global search
+- **NAIM translation:** This becomes an 'Invoice 360' modal in NAIM COMMAND's Billing/Finance module for AI-automation deals with recruitment agencies. Rebuild it as follows:
+- Header: invoice number (e.g. NAIM-INV-2026-004) plus a status badge (DUE / PARTIAL / PAID / OVERDUE).
+- Left panel: Client (the agency name instead of Walk-in), Business unit (main automation business vs future side-businesses, replacing Branch), Date, Subtotal, Discount, Retainer/plan discount (replacing Membership disc.), VAT 16% (Kenya, replacing Tax 5%), Credits applied/earned (optional, replacing Points), Refunded, and the linked Deal/Project (replacing Appointment).
+- KPI tiles: Total, Paid, Due, and Referral/Partner fee (replacing Tips), shown in KES.
+- Buttons: 'Print/Download PDF' and 'Record Payment (M-Pesa/Bank)'.
+- Tabs: Line Items (setup fee, monthly retainer, automation builds), Payments (M-Pesa/bank transactions), Commissions & Referral fees (sales rep / partner / closer, with Kind = Setup/Retainer/Upsell, Basis = Gross or Net of cost such as API/hosting costs, %, and Amount, frozen at invoice time), and Costs Posted (replacing Stock Posted; logs consumed resources such as API credits, hosting, and contractor hours).
+- Keep the 'No tips'-style empty states, e.g. 'No referral fees'.
+- Keep the dark header table style and the palette-themable design.
+
+## #43 `download-43.png` — salon-system · Services · Add Service modal: large near-full-width overlay dialog with a two-column form on the left and a Live Preview panel on the right. The underlying Services page is visible but dimmed behind a dark backdrop.
+- **Theme:** Mixed dark/light. The app chrome (sidebar and modal header bar) is dark, near-black with a warm tint (~#1a1010 / #2a1414). The modal body is light: form area white #ffffff; preview panel very light pink/off-white (~#fdf5f5). The accent is red/coral: active sidebar item (Services) is highlighted red ~#c0392b, and the 'Active' badge is red ~#e74c3c with white text. Inputs have light gray borders (~#d0d5dd) and rounded corners (~6px). Text is dark gray ~#333, with lighter gray (~#666) for preview labels.
+- **Layout:** Fixed dark left sidebar (~150px) with icons and labels grouped under uppercase section headers (SALON, INVENTORY, FINANCE, HR). The top bar on the Services page contains a scissors icon with the title 'Services', and a row of buttons: '+ Add Service' (dark/primary), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template'. To the right are a global search 'Search everything...', a theme/palette icon, a brush icon, a notification bell with a red badge, and 'Welcome, admin'. The modal is centered and spans ~90% of the width, with a dark header bar (~40px) and rounded top corners. The modal body is split roughly 58/42. The left side is a scrollable form in a 2-column grid of labeled fields; each label has a leading icon, and a vertical scrollbar is visible. The right side is a sticky 'LIVE PREVIEW' card that mirrors the field values in a key/value list with right-aligned values, plus its own scrollbar. Behind the modal, faint page content is visible on the right edge: a blue card/image, a 'Clear' button, and a dark bar.
+- **Sidebar:** Dashboard, My Day, SALON (section header), Front Desk (truncated 'Front D'), Appointments (truncated), Customers (truncated), POS / ... (truncated), Services (active, red highlight), Memberships (truncated 'Memb'), INVENTORY (section header), Inventory (truncated), Purchases (truncated), FINANCE (section header), Expenses (truncated), Finance (truncated), Payroll (truncated), Cash ... (truncated, likely Cash Till/Cash Book), HR (section header), Staff
+- **Client 360:** none
+- **Components:**
+  - Modal header: scissors icon + title 'Add Service' (white on dark); right side has a circular info (i) icon button and a close X button
+  - Field 'Category *' (layers icon): select dropdown, placeholder 'Select category'
+  - Field 'Service Name *' (scissors icon): text input, empty
+  - Field 'Price *' (tag icon): text/number input, empty
+  - Field 'Flat Cost (used when no recipe)' (receipt icon): number input, empty
+  - Field 'Duration (min) *' (hourglass icon): number input, empty
+  - Field 'Turnaround (min)' (brush icon): number input, default 10
+  - Field 'Free Gap Starts At (min)' (play icon): number input, default 30
+  - Field 'Free Gap Length (min)' (hourglass icon): number input, default 30
+  - Field 'Needs Station Type' (chair/station icon): select, value 'Any station'
+  - Field 'For' (gender icon): select, value 'Unisex'
+  - Field 'Bookable Online' (globe icon): select, value 'Yes'
+  - Field 'Max Discount %' (percent icon): number input, empty
+  - Partially visible next row: 'Commission % (blank = staff default)' (left) and 'Status' (right); more fields continue below the fold (likely a Recipe section)
+  - Live Preview panel: header 'LIVE PREVIEW' with an eye icon (small uppercase gray)
+  - Preview identity block: black rounded-square avatar with white scissors icon; name placeholder '—'; subtitle 'Service'; red pill badge 'Active'
+  - Preview key/value rows (label left, value right, '—' when empty): Category —; Service Name —; Price —; Flat Cost (used when no recipe) —; Duration (min) —; Turnaround (min) —; Free Gap Starts At (min) —; Free Gap Length (min) —; Needs Station Type 'Any station'; For 'Unisex'; Bookable Online 'Yes'; Max Discount % —; Commission % (blank = staff default) —; Status 'Active'; Recipe — products used per service '0 lines'
+  - Footer note in the preview panel (info icon): 'Required fields are checked here and again server-side before the row is written.'
+  - Background page toolbar: '+ Add Service', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template', 'Search everything...', palette icon, brush icon, bell with red notification badge, 'Welcome, admin'
+- **Features:**
+  - Service catalog CRUD with category assignment
+  - Pricing plus cost tracking: a flat cost is used when no recipe exists; a recipe (products consumed per service) enables margin/COGS calculation
+  - Scheduling metadata: duration, turnaround/cleanup buffer, and a 'free gap' window (staff free from minute X for Y minutes during a service, enabling parallel booking)
+  - Resource constraint: required station type
+  - Audience targeting: For (Unisex/Male/Female)
+  - Online booking toggle per service
+  - Discount guardrail: max discount %
+  - Per-service commission override, with fallback to the staff default
+  - Active/inactive status
+  - Live preview of the record while editing
+  - Client- and server-side validation of required fields
+  - Bulk operations: CSV/PDF export, Print, Import CSV, downloadable import Template
+  - Global search and theme palette switcher
+- **NAIM translation:** Map to NAIM COMMAND 'Offerings / Service Catalog' > 'Add Offering' modal, using the same layout: a 2-column form plus a sticky Live Preview card. Field mapping: Category becomes Product Line (e.g., AI Recruitment Automation, CV Screening Bot, WhatsApp Outreach, side-business lines). Service Name becomes Package Name. Price becomes Setup Fee (KES/USD), with an optional Monthly Retainer. Flat Cost becomes Delivery Cost (used when no BOM). Duration (min) becomes Delivery Timeline (days). Turnaround becomes Onboarding/QA buffer days. Free Gap Starts At/Length becomes the client-wait window where the team is freed for other projects (capacity planning). Needs Station Type becomes Required Resource/Skill (e.g., n8n dev, AI engineer, Any). For becomes Target Segment (Recruitment agency size: SME/Mid/Enterprise/Any). Bookable Online becomes 'Show on public pricing/booking page'. Max Discount % stays as the sales discount guardrail. Commission % maps to sales rep/partner commission (blank = rep default). Status stays Active/Inactive. Recipe becomes Bill of Materials: API/tool subscriptions consumed per delivery (OpenAI tokens, WhatsApp API, hosting) for margin calculation. Keep the preview footer validation note and the toolbar actions (+ Add Offering, CSV, PDF, Print, Import CSV, Template). Use the dark sidebar with a red accent or the user-selected palette.
+
+## #44 `download-44.png` — salon-system · Services · Add Service modal, scrolled to the lower half of the form, with a Live Preview panel on the right. The modal sits over the Services page, which is dimmed in the background.
+- **Theme:** Light mode for the modal body: white background (#FFFFFF), light gray inputs with a #DADDE2 border, labels in dark gray #333. The modal header bar is near-black/very dark maroon (#1E0E0E–#2A1414) with white title text. The background app has a dark sidebar (#1A1A1A) with a red/coral active item (#E0524A). Accent colors: the Save button is black (#111), the Cancel button is gray (#8A8F96), the '+ Add' button is gray (#7D828A), and the 'Active' badge is red/coral (#E5534B) with white text. The recipe empty-row strip is a very light pink (#FDF3F3).
+- **Layout:** The background page has a top bar with a scissors icon and the title 'Services'. To the right of the title are action buttons: '+ Add Service' (dark), 'CSV', 'PDF', 'Print', 'Import CSV' and 'Template'. Next come a global search field ('Search everything...'), icon buttons (palette/theme, brush, and a notification bell with a red badge) and the text 'Welcome, admin'. A large centered modal (about 90% width) is overlaid on top. The modal header is a dark bar with a scissors icon, the title 'Add Service', and on the right an info (i) icon and a close X. The modal body is split into two columns. The left column (about 58%) is a scrollable form arranged as a 2-column grid of fields. The right column (about 40%) is a sticky 'LIVE PREVIEW' card with its own scrollbar. The footer action buttons (Save / Cancel) sit at the bottom left of the form.
+- **Sidebar:** Dashboard, My Day, SALON (section), Front Desk (truncated 'Front D'), Appointments (truncated), Customers (truncated), POS / ... (truncated), Services (active, red highlight), Memberships (truncated 'Memb'), INVENTORY (section), Inventory (truncated), Purchases (truncated), FINANCE (section), Expenses (truncated), Finance (truncated), Payroll (truncated), Cash T... (truncated, likely Cash Till), HR (section), Staff
+- **Client 360:** none
+- **Components:**
+  - Modal header: scissors icon + 'Add Service'; right side: info circle icon and close 'X'
+  - Partially scrolled-off top input showing placeholder '10' (right column, likely Turnaround (min)); the left counterpart is cut off
+  - Field 'Free Gap Starts At (min)' with a play/triangle icon; number input, placeholder '30'
+  - Field 'Free Gap Length (min)' with an hourglass icon; number input, placeholder '30'
+  - Field 'Needs Station Type' with a chair/station icon; select, value 'Any station'
+  - Field 'For' with a gender icon; select, value 'Unisex'
+  - Field 'Bookable Online' with a globe icon; select, value 'Yes'
+  - Field 'Max Discount %' with a percent icon; empty input
+  - Field 'Commission % (blank = staff default)' with a percent icon; empty input
+  - Field 'Status' with a toggle icon; select, value 'Active'
+  - Section 'Recipe — products used per service' (list icon), full width
+  - Recipe line builder: select 'Pick an item' + quantity input with value '1' + gray button '+ Add'
+  - Recipe empty state row (light pink strip): 'No lines yet'
+  - Footer buttons: 'Save' (black, floppy-disk icon) and 'Cancel' (gray, X icon)
+  - Right panel header: eye icon + 'LIVE PREVIEW' (small caps, gray)
+  - Preview identity block: black rounded-square tile with a white scissors icon, name placeholder '—', subtitle 'Service', red pill badge 'Active'
+  - Preview key–value list (label left in gray, value right in bold) with divider lines between rows
+  - Preview rows: Category —; Service Name —; Price —; Flat Cost (used when no recipe) —; Duration (min) —; Turnaround (min) —; Free Gap Starts At (min) —; Free Gap Length (min) —
+  - Preview rows (continued): Needs Station Type: Any station; For: Unisex; Bookable Online: Yes; Max Discount % —; Commission % (blank = staff default) —; Status: Active; Recipe — products used per service: 0 lines
+  - Footer note in the preview: info icon + 'Required fields are checked here and again server-side before the row is written.'
+  - Background (dimmed): a blue card at the top right, a 'Clear' button, and table remnants on the Services page
+- **Features:**
+  - Service catalog CRUD with a rich Add Service form
+  - Real-time live preview that mirrors form values as you type
+  - Pricing plus cost modeling: Flat Cost is used when no recipe exists; the recipe (bill of materials) consumes inventory products per service with quantities
+  - Scheduling parameters: Duration, Turnaround (buffer time), and a Free Gap (start offset + length) so staff can take parallel bookings during processing time
+  - Resource constraint: required station type
+  - Audience targeting (For: Unisex/Male/Female)
+  - Online booking toggle per service
+  - Max discount guardrail per service
+  - Per-service commission override, with blank falling back to the staff default
+  - Active/Inactive status
+  - Client- and server-side validation
+  - Page-level CSV/PDF/Print export, Import CSV and Template download
+  - Global search
+  - Theme palette switcher
+  - Notifications
+- **NAIM translation:** This maps to NAIM COMMAND 'Services / Offer Catalog → Add Offer' modal, used to define sellable AI-automation packages for recruitment agencies (e.g., CV Screening Bot, WhatsApp Candidate Follow-up, CRM Integration).
+
+Field translations:
+- Category = Offer line (Automation / AI Agent / Integration / Retainer, or a side-business).
+- Price = setup fee in KES, plus a monthly retainer.
+- Flat Cost = delivery cost when no recipe exists.
+- Recipe = bill of materials: tools/APIs/hours consumed per delivery (OpenAI credits, n8n/Make ops, Twilio/WhatsApp, dev hours), with quantities, to compute gross margin.
+- Duration = build days.
+- Turnaround = QA/handover buffer.
+- Free Gap = client-waiting time (awaiting access/data) during which capacity can be reused.
+- Needs Station Type = required resource or skill (developer, prompt engineer, integration specialist).
+- For = target segment (Recruitment agency / SME / Any).
+- Bookable Online = shown on the public pricing/booking page.
+- Max Discount % = sales-discount guardrail.
+- Commission % = sales-rep or partner commission override.
+- Status = Active/Archived.
+
+Keep the right-hand Live Preview card showing a margin summary, and keep the CSV import/template and export toolbar. The dark header with light body is the style to reuse.
+
+## #45 `download-45.png` — salon-system · Services · Services page, Categories tab active: category list with status chevron filter (All/Active/Inactive), filters card with category search, and a DataTables-style table
+- **Theme:** Light mode content area (white #FFFFFF cards on light grey #F4F5F7 background) with a dark sidebar (near-black #1A1A1A / #121212). Accent is coral/red-orange (#F2564B to #F0625A) on the active sidebar item and active tab underline. KPI cards use gradients: coral #E8605A to blue #5B8DEF, and dark maroon #2A0E12 to near-black #3A1A1E. Table header is solid near-black #1A1414 with white text. Status chevrons are dark brown-grey #4A3B3D (All), green #2E8B3A (Active) and light grey #B5B5B5 (Inactive). Badges are dark green #1E7B34 pill with white text.
+- **Layout:** Fixed left sidebar (~150px wide, dark) with icon + label items and uppercase grey section headers. The active item is a full-width coral rounded rectangle. A scrollbar is visible on the sidebar. The main area has a sticky top bar on a white rounded card containing: page icon + title 'Services' on the left; then a right-aligned action button group; a global search input; a theme palette icon; a brush icon; a notification bell with a red badge; and the text 'Welcome, admin'. Below sits a large white content card containing, in order: a section title row; a 3-column KPI card grid (equal widths); a tab bar; a 3-segment chevron/arrow status filter bar spanning full width; a light grey Filters panel; and a data table with DataTables controls ('Show N entries' on the left, 'Search:' on the right).
+- **Sidebar:** Dashboard, My Day, SALON (section label), Front Desk, Appointments, Customers, POS / Billing, Services (active, coral highlighted pill), Memberships, INVENTORY (section label), Inventory, Purchases, FINANCE (section label), Expenses, Finance, Payroll, Cash Till, HR (section label), Staff (cut off at bottom; list continues)
+- **Client 360:** none
+- **Components:**
+  - Top bar title: scissors icon + 'Services' (bold)
+  - Primary button (black, white text): '+ Add Service Category'. The label is context-aware because the Categories tab is active.
+  - Secondary light-grey buttons with icons: 'CSV', 'PDF', 'Print', 'Import CSV', 'Template'
+  - Global search input: placeholder 'Search everything...' with a magnifier icon
+  - Icon buttons: palette (theme picker) and brush (customize)
+  - Notification bell with a red count badge (number not legible, likely single digit)
+  - Text: 'Welcome, admin'
+  - Section heading inside the card: scissors icon + 'Services'
+  - KPI card 1 (coral to blue gradient): big number '3', label 'Services', faint large scissors watermark icon at right
+  - KPI card 2 (dark maroon/black gradient): '3', 'Categories', layered-stack watermark icon
+  - KPI card 3 (coral to blue gradient): '2', 'Packages', open box watermark icon
+  - Tabs with icons: 'Services' (scissors), 'Categories' (layers icon, active, coral text + coral underline), 'Packages' (box icon)
+  - Chevron status filter bar with 3 arrow segments: 'ALL (3)' (dark brown-grey), 'ACTIVE (3)' (green, currently highlighted), 'INACTIVE (0)' (light grey). Labels are uppercase and white.
+  - Filters panel (light grey #F1F1F3 rounded): funnel icon + 'Filters' heading. A grey 'Clear' button with an x-circle icon sits on the right. A dark divider line follows.
+  - Inside the Filters panel: label 'SEARCH CATEGORIES' with a magnifier icon, and a full-width input with placeholder 'Search categories...'
+  - DataTables controls: 'Show [10 v] entries' select and a 'Search:' input
+  - Table header (black): 'Category' (sort arrow active ascending), 'Sort', 'Services', 'Status', 'Actions'. All columns have sort indicators except Actions.
+  - Row 1: Hair | 1 | 2 | ACTIVE badge (green pill) | actions: eye (view), pencil (edit), red trash (delete)
+  - Row 2: Nails | 3 | 0 | ACTIVE | eye, pencil, trash
+  - Row 3: Skin | 2 | 1 | ACTIVE | eye, pencil, trash
+  - Rows use alternating very light grey striping. A mouse cursor is visible near the Filters header (no hover state shown).
+- **Features:**
+  - Service catalog management split into Services, Categories and Packages (bundles)
+  - KPI counts for services, categories and packages
+  - Category CRUD with a manual sort order field (display ordering) and a count of linked services
+  - Active/Inactive status per category, with segmented status-count filter tabs
+  - Per-tab contextual primary action ('Add Service Category')
+  - Export to CSV/PDF, Print, Import CSV, and a downloadable import Template
+  - Global cross-module search, theme palette switcher, and notifications
+  - Client-side table pagination, search and column sorting
+- **NAIM translation:** Becomes the 'Offerings / Service Catalog' module in NAIM COMMAND. Services map to sellable automation products (e.g., CV screening bot, WhatsApp candidate follow-up, interview scheduler, CRM integration). Categories map to offering groups (e.g., Recruitment Automation, Sales Automation, Ops/Back-office, plus categories for future side-businesses), each with a sort order and a services count. Packages map to bundled retainers/tiers (Starter/Growth/Enterprise setup + monthly fee). Keep the 3 KPI cards (Offerings, Categories, Packages), the 3 tabs, the All/Active/Inactive chevron filter, and CSV/PDF/Import/Template tools for bulk-loading pricing. Make the primary button context-aware: '+ Add Offering', '+ Add Category' or '+ Add Package'. Packages then feed proposals/quotes in the leads pipeline and invoices in billing. Optionally add a 'Business Unit' filter so side-businesses share the same catalog engine.
+
+## #46 `download-46.png` — salon-system · Services · Services module, Packages tab active (list of service bundles/packages with status chevron filter, filters panel and DataTable)
+- **Theme:** Light content area (#F4F4F5 page bg, white cards) with dark sidebar (#1A1A1A to #222). Accent is coral/salmon red (#F05A4F to #FF6B5B) on the active sidebar item and active tab underline. Table header near-black (#1C1214, dark maroon tint). KPI cards use gradients: card 1 red→blue (#E8595F → #5B8DEF), card 2 coral→blue (#F06A5A → #6A9BE8), card 3 dark maroon→black (#5A1E28 → #1A0E10). Status chevrons: ALL dark brown-grey (#4A3A3C), ACTIVE green (#2E8B3A), INACTIVE light grey (#B8B8BC). ACTIVE badge is a green pill (#2E7D32) with white text.
+- **Layout:** Fixed left dark sidebar (~150px wide) with icon and label items grouped under uppercase section headers, plus a thin scrollbar. Main area: (1) top white header bar card with scissors icon and title 'Services' on the left; on the right a toolbar of buttons, a global search, theme and palette icons, a notification bell with red badge, and 'Welcome, admin'. (2) Page H2 'Services' with scissors icon. (3) Row of 3 equal KPI gradient cards in a 3-column grid, each with a large number, a label, and a large translucent icon at bottom-right. (4) Tab strip of 3 tabs. (5) Full-width chevron/arrow-style segmented status filter in 3 equal segments. (6) Light grey Filters panel card with a title, a dark underline, a Clear button at right, and a search field. (7) DataTable with a 'Show N entries' select on the left and a Search input on the right, a dark header row, striped rows, an info footer on the left and pagination on the right.
+- **Sidebar:** Dashboard, My Day, SALON (section header), Front Desk, Appointments, Customers, POS / Billing, Services (active, coral pill highlight), Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll, Cash Till, HR (section header), Staff (cut off; list continues below)
+- **Client 360:** none
+- **Components:**
+  - Header title: scissors icon + 'Services'
+  - Toolbar button (primary, black): '+ Add Package'
+  - Toolbar buttons (light grey, with icons): 'CSV', 'PDF', 'Print', 'Import CSV', 'Template'
+  - Global search input, placeholder 'Search everything...'
+  - Palette icon button and brush/theme icon button
+  - Notification bell with red count badge (0)
+  - Text: 'Welcome, admin'
+  - Page heading: scissors icon + 'Services'
+  - KPI card 1: '3' / 'Services', translucent scissors icon
+  - KPI card 2: '3' / 'Categories', translucent layers/stack icon
+  - KPI card 3: '2' / 'Packages', translucent open-box icon, dark maroon gradient
+  - Tabs: 'Services' (scissors icon), 'Categories' (layers icon), 'Packages' (box icon, active, coral text with coral underline)
+  - Chevron status filter: 'ALL (2)' (dark), 'ACTIVE (2)' (green, currently highlighted), 'INACTIVE (0)' (grey)
+  - Filters panel: funnel icon + 'Filters', dark grey 'Clear' button with an x-circle icon
+  - Field label 'SEARCH PACKAGES' with search icon; input placeholder 'Search packages...'
+  - DataTable control: 'Show [10 ▾] entries'
+  - DataTable control: 'Search:' input
+  - Table columns, all sortable: Package | Services | Value | Price | Validity | Status | Actions
+  - Row 1: 'Bridal Glow Package' (bold) | 3 | Rs 6,100 | Rs 5,500 | 60 d | ACTIVE badge | view (eye), edit (pencil), delete (red trash)
+  - Row 2: 'Grooming Monthly' (bold) | 4 | Rs 2,000 | Rs 1,600 | 30 d | ACTIVE badge | view, edit, delete
+  - Footer: 'Showing 1 to 2 of 2 entries'; pagination 'Previous' [1] 'Next'
+- **Features:**
+  - Service catalog management split into Services, Categories and Packages
+  - Packages bundle multiple services, showing the bundle's total value versus a discounted package price
+  - Package validity period in days (60 d, 30 d)
+  - Active/inactive status with a count-based chevron quick filter
+  - Export to CSV and PDF, print, CSV import with a downloadable template
+  - Client-side DataTable with page size, search, sorting and pagination
+  - Row-level CRUD actions: view, edit, delete
+  - KPI summary counts per entity
+  - Global search, theme/palette switcher, notifications
+- **NAIM translation:** This maps to a NAIM COMMAND 'Offers / Services Catalog' module. The tabs become Services (individual automations such as AI CV screening, WhatsApp candidate follow-up bot, interview scheduler, job-post generator), Categories (Sourcing, Screening, Client Comms, Back-office, plus side-business categories), and Packages (bundled offers for recruitment agencies, e.g. 'Agency Starter Stack', 3 automations, value KES 180,000 vs price KES 150,000, validity '90 d' pilot or retainer term). Keep the KPI trio (Services / Categories / Packages) and the ALL/ACTIVE/INACTIVE chevron filter. Keep the table columns, but switch the currency to KES and consider adding a 'Setup fee vs Monthly retainer' split and a 'Business unit' column for side-businesses. Keep the toolbar (+ Add Package, CSV, PDF, Print, Import CSV, Template). Packages should then be selectable from Leads/Deals when drafting proposals and invoices.
+
+## #47 `download-47.png` — salon-system · Services (Packages sub-section) · Package 360 View modal: 'Bridal Glow Package · 360 View', a large centered modal over a dimmed Services page, with the Included Services tab active
+- **Theme:** Light mode modal on a dimmed page. Header bar and table header are near-black/dark maroon (#1A0E10 to #2A1215). Left panel has a very light blush/pink tint (#FFF5F5). The primary accent is red/coral (#E8473A to #E74C3C), used for the active tab underline, the tab icon and the Delete button. The ACTIVE badge is green (#2E8B3E). KPI icon tiles are dark maroon (#3A1518) for Value, a pink-to-blue gradient for Price, and green (#43A047) for Saving. Text is dark (#222).
+- **Layout:** The background is the Services page. It has a dark sidebar (about 150px, dimmed) and a top bar containing: the '✂ Services' title; buttons '+ Add Package' (dark, primary), 'CSV', 'PDF', 'Print', 'Import CSV' and 'Template'; a global search 'Search everything...'; palette/theme and brush icons; a notification bell with a red badge; and the text 'Welcome, admin'. Partially visible behind the modal are a 'Clear' filter button and 'Next' pagination. The modal is about 90% of the viewport width with a dark header bar. The header shows a box/package icon, 'Bridal Glow Package' and a small grey suffix '· 360 View', with a white X close button at the far right. The modal body has two columns. The left column (about 20%, blush background) is a profile card. The right column (about 80%, white) holds the tab bar and a data table.
+- **Sidebar:** Dashboard, My D... (My Day/Desk, truncated), SALON section: Front... (Front Desk), Appo... (Appointments), Cust... (Customers), POS, Servi... (Services, active and highlighted in red), Mem... (Memberships), INVENTORY section: Inven... (Inventory), Purc... (Purchases), FINANCE section: Expe... (Expenses), Fina... (Finance), Payr... (Payroll), Cash... (Cashbook), HR section: Staff...
+- **Client 360:** none. This is a Package/Service 360 view (entity detail modal with a single tab: 'Included Services'). It is not the Appointments 3-tab Client 360 or the Customers 5-tab Client 360.
+- **Components:**
+  - Modal header: package icon, title 'Bridal Glow Package', subtitle '· 360 View', and close '✕' at the top right.
+  - Left panel avatar: a circular dark (#2A1215) avatar about 34px across, with a white gift/box icon.
+  - Name heading: 'Bridal Glow Package' (bold), with a green pill badge 'ACTIVE' below it.
+  - Key-value list (label on the left in grey, value on the right in bold, separated by thin dividers):
+  - • Package Name: Bridal Glow Package
+  - • Package Price: 5500
+  - • Validity: 60 (days implied)
+  - • Status: Active
+  - • Included services: 2 lines
+  - Mini KPI cards in a 2-column grid of white rounded cards with soft shadows. Each card has a small uppercase label and a bold value:
+  - • 'VALUE' / 'Rs 6,100', with a dark balance-scale icon
+  - • 'PRICE' / 'Rs 5,500', with a gradient tag icon
+  - • 'SAVING' / 'Rs 600', with a green piggy-bank icon
+  - Button 'Edit Package': full width, dark (#1A0E10), white text, pencil icon.
+  - Button 'Delete': full width, red (#E74C3C), white text, trash icon.
+  - Tab bar (right column): a single tab '✂ Included Services', active, with red text, red underline and a scissors icon. No other tabs are shown.
+  - Table: dark header row with white text. Columns are 'Service' | 'Qty' | 'Unit Price' | 'Line'.
+  - • Row 1: Facial – Gold | 2 | Rs 1,800 | Rs 3,600 (light hover highlight, cursor over it)
+  - • Row 2: Hair Color – Full | 1 | Rs 2,500 | Rs 2,500
+  - There is no totals row; the totals are shown in the KPI cards (Value Rs 6,100).
+- **Features:**
+  - Service packages/bundles made of multiple services, each with a quantity.
+  - The package value is calculated automatically as the sum of qty × unit price (3,600 + 2,500 = 6,100).
+  - The package has a discounted price (5,500), and the customer saving is calculated as value minus price (600).
+  - Validity period in days (60) for redeeming the package.
+  - Package status (Active/Inactive) shown as a badge.
+  - A 360 detail modal per package, with Edit and Delete actions.
+  - Packages page bulk tools: Add Package, export to CSV/PDF, Print, Import CSV, and a CSV Template download.
+  - Global search and theme palette switcher in the top bar.
+- **NAIM translation:** Maps to an 'Offers/Packages' module in NAIM COMMAND, for example 'Recruitment Automation Starter Bundle · 360 View'. The left panel would show Package Name, Package Price (KES), Validity (contract or onboarding period in days), Status badge and Included services count. The KPI cards become VALUE (sum of standalone service prices), PRICE (bundle price) and SAVING (discount, a useful sales talking point in proposals). The 'Included Services' table lists automation deliverables with columns Service | Qty | Unit Price | Line, for example 'CV Screening AI Agent' ×1, 'WhatsApp Candidate Follow-up Bot' ×1, 'Monthly Maintenance' ×3. Keep the Edit and Delete buttons. The page toolbar keeps Add Package, CSV, PDF, Print, Import CSV and Template. Packages should be selectable when creating proposals or invoices for recruitment-agency leads, and reusable for future side-businesses through a business/brand selector. Currency should be KES instead of Rs.
+
+## #48 `download-48.png` — salon-system · Memberships · Memberships page, 'Customer Memberships' tab active, 'Membership cards' sub-toggle selected, chevron status pipeline filter on 'All (3)', DataTable list of sold memberships
+- **Theme:** Light mode with a dark sidebar. Content background is near-white with a faint warm/pink tint (#FBF7F7). Cards are white (#FFFFFF) with soft shadows. Sidebar is near-black (#1A1214). The active sidebar item uses a coral/red pill (#F0605A). Accent for the active tab is coral red (#E8564F). The hero KPI card has a gradient from coral (#EE6A5E) through mauve to blue (#5B8BD9). Table header is black (#151515) with white text. Active status badge is green (#2E7D32).
+- **Layout:** Fixed left dark sidebar (~150px) with icon+label items grouped by uppercase section headers, and a thin scrollbar. The main area has two stacked white rounded cards. (1) Top header bar card: page icon plus title 'Memberships' on the left; action buttons and global utilities on the right. (2) Content card: a section title with an icon, then a single gradient KPI card occupying ~40% width on the left with the right side empty. Below it come an underline tab row, a segmented toggle, a full-width 4-step chevron/arrow status filter bar, DataTables controls (Show entries on the left, Search on the right), the data table, and a footer with an info string on the left and pagination on the right.
+- **Sidebar:** Dashboard, My Day, SALON (section header), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships (active, coral highlight), INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll, Cash Till, HR (section header), Staff (partially visible, list continues below)
+- **Client 360:** none
+- **Components:**
+  - Header title: ID-card icon + 'Memberships' (bold).
+  - Header primary button: '+ Sell Membership' (black filled, white text).
+  - Header export buttons (light grey outlined, each with an icon): 'CSV', 'PDF', 'Print'.
+  - Global search input with placeholder 'Search everything...'.
+  - Icon buttons: theme/palette (circle icon) and brush (customize) icon.
+  - Notification bell with a red badge showing count '6'.
+  - Header greeting text: 'Welcome, admin'.
+  - Section heading: ID-card icon + 'Memberships'.
+  - KPI gradient card (coral→blue): large number '2', label 'Plans', and a faded ID-card illustration icon at bottom right.
+  - Tabs: 'Plans' (inactive, icon) and 'Customer Memberships' (active, coral text with coral underline, icon).
+  - Segmented toggle: 'Membership cards' (selected, black filled) and 'Package cards' (outlined).
+  - Chevron pipeline filter, 4 arrow-shaped segments with uppercase labels and counts: 'ALL (3)' (dark brown/charcoal #4A3A3A, selected), 'ACTIVE (3)' (green #2E7D32), 'EXPIRED (0)' (light amber #F0C77A), 'CANCELLED (0)' (grey #A8ABAE).
+  - 'Show [10 ▾] entries' select.
+  - 'Search:' input (DataTables local filter).
+  - Table columns, all sortable with arrows (Start shows the active sort indicator ▼): Customer | Plan | Benefit | Start | Expiry | Days left | Paid | Status | Actions.
+  - Row 1: Client 3 | Gold Card | 15% off services | Sep 05, 2026 | Sep 05, 2027 | 361 | Rs 8,000 | ACTIVE | cancel icon.
+  - Row 2: Client 1 | Gold Card | 15% off services | Jul 22, 2026 | Jul 22, 2027 | 316 | Rs 8,000 | ACTIVE | cancel icon.
+  - Row 3: Client 3 | Silver Card | 10% off services | Aug 06, 2026 | Feb 02, 2027 | 146 | Rs 3,000 | ACTIVE | cancel icon.
+  - Table styling: zebra rows; the sorted Start column is shaded slightly grey; Customer names are bold.
+  - Status badge: green pill 'ACTIVE' with white uppercase text.
+  - Actions: red circle-slash (ban/cancel) icon per row, used to cancel the membership.
+  - Footer: 'Showing 1 to 3 of 3 entries', with pagination 'Previous | 1 | Next'.
+- **Features:**
+  - Membership plan catalog (Plans tab) with a plan count KPI.
+  - Selling memberships to customers via the '+ Sell Membership' action, likely a modal.
+  - Two product types: recurring membership cards and prepaid package cards (sessions/bundles).
+  - Each membership has a benefit definition (e.g., % discount on services) that likely auto-applies at POS.
+  - Lifecycle tracking: start date, expiry date, computed days-left countdown.
+  - Payment amount tracking per membership (currency Rs).
+  - Status pipeline filtering by All / Active / Expired / Cancelled, with live counts.
+  - Cancel membership action per row.
+  - Exports: CSV, PDF, Print.
+  - Global search, notifications, and theme customization.
+- **NAIM translation:** Map this to a 'Retainers & Subscriptions' module in NAIM COMMAND. The Plans tab becomes service packages sold to recruitment agencies (e.g., 'Starter Automation', 'Growth AI Recruiter', 'Enterprise'), each with a monthly fee in KES, included deliverables/benefit (e.g., 'X CV screenings/month', '10% off add-on builds'), and a term. The 'Customer Memberships' tab becomes 'Client Subscriptions', a table with columns Client (agency) | Plan | Benefit/Scope | Start | Renewal/Expiry | Days left | Paid (KES) | Status | Actions. Replace the cancel icon with actions for renew/upgrade/cancel. 'Membership cards' vs 'Package cards' maps to 'Recurring retainers' vs 'Prepaid project packs / credit bundles' (e.g., a bundle of build hours or automation credits). Keep the chevron status pipeline with stages All / Active / Expiring soon or Expired / Cancelled, and add renewal alerts when days left is under 30 to the notification bell. Keep the gradient KPI hero card; add MRR, Active subscriptions, and Churn KPI cards beside it to fill the empty space. Rename the '+ Sell Membership' button to '+ New Subscription'. Keep the CSV/PDF/Print exports. Make the module multi-business ready, so side-businesses can define their own plans under a business switcher.
+
+## #49 `download-49.png` — salon-system · Memberships · Sell Membership modal (empty, initial state) open over the Memberships list page. The page behind is dimmed with a dark overlay.
+- **Theme:** Light mode content area with a dark sidebar (near-black/very dark maroon, about #1a1012). The modal header bar is dark (about #1f0d0f, nearly black with a maroon tint) with white text. The active sidebar item and the KPI card use a red/coral accent (about #d9534f to #e0614f). The KPI card behind the modal is a gradient from red (about #d9433a) to blue (about #3b6fd8). The primary button is dark (about #1c1c1c). The modal body is white, and the right preview pane has a faint pink/blush tint (about #fdf3f3). The disabled Charge button is grey (about #b5b8bc), and the Cancel button is slate grey (about #6c757d). This is a dark-maroon/red palette variant.
+- **Layout:** Fixed left dark sidebar (about 150px wide) with icon+label items grouped under uppercase section headers (SALON, INVENTORY, FINANCE, HR). The top bar on the light content area contains: page title with icon 'Memberships' on the left; on the right, a primary dark button '+ Sell Membership', then outline/icon buttons 'CSV', 'PDF', 'Print', a global search input 'Search everything...', a theme/palette icon, a brush (customize) icon, a notification bell with a red badge, and the text 'Welcome, admin'. The page body shows a section heading 'Memberships' (with icon), a gradient KPI card (value '2', small label obscured, probably 'Plans' or 'Active'), and a table with footer 'Showing 1 to 3 of 3 entries' and pagination 'Previous | 1 | Next'. The centered modal is about 900px wide. It has a dark header bar and a 2-column body: on the left (about 60%), a form in a 2x2 grid with action buttons; on the right (about 40%), a 'LIVE PREVIEW' summary panel with a tinted background separated by a vertical divider.
+- **Sidebar:** Dashboard, My Day, SALON (section header), Front Desk, Appointments, Customers (truncated 'Custom...'), POS / ... (truncated), Services (truncated 'Service...'), Memberships (ACTIVE, red highlight pill, truncated 'Memb...'), INVENTORY (section header), Inventory (truncated), Purchases (truncated 'Purcha...'), FINANCE (section header), Expenses (truncated 'Expen...'), Finance (truncated), Payroll, Cash Till, HR (section header), Staff
+- **Client 360:** none
+- **Components:**
+  - Modal header: ID-card icon + title 'Sell Membership' (white on dark); right side has a circular info icon (i) and a close X icon
+  - Field 'Customer *' (person icon, required): select dropdown with placeholder 'Select...' (mouse cursor hovering it; likely a searchable customer select)
+  - Field 'Plan *' (card icon, required): select dropdown with placeholder 'Select...'
+  - Field 'Branch *' (building icon, required): select with value 'Branch 1 – Gulberg'
+  - Field 'Payment Method' (wallet icon): select with value 'Cash'
+  - Button 'Charge Rs 0' (disabled grey, with check-circle icon); its label is dynamic with the amount
+  - Button '× Cancel' (slate grey)
+  - Right panel header: eye icon + 'LIVE PREVIEW' (small uppercase muted)
+  - Preview card: black square tile with ID-card icon; title '—'; subtitle 'No plan selected'
+  - Preview key-value rows (label left muted, value right bold): 'Plan' —; 'Validity' —; 'Service discount' —; 'Branch' 'Branch 1 – Gulberg'; 'Method' 'Cash'
+  - Thick divider line, then total row: 'Charge' (bold) with 'Rs 0' (bold) on the right
+  - Footer note with info icon: 'This posts a real invoice through the POS funnel — it lands in Finance and the day close.'
+  - Background: top action buttons '+ Sell Membership', 'CSV', 'PDF', 'Print'; search 'Search everything...'; notification bell with red count badge; 'Welcome, admin'
+  - Background: gradient KPI card showing '2'
+  - Background: table (rows obscured), with a dark header/row band visible at right; footer 'Showing 1 to 3 of 3 entries'; pagination 'Previous', '1' (active, boxed), 'Next'
+- **Features:**
+  - Sell a membership/subscription plan to an existing customer from a dedicated modal
+  - Required customer, plan and branch selection; payment method choice (Cash default; likely Card/Mobile/Bank options)
+  - Live preview panel that recalculates plan, validity period, service discount %, branch, method and charge as the inputs change
+  - Charge button is disabled until it is valid, and its label shows the live amount ('Charge Rs X')
+  - Membership sale posts a real invoice through the POS pipeline, flowing into Finance reports and the daily cash close (single source of truth for revenue)
+  - Multi-branch support (Branch 1 – Gulberg)
+  - Membership list export to CSV/PDF and Print
+  - Global search, theme/palette switcher, UI customization, notifications
+  - Currency in Rs (PKR); NAIM should use KES
+- **NAIM translation:** This maps to a 'Sell Retainer / Subscription' modal on a NAIM COMMAND 'Retainers' (or 'Plans & Subscriptions') page. The fields become: Client * (a recruitment agency from CRM, as a searchable select); Plan * (e.g. 'AI Recruiter Starter', 'Growth Automation', 'Enterprise' retainer packages); Business Unit / Entity * (in place of Branch: Naim Automation core vs future side-businesses); and Payment Method (M-Pesa, Bank Transfer, Card, Cash). The Live Preview should show plan name, billing term/validity (monthly/quarterly/annual), included deliverables or a discount on add-on services (in place of service discount), entity, method, and total 'Charge KES X'. Keep the disabled-until-valid 'Charge KES X' button and the footer note explaining that this creates a real invoice in the Invoicing/Finance module and appears in daily/monthly revenue close. On the Retainers list page, keep the KPI gradient cards (active retainers, MRR, renewals due), the CSV/PDF/Print exports, and pagination. Reuse the dark-header modal styling and the tinted preview pane, with a NAIM accent colour.
+
+## #50 `download-50.png` — salon-system · Inventory · Add Product modal (large two-pane form with Live Preview), opened over the Inventory page, light theme modal over dimmed app
+- **Theme:** Light-mode modal content (white #FFFFFF form pane, very light pinkish/off-white #FDF7F6 preview pane) with a near-black/dark maroon header bar (#1A0E0E to #2A1414). Accent is a red/coral (#E8504A) seen in the 'Active' badge and the active sidebar item 'Inventory' (#D9534F-ish highlight). Background app is dimmed by a dark overlay (~60% black). The underlying app header has dark buttons (#1E1E1E) with white text; a yellow warning card (#F4C430) peeks out at the right edge behind the modal.
+- **Layout:** Background: dark left sidebar (~150px, #1C1C1C) with icon + label items grouped under uppercase section labels (SALON, INVENTORY, FINANCE, HR); top app bar on the page with title 'Inventory' (with icon) and a row of action buttons on the right ('+ Add Product', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template'), a global search 'Search everything', theme/palette icons, a notification bell with red badge, and 'Welcome, admin'. Foreground: a wide centered modal (~900px wide, nearly full height, rounded top corners) with dark header bar containing icon + title 'Add Product' on the left and an info (i) circle button and close (X) on the right. Modal body is split ~60/40: LEFT = scrollable form in a 2-column grid of labeled inputs (each label prefixed with a small icon); RIGHT = sticky 'LIVE PREVIEW' panel with its own scrollbar showing a product summary card and a key/value list that updates as fields are typed. Form continues below the fold (scroll).
+- **Sidebar:** Dashboard, My Day, SALON (section label), Front Desk (truncated 'Front D'), Appointments (truncated 'Appoin'), Customers (truncated 'Custom'), POS / ... (truncated 'POS / I'), Services (truncated 'Service'), Memberships (truncated 'Membe'), INVENTORY (section label), Inventory (active, red/coral highlight), Purchases (truncated 'Purcha'), FINANCE (section label), Expenses (truncated 'Expen'), Finance (truncated 'Financ'), Payroll (truncated 'Payrol'), Cash T... (truncated, likely Cash Till/Transactions), HR (section label), Staff
+- **Client 360:** none
+- **Components:**
+  - Modal header: icon (boxes/inventory glyph) + 'Add Product' bold white text; right side: info icon button (white circle 'i') and close 'X' button
+  - Form field 'SKU *' (barcode icon) – text input with placeholder 'PRD-001' (required)
+  - Form field 'Product Name *' (box icon) – text input, required
+  - Form field 'Barcode' (barcode icon) – text input (cursor focus I-beam visible)
+  - Form field 'Category' (layers icon) – text input
+  - Form field 'Brand' (circle 'B'/copyright-style icon) – text input
+  - Form field 'Unit' (pencil/tag icon) – select dropdown, default value 'pcs'
+  - Form field 'Pack Size (units per pack)' (boxes icon) – numeric text input
+  - Form field 'Usage' (register/store icon) – select dropdown, default value 'Retail' (implied options e.g. Retail / Professional/Salon use / Both)
+  - Form field 'Cost Price (per pack) *' (money/bills icon) – numeric input, required
+  - Form field 'Sale Price' (tag icon) – numeric input
+  - Form field 'Commission % (blank = staff default)' (percent icon) – numeric input
+  - Form field 'Min Stock (packs)' (warning triangle icon) – numeric input
+  - Partially visible next row (cut off at bottom): 'Reorder Qty (packs)'-style field (left, label truncated 'Reorder Stock...'/similar) and 'Preferred Supplier' (right) – continues below fold; also implied 'Shelf / Location' and 'Track Expiry' fields further down
+  - Inputs: white, 1px light grey border (#DADADA), ~6px radius, ~40px height; labels small dark grey bold-ish text (#333) with leading icon
+  - Live Preview panel header: eye icon + 'LIVE PREVIEW' uppercase small grey letterspaced text
+  - Preview card: black rounded square avatar with white inventory icon, title '—' (placeholder for product name), subtitle 'Product', red pill badge 'Active' (#E8504A bg, white text)
+  - Preview key/value list (label left grey, value right bold, thin dividers): SKU '—', Product Name '—', Barcode '—', Category '—', Brand '—', Unit 'pcs', Pack Size (units per pack) '—', Usage 'Retail', Cost Price (per pack) '—', Sale Price '—', Commission % (blank = staff default) '—', Min Stock (packs) '—', Reorder Qty (packs) '—', Preferred Supplier '—', Shelf / Location '—', Track Expiry 'Yes'
+  - Vertical scrollbars on both the form pane and the preview pane
+  - Background (dimmed) page toolbar buttons: '+ Add Product', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template'; search box 'Search everything'; partial 'Clear' button and a yellow alert/warning card with triangle icon on the right edge
+- **Features:**
+  - Product/catalog creation with required SKU, name and cost price
+  - Barcode support for scanning at POS
+  - Category and brand classification
+  - Unit of measure + pack size (units per pack) for pack-vs-unit stock conversion
+  - Usage type (Retail vs internal/professional consumption)
+  - Cost vs sale price for margin tracking
+  - Per-product commission % with fallback to staff default commission
+  - Min stock and reorder quantity thresholds driving low-stock alerts (yellow warning card in background)
+  - Preferred supplier link to Purchases module
+  - Shelf / location tracking
+  - Expiry tracking toggle (default Yes)
+  - Live preview panel mirroring the form in real time; default status 'Active'
+  - Bulk import/export: CSV, PDF, Print, Import CSV, downloadable Template
+  - Contextual help via info (i) button in modal header
+- **NAIM translation:** Becomes the 'Add Service Package / Offer' modal in NAIM COMMAND's Catalog (Offers) module. Map fields: SKU -> Offer Code (e.g. NAIM-AUT-001); Product Name -> Offer name (e.g. 'CV Screening Bot', 'WhatsApp Candidate Intake'); Barcode -> internal reference/Stripe or M-Pesa product ID; Category -> Automation type (Lead Gen, Candidate Sourcing, Onboarding); Brand -> Business line (Naim Automation vs future side-businesses); Unit (pcs) -> Billing unit (one-time / monthly / per seat / per placement); Pack Size -> included units (e.g. hours, workflows, seats); Usage (Retail) -> Sold to client vs Internal tool; Cost Price -> delivery cost (API/tools/contractor hours, KES); Sale Price -> list price (KES/USD); Commission % (blank = staff default) -> sales rep/referral partner commission with default fallback; Min Stock / Reorder Qty -> capacity limits (max concurrent builds, delivery slots) triggering 'capacity low' alerts; Preferred Supplier -> primary vendor/subcontractor (e.g. OpenAI, n8n, freelancer); Shelf/Location -> repo/Drive link for the template; Track Expiry -> contract/licence renewal tracking (default Yes). Keep the dark header + split form/LIVE PREVIEW layout with 'Active' coral badge, and the toolbar actions (+ Add Offer, CSV, PDF, Print, Import CSV, Template).
+
+## #51 `download-51.png` — salon-system · Inventory · Add Product modal (scrolled to lower half of form) with Live Preview side panel; cursor hovering the Save button
+- **Theme:** Light-mode content with a dark maroon/near-black brand palette. Modal header bar is dark maroon-black (#2B0F12 / #1E0B0D) with white title and icons. Primary button 'Save' is deep maroon (#5A1A22). 'Cancel' is a grey button (#6C757D). 'Active' badge in Live Preview is coral-red (#E8504A) with white text. Form inputs are white with light grey borders (#D0D5DA). The Live Preview panel has a very light pink/blush background (#FDF5F5). The sidebar behind the overlay is dark (#1A1A1A) with the active item 'Inventory' highlighted in maroon/red (#8B2A2A). The background page is dimmed by a dark overlay.
+- **Layout:** Underlying page: left dark sidebar (~150px) plus the Inventory page, whose top bar reads 'Inventory' and has the buttons '+ Add Product', 'CSV', 'PDF', 'Print', 'Import CSV' and 'Template', a 'Search everything...' input, theme/palette icons, a notification bell with a badge, and 'Welcome, admin'. The page is dimmed by an overlay. A large centered modal (~90% width) sits on top of it. It has a dark header bar showing a product icon, the title 'Add Product', and on the right an info (i) icon and a close (X) icon. The modal body uses a two-zone grid. The left ~58% is a scrollable form arranged as a 2-column grid of labeled fields, each label having a small leading icon. The right ~38% is a sticky 'LIVE PREVIEW' card listing key/value rows that update as the user types. The bottom-left holds the Save and Cancel buttons. The form is scrolled, so the top fields (SKU, Name, Barcode, Category, Brand, Unit, Pack Size, Usage) are partly off-screen, with only the 'Retail' select visible at the top right.
+- **Sidebar:** Dashboard, My Day, SALON (section label), Front Desk (truncated as 'Front D...'), Appointments (truncated as 'Appoin...'), Customers (truncated as 'Custom...'), POS / Billing (truncated as 'POS / B...'), Services (truncated), Memberships (truncated as 'Membe...'), INVENTORY (section label), Inventory (active, highlighted), Purchases (truncated as 'Purcha...'), FINANCE (section label), Expenses (truncated as 'Expen...'), Finance (truncated), Payroll (truncated), Cash T... (Cash Tracker/Cash Till, truncated), HR (section label), Staff
+- **Client 360:** none
+- **Components:**
+  - Modal header: product/box icon + title 'Add Product'; right side has an info circle icon (i) and a close X icon
+  - Top row (partially scrolled off): an empty left input (likely Pack Size) and a right select showing 'Retail' (Usage field)
+  - Field 'Cost Price (per pack) *' (required, money icon): empty text input
+  - Field 'Sale Price' (tag icon): empty text input
+  - Field 'Commission % (blank = staff default)' (% icon): empty input
+  - Field 'Min Stock (packs)' (warning triangle icon): empty input
+  - Field 'Reorder Qty (packs)' (cart icon): empty input
+  - Field 'Preferred Supplier' (truck icon): dropdown with placeholder 'Select preferred supplier'
+  - Field 'Shelf / Location' (pin icon): input with placeholder 'A-1'
+  - Field 'Track Expiry' (calendar icon): dropdown, value 'Yes'
+  - Field 'Status' (toggle icon): dropdown, value 'Active'
+  - Button 'Save' (floppy-disk icon, maroon, primary; the cursor is on it)
+  - Button 'Cancel' (X icon, grey)
+  - Live Preview panel header: eye icon + 'LIVE PREVIEW' (small caps, grey)
+  - Preview identity block: dark square product icon tile, name placeholder '—', subtitle 'Product', badge 'Active' (coral pill)
+  - Preview key/value rows separated by thin dividers. SKU —; Product Name —; Barcode —; Category —; Brand —; Unit pcs; Pack Size (units per pack) —; Usage Retail; Cost Price (per pack) —; Sale Price —; Commission % (blank = staff default) —; Min Stock (packs) —; Reorder Qty (packs) —; Preferred Supplier —; Shelf / Location —; Track Expiry Yes
+  - Scrollbars on both the form column and the preview column
+  - Background page elements visible behind the overlay: a yellow warning/alert card with a triangle icon (top right), 'Clear' button, a dark input/bar
+- **Features:**
+  - Product catalog creation with SKU, name, barcode, category, brand
+  - Unit of measure plus pack-size conversion (stock tracked in packs, units per pack)
+  - Usage type (Retail vs. likely Professional/Internal use)
+  - Cost vs. sale pricing per pack, for margin tracking
+  - Per-product sales commission % that overrides the staff default
+  - Low-stock threshold (Min Stock) and suggested reorder quantity, for auto purchase suggestions
+  - Preferred supplier link to the Purchases module
+  - Shelf/bin location tracking
+  - Expiry tracking toggle (batch/expiry management)
+  - Active/Inactive status
+  - Real-time live preview of the record before saving
+  - Inventory page bulk tools: CSV/PDF export, Print, Import CSV, downloadable import Template
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** Map this to a 'Add Offering / Product' modal in a NAIM COMMAND 'Catalog' module (services and packages sold to recruitment agencies, e.g. 'AI CV Screener', 'WhatsApp Candidate Bot', setup fee, monthly retainer). The fields translate as follows. SKU becomes Offering code. Category becomes Offering line (Recruitment Automation, or a future side-business). Unit becomes billing unit (per month / per seat / one-off). Pack Size becomes seats or quota included. Usage (Retail) becomes Offer type (Client-facing vs. Internal tool). Cost Price becomes delivery cost (API, hosting, contractor hours). Sale Price becomes list price in KES/USD. Commission % (blank = default) becomes sales-rep or referral-partner commission override. Min Stock / Reorder Qty become capacity limits (max concurrent onboardings) or a license/credit pool reorder threshold for resold tools (API credits, WhatsApp numbers). Preferred Supplier becomes vendor (OpenAI, Twilio/Meta, hosting). Shelf/Location becomes repo/workspace link. Track Expiry becomes contract/subscription renewal tracking. Status stays Active/Inactive. Keep the right-side LIVE PREVIEW card, because it shows the offering as it will appear on proposals/invoices. Keep the maroon header, the Save/Cancel pattern, and the toolbar export/import (CSV, PDF, Template). For a future physical side-business, the same modal can be reused unchanged as true inventory.
+
+## #52 `download-52.png` — salon-system · Inventory · Product 360 View modal for 'Shampoo 250ml' (opened over the Inventory list page), 'Used in Recipes' tab active, showing an empty state
+- **Theme:** Light-mode content with a dark sidebar and a dark maroon/near-black modal header (~#1E0E0E / #2A1414). The accent is a muted red/coral (~#C0392B / #D9534F) used for the active tab underline, the active sidebar item (Inventory, ~#C0504D) and icon tints. Page background is light gray (~#F2F2F2). The left modal panel is a very light pink (~#FBF1F1). The status badge is green (~#2E7D32). The theme switcher is visible in the topbar (palette and brush icons).
+- **Layout:** The app shell has a dark left sidebar (~150px wide) and a white topbar. The topbar holds the page title 'Inventory' with an icon, followed by action buttons. A large centered modal covers about 90% of the width and most of the height, with the underlying page dimmed by a dark overlay. Modal structure: (1) A dark header bar with an icon, the title 'Shampoo 250ml', a small subtitle '- 360 View' and a white X close button on the right. (2) A two-column body. The left column (~200px, scrollable, light pink background) is the profile/info panel. The right column (wide, white) holds the tab strip and tab content.
+- **Sidebar:** Dashboard, My D... (My Day, partially hidden), SALON (section), Front... (Front Desk), Appo... (Appointments), Cust... (Customers), POS, Serv... (Services), Mem... (Memberships), INVENTORY (section), Inventory (active, red highlight), Purc... (Purchases), FINANCE (section), Expe... (Expenses), Fina... (Finance), Payr... (Payroll), Cash... (Cash register), HR (section), Staff
+- **Client 360:** none (this is a Product/Inventory 360 view, not a client 360; only one tab is visible: 'Used in Recipes')
+- **Components:**
+  - Topbar title: icon + 'Inventory'
+  - Topbar buttons: '+ Add Product' (dark filled primary), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template' (outline/ghost with icons)
+  - Global search input: placeholder 'Search everything...'
+  - Topbar icons: palette (theme), brush (customize), notification bell with red badge; text 'Welcome, admin'
+  - Modal header: product icon + 'Shampoo 250ml' + '- 360 View'; close 'X' at top right
+  - Left panel avatar: dark circular icon (~#2A1A1A) with a white product glyph
+  - Left panel name: 'Shampoo 250ml' (bold)
+  - Status pill: 'ACTIVE' (green background, white text)
+  - Key-value list, label left in gray and value right in bold dark:
+  -   SKU: PRD-001
+  -   Product Name: Shampoo 250ml
+  -   Barcode: 8901000000011
+  -   Category: Hair Care
+  -   Brand: Brand A
+  -   Unit: Pcs
+  -   Pack Size: 1
+  -   Usage: Retail
+  -   Cost Price: 150
+  -   Sale Price: 250
+  -   Commission %: —
+  -   Min Stock: 10
+  -   Reorder Qty: 20
+  -   Preferred Supplier: Supplier 1
+  -   Shelf / Location: A-1
+  -   Track Expiry: 1
+  -   Status: Active
+  - Mini stat cards at the bottom of the left panel (partially visible, white cards with colored icon squares): 'UNIT COST' 'Rs 150.00' (dark icon); 'PACK SIZE' '1 pcs' (pink/red icon); more cards likely below the scroll
+  - Vertical scrollbar on the left panel
+  - Right panel tab strip: a single tab 'Used in Recipes' (active, red text, red flask icon, red underline)
+  - Empty state centered near the top of the tab area: gray inbox/tray icon + text 'Not used in any service recipe'
+- **Features:**
+  - Product master data: SKU, barcode, category, brand, unit, pack size
+  - Usage type (Retail vs. internal/consumable)
+  - Cost price vs. sale price (margin)
+  - Per-product commission %
+  - Reorder logic: min stock, reorder qty, preferred supplier
+  - Shelf/location tracking
+  - Expiry tracking flag
+  - Bill of materials linking products to service recipes (consumption per service)
+  - Entity 360 modal pattern reused across modules
+  - Export/import tooling: CSV, PDF, print, import CSV, download template
+- **NAIM translation:** Map this to a 'Product/Offer 360' in a NAIM COMMAND Catalog module, covering automation packages, SaaS tools and resold licences. Left panel fields map as follows: SKU becomes package code; Category becomes vertical (Recruitment Automation, CV Screening Bot, WhatsApp Outreach); Brand becomes vendor or tool (OpenAI, n8n, Twilio); Unit and Pack Size become billing unit (per seat, month or project); Cost Price and Sale Price become cost (API/tool spend) and price in KES, with margin; Commission % becomes sales rep or referral partner commission; Min Stock and Reorder become licence/credit thresholds with a reminder to top up API credits; Preferred Supplier becomes vendor; Track Expiry becomes licence or subscription renewal date. The 'Used in Recipes' tab becomes 'Used in Solutions/Deliverables', listing which service packages or client projects consume this component, with the same empty state ('Not used in any solution'). Reuse the 360 modal pattern: dark header, info panel left, tabs right, and stat cards (Unit Cost, Billing Unit, Active Clients, Monthly Spend). Keep the CSV/PDF/Print/Import/Template toolbar on every list page. For future side-businesses, physical inventory can use the same module as-is.
+
+## #53 `download-53.png` — salon-system · Inventory · Product 360 View modal for 'Shamboo 250ml', a near full-screen overlay. It shows the 'Used in Recipes' tab in an empty state. The left panel is scrolled down, so fields above Barcode are not visible.
+- **Theme:** Light-mode modal over a dimmed light app. The modal header is a very dark maroon/near-black bar (#1E0F0F to #2A1414) with white text. The accent is coral-red (#E5483B) on the active tab underline, the Delete button and the active sidebar item 'Inventory'. The primary button is dark maroon-black (#1E0F0F). The left detail panel has a faint pinkish-cream background (#FDF5F3). Mini stat icon tiles use dark maroon (#2A1414), a purple-pink gradient (#9B5DE5 to #E05A7A), green (#3BA55C) and amber (#F2B705). Body text is dark gray (#333), with muted gray labels (#666).
+- **Layout:** The background page is Inventory. Its top bar has the page title 'Inventory' with an icon, plus action buttons: '+ Add Product' (dark, primary), 'CSV', 'PDF', 'Print', 'Import CSV' and 'Template'. To their right sit a 'Search everything…' input, a palette icon, a brush icon, a notification bell with a red badge, and 'Welcome, admin'. The page is dimmed by a dark overlay. A large centered modal covers about 90% of the width and almost the full height. Its header bar shows a product icon, the title 'Shampoo 250ml', a small subtitle '· 360 View', and a white X close button on the right. The modal body has two columns. The left column (about 20% width) is a scrollable key–value details list with a thin scrollbar, followed by a 2x2 grid of mini stat cards and stacked action buttons. The right column (about 80%) holds a tab bar and the tab content area.
+- **Sidebar:** Dashboard, My D… (My Day, truncated), SALON (section), Front… (Front Desk), Appo… (Appointments), Cust… (Customers), POS, Serv… (Services), Mem… (Memberships), INVENTORY (section), Inve… (Inventory, active, coral-red highlight), Purc… (Purchases), FINANCE (section), Expe… (Expenses), Fina… (Finance), Payr… (Payroll), Cash… (Cash), HR (section), Staff
+- **Client 360:** none (this is a Product/Inventory 360 view, not a client 360; its single visible tab is 'Used in Recipes')
+- **Components:**
+  - Modal header: product/box icon + 'Shampoo 250ml' (bold white) + '· 360 View' (small, muted white). Close button '✕' at top right.
+  - Left details list, rows with the label on the left (gray) and the value right-aligned (dark):
+  - Barcode: 8901000000011
+  - Category: Hair Care
+  - Brand: Brand A
+  - Unit: Pcs
+  - Pack Size: 1
+  - Usage: Retail
+  - Cost Price: 150
+  - Sale Price: 250
+  - Commission %: — (empty)
+  - Min Stock: 10
+  - Reorder Qty: 20
+  - Preferred Supplier: Supplier 1
+  - Shelf / Location: A-1
+  - Track Expiry: 1
+  - Status: Active
+  - Stat card 'UNIT COST' with value 'Rs 150.00' and a dark maroon icon tile (calculator/receipt icon).
+  - Stat card 'PACK SIZE' with value '1 pcs' and a purple-pink gradient icon tile (cubes icon).
+  - Stat card 'SALE PRICE' with value 'Rs 250' and a green icon tile (tag icon).
+  - Stat card 'MIN STOCK' with value '10' and an amber icon tile (warning triangle icon).
+  - Each stat card is white with rounded corners, a small uppercase gray label and a bold value.
+  - Button '✏ Edit Product': full width, dark maroon-black, white text.
+  - Button '🗑 Delete': full width, coral-red (#E5483B), white text.
+  - Tab bar with a single tab, '🧪 Used in Recipes', active with a coral-red text/icon and underline.
+  - Empty state centered near the top of the content area: a gray inbox/tray icon and the text 'Not used in any service recipe'.
+  - Background (dimmed): a partial yellow warning card at the right edge, and some partial table or filter elements including a button ending in '…ar' (likely 'Clear').
+- **Features:**
+  - Product 360 view showing full SKU master data: barcode, category, brand, unit, pack size, usage type (Retail vs consumable), cost/sale price, commission %, min stock, reorder qty, preferred supplier, shelf location, expiry tracking and status.
+  - Quick KPI mini cards for unit cost, pack size, sale price and min stock.
+  - Edit and delete product directly from the 360 view.
+  - Cross-link to service recipes (bill of materials) showing which services consume this product, with an empty state when there are none.
+  - Retail commission per product.
+  - Reorder thresholds and links to preferred suppliers, feeding purchase orders.
+  - Inventory page bulk actions: Add Product, CSV/PDF export, Print, Import CSV, Template download, and a global search.
+- **NAIM translation:** Map this to a 'Service/Package Catalog 360' (or 'Asset/Tool 360') in NAIM COMMAND. Each automation product, such as 'CV Screening Bot', 'WhatsApp Candidate Follow-up' or 'ATS Integration', gets a detail panel. The panel holds the SKU/code, category (Recruitment Automation, side-business lines), vendor/stack (e.g. OpenAI, n8n, Twilio), unit (per seat/per month/one-off), cost price (API/tool cost in KES) and sale price, sales commission %, and status. Inventory-style fields become capacity limits or minimum margin. The four mini KPI cards become Unit Cost, Sale Price, Margin % and Active Clients. The 'Used in Recipes' tab becomes 'Used in Packages/Proposals': it lists which bundled offers or deployed client solutions include this component, with an empty state reading 'Not used in any package'. Keep the Edit and Delete buttons. Reuse the dark header modal, the coral accent and the top bar bulk actions (Add, CSV, PDF, Print, Import CSV, Template) for catalog management.
+
+## #54 `download-54.png` — salon-system · Purchases · Suppliers tab: supplier list with status chevron filter, filters panel and DataTable
+- **Theme:** Light main content (page bg very light warm off-white ~#FBF5F3, white cards ~#FFFFFF) with dark sidebar (~#1E1A1A, near-black brown). Accent is coral/salmon red (~#F0645A) on the active sidebar item and active tab underline. Status chevrons: ALL dark brown/mauve ~#4A3A3D, ACTIVE green ~#2E7D32, INACTIVE light gray ~#BDBDBD with white text. Table header near-black ~#1A1414 with white text. Green ACTIVE pill badges ~#2E7D32. Delete icon red ~#D32F2F. Header buttons are light gray chips ~#EEEEEE, except 'Add Supplier', which is black ~#111111.
+- **Layout:** There is a fixed left dark sidebar about 150px wide, with icon + label items grouped under small uppercase gray section headers (SALON, INVENTORY, FINANCE, HR). The sidebar has a scrollbar. The main area has a white top header bar card with rounded corners. On the left of that bar is a truck icon and the 'Purchases' title. On the right are action buttons, a global search, a theme palette icon, a brush icon, a notification bell with a red badge, and 'Welcome, admin'. Below the header is one large white rounded card. That card contains, in order: the page title, sub-tabs, a full-width 3-segment chevron/arrow status filter bar, a light gray Filters panel, and a DataTable (length selector + search on top, info + pagination at the bottom).
+- **Sidebar:** Dashboard, My Day, SALON (section), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, INVENTORY (section), Inventory, Purchases (active, coral highlight pill), FINANCE (section), Expenses, Finance, Payroll, Cash Till, HR (section), Staff (cut off; list continues below)
+- **Client 360:** none
+- **Components:**
+  - Top bar title: truck icon + 'Purchases'
+  - Top bar buttons, left to right: '+ Add Supplier' (black primary), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template' (gray, each with an icon)
+  - Global search input with magnifier icon and placeholder 'Search everything...'
+  - Icon buttons: palette (theme switcher), brush (appearance), bell with red notification badge (count ~6)
+  - Text 'Welcome, admin'
+  - Card heading: truck icon + 'Purchases'
+  - Sub-tabs: 'Purchase Orders' (document icon, inactive) and 'Suppliers' (truck icon, active, coral text + coral underline)
+  - Chevron status filter bar with 3 segments: 'ALL (2)' (dark mauve), 'ACTIVE (2)' (green), 'INACTIVE (0)' (gray). The segments are arrow-shaped and connected.
+  - Filters panel (light gray bg, funnel icon + 'Filters' heading, dark divider line) with a 'Clear' button (dark gray, x-circle icon) at the top right
+  - Filter field label 'SEARCH SUPPLIERS' (search icon) above a full-width input with placeholder 'Search suppliers...'
+  - DataTable controls: 'Show [10 ▾] entries' and 'Search:' input on the right
+  - Table columns (all sortable, with sort arrows): 'Supplier' (sorted asc), 'Contact', 'Mobile', 'Email', 'Status', 'Actions'
+  - Row 1: Supplier 1 | Vendor Contact 1 | 03002000001 | supplier1@demo.com | ACTIVE (green pill) | view (eye), edit (pencil), delete (red trash)
+  - Row 2: Supplier 2 | Vendor Contact 2 | 03002000002 | supplier2@demo.com | ACTIVE (green pill) | eye, pencil, red trash
+  - Supplier name cells are bold with a light gray shaded column background
+  - Footer: 'Showing 1 to 2 of 2 entries' on the left; pagination 'Previous' [1] 'Next' on the right
+- **Features:**
+  - Supplier/vendor master data management (name, contact person, mobile, email, active status)
+  - Purchases module with two sub-tabs: Purchase Orders and Suppliers
+  - Status segmentation filter with live counts (All/Active/Inactive)
+  - Dedicated filter panel with a clear-all action plus a DataTable quick search
+  - Export to CSV/PDF, Print, Import CSV, plus a downloadable Template for bulk import
+  - Row actions: view details, edit, delete
+  - Sortable, paginated table with configurable page size
+  - Global search, theme palette switching, notifications
+- **NAIM translation:** In NAIM COMMAND, map this to an 'Operations > Vendors & Purchases' module, keeping the same two sub-tabs: 'Purchase Orders' and 'Vendors'. Vendors would be the tools and service providers Naim pays for, such as OpenAI/LLM APIs, Twilio/WhatsApp BSP, Make/n8n, hosting, data/lead list providers, freelancers and subcontractors. Vendor table columns: Vendor, Contact, Mobile (+254), Email, Category (API/SaaS/Freelancer), Monthly cost (KES/USD), Status. Reuse the chevron status bar (ALL/ACTIVE/INACTIVE with counts), the Filters panel with Clear, and the header actions: '+ Add Vendor', CSV, PDF, Print, Import CSV, Template. Purchase Orders become tool subscriptions and contractor POs, tied to client projects so per-client delivery cost and margin can be calculated. The same pattern can be reused per side-business via a business switcher.
+
+## #55 `download-55.png` — salon-system · Purchases (Inventory section) · Purchase Order 360 View modal (PO-2026-002), Items tab active, overlaid on the Purchases list page, which is dimmed behind a gray backdrop
+- **Theme:** Light content with dark chrome. Behind the modal, the app sidebar is near-black (#141414) with a darkened overlay. The modal header bar is very dark brown/black (#1E0F0F). The modal body is white (#FFFFFF). The left profile column has a faint warm/pink tint (#FDF5F5). Accent red: active tab underline and Cancel button (#E74C3C / #E5483B). Table header is dark (#1A1010) with white text. The 'ORDERED' badge is blue (#2F6FDB) with white text. KPI icon tiles are dark brown (#2A1414), green (#3BA55C), red (#D93A2B) and amber (#F2B705).
+- **Layout:** Underlying page: left dark sidebar (~150px) with sectioned nav. A top bar shows a truck icon and the 'Purchases' title, plus action buttons and global search. A large centered modal (~90% width, ~90% height) has rounded corners and a dark header strip containing the document icon, the 'PO-2026-002' title, the small '· 360 View' suffix, and a white X close button at right. The modal body is a 2-column split. LEFT column (~200px, tinted): a circular dark avatar holding a document icon, the PO number, a status badge, a key/value detail list, a 2x2 KPI mini-card grid, and 3 stacked full-width action buttons. RIGHT column: a tab bar with underline style, and below it a full-width data table.
+- **Sidebar:** Dashboard, My D… (My Day / My Dashboard, truncated), SALON (section label), Fron… (Front Desk), Appo… (Appointments), Cust… (Customers), POS, Serv… (Services), Mem… (Memberships), INVENTORY (section label), Inve… (Inventory), Purc… (Purchases, active, red highlight), FINANCE (section label), Expe… (Expenses), Fina… (Finance), Payr… (Payroll), Cash… (Cash register/Cashbook), HR (section label), Staff
+- **Client 360:** none — this is a Purchase Order 360 View (entity 360 pattern for POs), not a client 360. Its tabs are: Items, Payments, Stock Posted.
+- **Components:**
+  - Background top bar: truck icon + 'Purchases' title; dark button '+ New Purchase Order'; buttons 'Reorder', 'CSV', 'PDF', 'Print' (icon + label); search input 'Search everything...'; palette/theme icon; brush icon; bell with red notification badge; 'Welcome, admin'
+  - Background page fragments visible at right edge: a green card, a red bar, a 'Clear' button, input boxes, a black bar, 'Next' pagination
+  - Modal header (dark): file icon + 'PO-2026-002' bold white + small '· 360 View'; white '✕' close at top-right
+  - Left profile: dark circular avatar with white document icon; 'PO-2026-002' bold; status pill 'ORDERED' (blue)
+  - Detail rows (label left gray, value right bold, separated by thin dividers): Supplier — Supplier 2; Branch — Branch 2 – Blue Area; Date — Sep 02, 2026; Supplier Invoice — SI-2088; Subtotal — Rs 7,500; Tax — —; Received At — —
+  - KPI mini cards (white, rounded, soft shadow, icon tile left): TOTAL Rs 7,500 (dark money-bag icon); PAID Rs 5,000 (green cash icon); PAYABLE Rs 2,500 (red hourglass icon); LINES 1 (amber list icon)
+  - Button 'Receive into Stock' — full width, dark (#1E0F0F), white text, boxes/dolly icon
+  - Button 'Record Payment' — full width, gray (#7D8288), white text, cash icon
+  - Button 'Cancel Order' — full width, red (#E5483B), white text, circle-slash icon
+  - Tabs: 'Items' (active, red text + red underline, list icon), 'Payments' (cash icon), 'Stock Posted' (warehouse icon)
+  - Items table, dark header, columns: Product | Qty (packs) | Unit Cost | Expiry | Line
+  - Row: Face Mask Gold | 30 | Rs 250 | — | Rs 0 (Line bold; note the line total shows Rs 0, likely a calc bug, because 30×250 should be 7,500)
+- **Features:**
+  - Purchase order lifecycle with status (Ordered → Received / Cancelled)
+  - Supplier and branch assignment per PO, multi-branch support
+  - Supplier invoice reference tracking
+  - Subtotal/tax/total computation
+  - Partial payments against a PO, with Paid vs Payable balance (accounts payable)
+  - Receive-into-stock action that posts inventory, with 'Stock Posted' audit tab and Received At timestamp
+  - Line items in pack units with unit cost and expiry date (batch/expiry tracking)
+  - PO cancellation
+  - Payment history tab per PO
+  - PO list-level actions: new PO, reorder suggestions, CSV/PDF export, print
+- **NAIM translation:** Reuse this '360 View' modal pattern as the generic entity-detail template in NAIM COMMAND. Main mappings: (1) Vendor/Expense POs: purchases of software subscriptions (n8n, OpenAI API credits, Twilio/WhatsApp, hosting), contractor/freelancer work orders, and side-business stock. Details would include Vendor, Business unit (in place of Branch, e.g. Naim Automation vs side-business), Date, Vendor Invoice, Subtotal, VAT 16% (KRA), and Received/Delivered At. KPIs would be Total / Paid / Payable / Lines in KES. Actions: 'Mark Delivered/Activate', 'Record Payment' (M-Pesa/bank), 'Cancel'. Tabs: Items, Payments, Delivered/Provisioned. (2) The same layout can drive a Client Deal/Project 360 for recruitment-agency clients: deal ID, status badge (Proposal / Won / Onboarding), and Agency, Owner, Start date and Contract ref as details. KPIs: Contract Value / Collected / Outstanding / Deliverables. Actions: 'Start Delivery', 'Record Payment', 'Cancel Deal'. Tabs: Deliverables (automations such as CV parsing or candidate WhatsApp follow-up), Payments, Delivery Log. Fix the line-total calculation: line = qty × unit cost.
+
+## #56 `download-56.png` — salon-system · Expenses (Finance module) · Add Expense modal (two-pane: form left + Live Preview right) over the Expenses list page, which is dimmed behind a dark overlay
+- **Theme:** Light theme with a near-black / deep maroon-brown palette (likely the 'dark chocolate/black' theme variant). The modal header bar is near-black with a maroon tint (~#1E0E10) and white text. The form pane is white (#FFFFFF). The preview pane is a very light pink/blush (#FDF5F5) separated by a thin vertical divider (#EEE). The primary Save button is near-black (#1A0A0C) with white text. The Cancel button is grey (#8A8F94) with white text. The 'Active' badge is a red pill (#E04848) with white text. The sidebar is dark (#151515) and the active item 'Expenses' has a red-coral highlight (~#E8604C). The page background behind the overlay is light grey (#F1F1F1).
+- **Layout:** The left sidebar is dark and about 150px wide, with section headers in small caps (SALON, INVENTORY, FINANCE, HR). The top bar contains, from left to right: the page title 'Expenses' with a money icon, then the action buttons '+ Add Expense' (dark filled), 'CSV', 'PDF', 'Print', 'Import CSV' and 'Template' (all ghost buttons with icons), then a global search 'Search everything...', a palette icon (theme switcher), a brush icon, a bell with a red notification badge, and the text 'Welcome, admin'. Behind the modal you can see partial page content: a filter bar with a dark 'Clear' button, an input, a table header row in dark, and 'Next' pagination at the bottom right. The modal itself is a large centered dialog about 900px wide, with rounded corners and a dark header bar. The body is split roughly 57/43: on the left a 2-column form grid, on the right the LIVE PREVIEW panel. The footer buttons sit at the bottom left of the form pane.
+- **Sidebar:** Dashboard, My Day, SALON (section), Front Desk (truncated 'Front D'), Appointments (truncated), Customers (truncated), POS / Billing (truncated 'POS / ...'), Services (truncated), Memberships (truncated 'Membe...'), INVENTORY (section), Inventory (truncated), Purchases (truncated), FINANCE (section), Expenses (active, red highlight), Finance (truncated), Payroll (truncated), Cash T... (Cash Transfers / Cash Till, truncated), HR (section), Staff
+- **Client 360:** none
+- **Components:**
+  - Modal header (dark): an icon of a cash bill, the title 'Add Expense', and on the right an info icon (circle 'i') plus a close 'X'.
+  - Form field 'Branch *' (store icon): a select with the value 'Branch 1 – Gulberg'.
+  - Form field 'Date *' (calendar icon): a native date input with the placeholder 'mm/dd/yyyy' and a calendar picker icon.
+  - Form field 'Category *' (tag icon): a select with the value 'Rent'.
+  - Form field 'Amount *' (money icon): an empty number input.
+  - Form field 'Recurring Monthly' (repeat/sync icon): a select with the value 'Yes'.
+  - Form field 'Paid Via' (wallet/card icon): a select with the value 'Cash'.
+  - Form field 'Vendor / Paid To' (user icon): an empty text input in the left column only.
+  - Form field 'Notes' (note icon): a full-width textarea, resizable.
+  - Button 'Save' with a floppy icon: dark filled (#1A0A0C).
+  - Button 'Cancel' with an x icon: grey filled.
+  - Right pane header: an eye icon with 'LIVE PREVIEW' in small uppercase grey letters.
+  - Preview card: a dark square avatar tile with a cash icon, the title '1' (placeholder record name/ID), the subtitle 'Expense', and a red pill badge 'Active'.
+  - Preview key/value list (label left in grey, value right in bold):
+  - Preview row: Branch: Branch 1 – Gulberg
+  - Preview row: Date: —
+  - Preview row: Category: Rent
+  - Preview row: Amount: —
+  - Preview row: Recurring Monthly: Yes
+  - Preview row: Paid Via: Cash
+  - Preview row: Vendor / Paid To: —
+  - Preview row: Notes: —
+  - Preview footer hint (info icon): 'Required fields are checked here and again server-side before the row is written.'
+  - Background page toolbar buttons: '+ Add Expense', 'CSV', 'PDF', 'Print', 'Import CSV', 'Template'.
+  - Background: global search 'Search everything...', theme/palette icon, brush icon, notification bell with badge, 'Welcome, admin'.
+  - Background: filter area with a 'Clear' button, a dark table header, and 'Next' pagination.
+- **Features:**
+  - Expense capture per branch (multi-branch accounting).
+  - Expense categories (e.g. Rent).
+  - Recurring monthly expense flag, for auto-generating fixed costs.
+  - Payment method tracking (Cash, presumably also Bank, Card, Mobile).
+  - Vendor / payee recording.
+  - Free-text notes.
+  - Live preview panel that mirrors form values in real time, with '—' shown for empty fields.
+  - Client-side plus server-side validation of required fields.
+  - Expense list export to CSV/PDF, Print, Import CSV, and a downloadable import Template.
+  - Global search and theme switching.
+  - Status badge on records (Active).
+- **NAIM translation:** Map this to NAIM COMMAND > Finance > Expenses, using the same modal pattern of a form plus a LIVE PREVIEW pane and the same toolbar (Add Expense, CSV, PDF, Print, Import CSV, Template). The fields translate as follows. 'Branch' becomes 'Business Unit' (e.g. Naim Automation – Recruitment AI, plus future side-businesses), with an optional Project/Client link for billable delivery costs. 'Category' covers the business's main cost types: Software/SaaS subscriptions (OpenAI, Twilio, hosting), Ads/Lead-gen (LinkedIn, Apollo), Rent/Co-working, Internet, Contractors, Travel and Marketing. 'Recurring Monthly' (Yes/No) is used for SaaS seats and retainer costs and should auto-generate monthly entries. For 'Paid Via', use Kenyan options: M-Pesa, Bank Transfer, Card, Cash. 'Amount' should carry a currency selector (KES/USD) because API costs are in USD. 'Vendor / Paid To' should be backed by a vendor list. 'Notes' stays as is, with a receipt-upload attachment added. Keep the server-side validation hint. This feeds the P&L per business unit and the cost-per-client margin on automation retainers.
+
+## #57 `download-57.png` — salon-system · Finance · Finance > Cash Flow tab (active), Period filter card, 4 gradient KPI cards, 'Money in by method' panel, 'Daily flow' table header (cut off at bottom)
+- **Theme:** Light mode content area (#F4F5F7 page bg, white cards #FFFFFF, subtle shadows, radius ~10-12px) with a near-black/dark maroon sidebar (#1A0F12 to #241418). Accent = coral/salmon (#F25C4A to #FF6F5E), used for the active sidebar pill, active-tab underline/text and the thin top border lines on panel cards. Dark tones (#1E1215 / #2B1A1E) for method icon tiles and the table header row.
+- **Layout:** Fixed left sidebar ~150px wide, dark, with icon+label rows (~26px row height), grouped by uppercase section headers (SALON, INVENTORY, FINANCE, HR); thin vertical scrollbar visible at the sidebar's right edge. Main area: (1) a white rounded top bar card with pie icon + page title 'Finance' at left; at right a 'Search everything...' pill search input with magnifier icon, a palette/theme icon button, a brush icon button, a bell icon with red notification badge, and the text 'Welcome, admin'. (2) A white page card containing the header 'Finance' (pie icon) and a horizontal tab strip: P&L | Cash Flow | Receivables | Payables | Tax | Day Close, each with a small icon; the active tab is coral with a coral underline. (3) A grey-tinted 'Period' filter card (funnel icon) with a dark horizontal divider line under the title, then a 3-column grid: FROM date, TO date, BRANCH select. (4) A 4-column KPI card row, equal widths, ~70px tall. (5) Collapsible panel 'Money in by method' with a coral top border and a '−' collapse control at right; inside, 4 equal white sub-cards. (6) Collapsible panel 'Daily flow' (calendar icon, '−' at right) containing a table with a dark header row; rows are cut off. The cursor is hovering over the Cash Flow tab.
+- **Sidebar:** Dashboard (partially cut off at top, line-chart icon), My Day, SALON (section header, small caps grey), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance (ACTIVE - filled coral pill #F2604E, white text, pie-chart icon), Payroll, Cash Till, HR (section header), Staff, (further items cut off below)
+- **Client 360:** none
+- **Components:**
+  - Top bar: pie-chart icon + 'Finance'; search input placeholder 'Search everything...'; theme palette icon button; paint-brush (customize) icon button; bell with red badge (count, likely '0'/small number); 'Welcome, admin'
+  - Page header: pie icon + 'Finance'
+  - Tabs (icon + label): 'P&L' (line-chart icon), 'Cash Flow' (money/banknote icon, ACTIVE, coral #F25C4A text + underline), 'Receivables' (document icon), 'Payables' (truck icon), 'Tax' (percent icon), 'Day Close' (building/calendar icon)
+  - Filter card title: funnel icon + 'Period'
+  - Field label 'FROM' (calendar icon) – date input value '09/01/2026' with calendar picker icon
+  - Field label 'TO' (calendar icon) – date input value '09/09/2026' with calendar picker icon
+  - Field label 'BRANCH' (store icon) – select showing 'All branches' with chevron
+  - KPI card 1: green gradient (#3FA34D to #2E8B3E), value 'Rs 10,025', label 'Cash In', large faded down-arrow watermark icon at bottom-right
+  - KPI card 2: red gradient (#D93A2F to #E8564A), value 'Rs 0', label 'Expenses Out', faded up-arrow watermark
+  - KPI card 3: yellow/amber gradient (#E9B41C to #F2C230), value 'Rs 5,000', label 'Supplier Payments', faded truck watermark
+  - KPI card 4: gradient coral-red to blue (#E8575A to #6A8FD8), value 'Rs 0', label 'Advances Given', faded hand-with-dollar watermark
+  - Panel 'Money in by method' (cash-bill icon, '−' collapse button): 4 method tiles each with dark square icon (wallet icon, #2B1A1E bg, white glyph) + small uppercase label + bold value: 'CASH Rs 8,525', 'CARD Rs 1,500', 'BANK Rs 0', 'ONLINE Rs 0'
+  - Panel 'Daily flow' (calendar icon, '−' collapse button): table with dark (#1E1215) header row, white header text, columns 'Date' | 'In' | 'Out' | 'Net'; body rows not visible (cut off)
+- **Features:**
+  - Finance module with sub-tabs: Profit & Loss, Cash Flow, Receivables, Payables, Tax, Day Close (end-of-day reconciliation)
+  - Date-range filter (From/To) and multi-branch filter ('All branches')
+  - Cash flow KPIs: Cash In, Expenses Out, Supplier Payments, Advances Given (staff salary advances)
+  - Breakdown of incoming money by payment method: Cash, Card, Bank, Online
+  - Daily flow ledger table: per-day In, Out, Net
+  - Collapsible report panels
+  - Currency shown as 'Rs' (configurable currency – would be KES for Naim)
+  - Global search, theme palette switcher, UI customization, notifications
+- **NAIM translation:** Becomes NAIM COMMAND > Finance > Cash Flow. Keep the same tab set but adapt: P&L (per business line: AI automation for recruitment agencies vs future side-businesses), Cash Flow, Receivables (unpaid client invoices/retainers from agencies), Payables (SaaS/API costs like OpenAI, Twilio, hosting, contractors), Tax (Kenya VAT 16% / withholding, KRA eTIMS), Day Close → 'Month Close' or weekly close. Filters: From/To date + 'Business unit' select (replaces Branch: 'All businesses', 'Naim Automation', side-businesses). KPI cards: 'Cash In' (client payments), 'Expenses Out', 'Vendor/Tool Payments' (replaces Supplier Payments), 'Contractor Advances' or 'Owner Drawings' (replaces Advances Given); keep the green/red/amber/gradient colors and watermark icons, currency 'KES'. 'Money in by method' → M-Pesa, Bank Transfer, Card/Stripe, Cash (M-Pesa first given Nairobi). 'Daily flow' table Date | In | Out | Net, plus optional link to source invoice/expense. Same light theme, dark sidebar, coral accent (or Naim brand accent via theme palette).
+
+## #58 `download-58.png` — salon-system · Finance · Finance > Receivables tab (AR ageing: period filter, 4 ageing-bucket KPI cards, Ageing detail table)
+- **Theme:** Light content area (white cards on #F4F5F7-ish background, faint pink/peach top gradient) with a dark sidebar (#1A0E10 near-black maroon). Accent is coral/red (#F0645A active nav pill, #E53935 active tab underline and text). This is the 'red/coral' palette variant. KPI cards: dark maroon gradient (#3A1218 → #6B1E2A), green (#2E9E47 → #4CAF50), yellow/amber (#F2B705 → #F5C518), red (#C62828 → #E53935). Table header bar is black (#111) with white text. Bucket badges are dark green (#2E7D32) pills with white text.
+- **Layout:** Fixed left dark sidebar (~150px) with icon+label items grouped under uppercase small grey section headers. Main area: top header bar card with page title 'Finance' (pie-chart icon) on the left; on the right a rounded search input 'Search everything...' (magnifier icon), a palette icon button (theme picker), a brush icon button (appearance/customize), a bell icon with red badge (count '8' style small red dot with number), and text 'Welcome, admin'. Below, one large white card titled 'Finance' (pie icon) containing a horizontal tab bar, then a grey 'Period' filter panel (3-column grid: FROM, TO, BRANCH), then a 4-column row of equal-width colored KPI cards, then a collapsible 'Ageing detail' card with a full-width table.
+- **Sidebar:** Dashboard (partially cut off at top), My Day, SALON (section header), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance (active, coral pill #F0645A, white text), Payroll, Cash Till, HR (section header), Staff
+- **Client 360:** none
+- **Components:**
+  - Header bar: pie-chart icon + 'Finance' title; search field 'Search everything...'; palette icon button; brush icon button; notification bell with red count badge; 'Welcome, admin'
+  - Section card title: pie icon + 'Finance'
+  - Tab bar (icon + label): 'P&L' (line-chart icon), 'Cash Flow' (cash icon), 'Receivables' (document icon, ACTIVE — red text + red underline, mouse cursor hovering), 'Payables' (truck icon), 'Tax' (percent icon), 'Day Close' (calendar icon)
+  - Filter panel (light grey #EEF0F3 background, rounded): header with funnel icon 'Period' and a dark divider line below; fields: 'FROM' (calendar icon label) date input value '09/01/2026' with calendar picker icon; 'TO' date input '09/09/2026' with calendar picker icon; 'BRANCH' (building icon label) select 'All branches' with chevron
+  - KPI card 1 (dark maroon gradient): 'Rs 5,877' large bold white, sub-label 'Total outstanding', faded watermark icon of invoice/document with $ sign at right
+  - KPI card 2 (green): 'Rs 5,877', sub-label '0-7 days', faded hourglass watermark icon
+  - KPI card 3 (yellow): 'Rs 0' (dark text), sub-label '8-30 days', faded hourglass watermark icon
+  - KPI card 4 (red): 'Rs 0', sub-label '31+ days', faded hourglass watermark icon
+  - Collapsible card with red/coral top border: hourglass icon + 'Ageing detail' title, '−' collapse toggle at far right
+  - Table header (black bar, white bold): 'Invoice' | 'Customer' | 'Date' | 'Age' | 'Bucket' | 'Due' (Due right-aligned)
+  - Row 1: 'INV-2026-002' (bold) | 'Client 3' | 'Sep 04, 2026' | '5 d' | badge '0-7' (green) | 'Rs 437' (bold, right)
+  - Row 2: 'INV-2026-003' | 'Client 3' | 'Sep 05, 2026' | '4 d' | badge '0-7' | 'Rs 400'
+  - Row 3: 'INV-2026-004' | 'Walk-in' | 'Sep 09, 2026' | '0 d' | badge '0-7' | 'Rs 5,040'
+  - Rows separated by thin light grey lines; no pagination or totals row visible
+- **Features:**
+  - Accounts receivable tracking of unpaid/partially paid invoices
+  - Ageing analysis with buckets 0-7 days, 8-30 days, 31+ days plus total outstanding
+  - Date range (From/To) and branch filtering for multi-branch reporting
+  - Per-invoice age in days computed from invoice date to period end/today
+  - Color-coded bucket badges (green 0-7; presumably yellow 8-30, red 31+)
+  - Finance module split into P&L, Cash Flow, Receivables, Payables, Tax, Day Close
+  - Walk-in (anonymous) customers can carry outstanding balances
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** Becomes NAIM COMMAND > Finance > Receivables: track invoices to recruitment-agency clients (setup fees, monthly automation retainers, milestone payments) in KES ('KSh' instead of 'Rs'). Keep the 4 KPI cards but use B2B-appropriate buckets (e.g., 0-30, 31-60, 61-90, 90+ days) plus Total outstanding. Replace BRANCH filter with 'Business unit' (Agency Automation vs side-businesses) and optionally 'Account owner'. Ageing table columns: Invoice, Client (agency), Project/Retainer, Issue date, Due date, Age, Bucket, Amount due, plus row actions (Send reminder via email/WhatsApp, Record payment / M-Pesa reference, Open client). Clicking a client should open the Customers-style Client 360 (Invoices tab). Sibling tabs map directly: P&L, Cash Flow, Receivables, Payables (tool subscriptions like OpenAI, n8n, hosting, contractors), Tax (KRA VAT 16%/withholding), Day Close (daily/monthly close).
+
+## #59 `download-59.png` — salon-system · Finance · Finance > Payables tab (Payables by supplier report, filtered by period + branch)
+- **Theme:** Light mode, coral/salmon palette. Sidebar is near-black (#141414 to #1a1a1a) with white text and muted grey uppercase section headers. The active nav item (Finance) is a coral/red pill (#F0634F to #EF5B4B) with white text. The content background is a very faint warm pink/off-white (#FDF6F5) holding white cards (#FFFFFF) with soft shadows and rounded corners (~8px). The Period filter card has a light grey header band (#ECEDEF) with a thin black divider. The active tab text and underline are coral (#E8574A). Table headers are dark/black (#1A0F0F) with white text. The ORDERED status badge is a blue pill (#2F6FD6) with white uppercase text. The notification badge on the bell is red (#E53935).
+- **Layout:** This is a fixed left sidebar (~150px, dark) plus a main content area. Each sidebar item has a small white icon followed by its label.
+
+The top bar is a white rounded card spanning the full content width:
+- Left: a pie-chart icon and the bold page title 'Finance'.
+- Right: a global search input with a magnifier icon and the placeholder 'Search everything...'.
+- Then three small square icon buttons: palette (theme picker), brush (appearance/customize), and bell with a red badge showing '6'.
+- Then the text 'Welcome, admin'.
+
+Below the top bar is the main page card (white, rounded):
+1. Header with a pie-chart icon and bold 'Finance'.
+2. A horizontal tab bar with icon+label tabs. The active tab has coral text and a coral underline, with a thin grey line under the whole tab row.
+3. A nested 'Period' filter panel (grey header band) containing a 3-column grid: FROM date, TO date, and BRANCH select, each taking about one third of the width.
+4. A report card, 'Payables by supplier', with a coral/red top border accent, a truck icon in the header, and a collapse '−' control at the right. It holds a full-width table with a black header row.
+
+The empty space below the cards shows the pale pink background.
+- **Sidebar:** Dashboard (partially visible at top, cut off), My Day, SALON (section header), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance (ACTIVE, coral pill), Payroll, Cash Till, HR (section header), Staff (more items likely below, scrollable; a grey scrollbar is visible at the sidebar's right edge)
+- **Client 360:** none
+- **Components:**
+  - Top bar title: pie-chart icon + 'Finance'
+  - Global search input: placeholder 'Search everything...' with a search icon, rounded grey field
+  - Icon button: palette (theme switcher)
+  - Icon button: paint brush (customization)
+  - Icon button: bell, with red notification badge '6'
+  - User greeting text: 'Welcome, admin'
+  - Page card header: pie-chart icon + 'Finance' (bold)
+  - Tabs, each with an icon:
+- 'P&L' (line-chart icon)
+- 'Cash Flow' (money/bills icon)
+- 'Receivables' (document icon)
+- 'Payables' (truck icon, ACTIVE: coral text + coral underline; mouse cursor hovering on it)
+- 'Tax' (percent icon)
+- 'Day Close' (calendar/lock icon)
+  - Filter panel header: funnel icon + 'Period', with a black divider line under the header
+  - Field 'FROM' (calendar icon label, uppercase, small bold): date input with value '09/01/2026' and a native calendar picker icon
+  - Field 'TO' (calendar icon label): date input with value '09/09/2026' and a calendar picker icon
+  - Field 'BRANCH' (building icon label): select dropdown with value 'All branches' and a chevron-down icon
+  - Report card header: truck icon + 'Payables by supplier' (bold), with a '−' collapse toggle at the far right and a coral top border
+  - Table column headers (black row, white bold small text): 'PO' | 'Supplier' | 'Date' | 'Status' | 'Due' (Due is right-aligned)
+  - Row 1: PO 'PO-2026-002' (bold) | Supplier 'Supplier 2' | Date 'Sep 02, 2026' | Status badge 'ORDERED' (blue pill) | Due 'Rs 2,500' (bold, right-aligned)
+  - Footer row: 'Total payable' (bold) | ... | 'Rs 2,500' (bold, right-aligned); thin row separators between rows
+- **Features:**
+  - Finance module with tabbed sub-reports: P&L, Cash Flow, Receivables, Payables, Tax, Day Close
+  - A shared Period filter (from/to date range) plus a Branch filter (multi-branch support; default 'All branches') applied across the finance tabs
+  - Accounts payable report grouped/listed by supplier, sourced from Purchase Orders (Inventory > Purchases)
+  - PO status lifecycle shown as colored badges (e.g., ORDERED; likely also DRAFT/RECEIVED/PAID)
+  - Amount due per PO with a computed 'Total payable' footer
+  - Currency formatting with prefix 'Rs' and thousands separators
+  - Collapsible report cards
+  - Global search, notifications counter, and theme/appearance customization in the header
+  - Day Close tab implies an end-of-day reconciliation workflow (tied to Cash Till)
+  - Tax tab implies VAT/tax summary reporting
+- **NAIM translation:** NAIM COMMAND > Finance module with the same 6 tabs, localized as P&L, Cash Flow, Receivables, Payables, Tax (Kenya VAT 16% / withholding), and Day/Month Close.
+
+The Period filter keeps FROM/TO dates. Replace the BRANCH filter with 'Business unit' (default 'All businesses'), with options such as Naim Automation (recruitment-agency AI) and future side-businesses. Optionally add a Client/Project filter.
+
+Payables → 'Payables by vendor' would list bills owed to:
+- SaaS/tool vendors (OpenAI/API credits, n8n/Make, Twilio/WhatsApp API, hosting)
+- Freelancers/contractors
+- Ad spend
+
+Table columns: Bill/PO # (e.g., BILL-2026-002), Vendor, Date, Status badge (ORDERED/BILLED → 'Due', 'Overdue' in red, 'Paid' in green), and Due amount. Add a 'Total payable' footer row and use KES formatting ('KSh 2,500').
+
+The Receivables tab mirrors this for agency clients' invoices: setup fees and monthly retainers, with aging. P&L should show revenue by business unit and by service (setup vs retainer).
+
+Keep the dark sidebar plus coral accent theme, and keep the theme picker. Sidebar sections become:
+- SALES: Leads, Pipeline, Clients
+- DELIVERY: Projects, Automations
+- FINANCE: Expenses, Finance, Payroll, Cash/M-Pesa till
+- HR: Staff
+
+## #60 `download-60.png` — salon-system · Finance · Finance > Tax tab (Tax collected — filing view), cursor hovering the 'Day Close' tab
+- **Theme:** Light mode with coral/salmon-red accent palette. Sidebar is near-black (#140C0C to #1A1010) with white/grey text. Active nav pill is coral (#F0614F to #F26B5B) with white text. Main content background is a very faint warm off-white/pink (#FDF6F5). Cards are white (#FFFFFF) with soft shadows and rounded corners (~8-10px). The Period filter card has a light grey background (#ECECEE). The table header row is dark brown/black (#1E1212) with white text. The active tab has a coral underline (#E8604F), and the Tax collected card has a coral top border.
+- **Layout:** Fixed left sidebar (~150px wide, dark) with grouped nav sections. Each item has an icon and a label, and there is a thin scrollbar on the right edge of the sidebar. The main area has a white top bar card containing a pie-chart icon with the page title 'Finance' on the left. On the right of the top bar are a search input ('Search everything...' with magnifier icon), three round icon buttons (palette/theme, brush/customize, and a bell with a red badge showing '6'), and the text 'Welcome, admin'. Below the top bar is a large white page card with the heading 'Finance' (pie icon) and a horizontal tab bar. Inside the page card, stacked vertically, are a grey 'Period' filter card with a 3-column grid of inputs, followed by a white 'Tax collected — filing view' card containing a full-width table. The empty space below is the background.
+- **Sidebar:** Dashboard (partially cut off at the top), My Day, SALON (section label), Front Desk, Appointments, Customers, POS / Billing, Services, Memberships, INVENTORY (section label), Inventory, Purchases, FINANCE (section label), Expenses, Finance (active, coral pill), Payroll, Cash Till, HR (section label), Staff
+- **Client 360:** none
+- **Components:**
+  - Top bar: pie-chart icon + 'Finance' title
+  - Global search input: placeholder 'Search everything...' with magnifier icon
+  - Icon button: palette (theme switcher)
+  - Icon button: brush (appearance/customize)
+  - Icon button: notification bell with red count badge '6'
+  - Text: 'Welcome, admin'
+  - Page header: pie-chart icon + 'Finance'
+  - Tabs, each with an icon: 'P&L' (line-chart icon), 'Cash Flow' (money icon), 'Receivables' (document icon), 'Payables' (truck icon), 'Tax' (percent icon; active, coral text and underline), 'Day Close' (shop/register icon; hovered by cursor)
+  - Filter card titled 'Period' (funnel icon) with a dark divider line under the title
+  - Date input 'FROM' (calendar icon label), value '09/01/2026', with native calendar picker icon
+  - Date input 'TO', value '09/09/2026', with calendar picker icon
+  - Select 'BRANCH' (store icon label), value 'All branches', with chevron dropdown
+  - Card 'Tax collected — filing view' (percent icon) with a collapse '—' button top-right and a coral top border accent
+  - Table header (dark): 'Month' | 'Branch' | 'Invoices' | 'Taxable' | 'Tax collected' (right-aligned)
+  - Row: '2026-09' | 'Branch 1 – Gulberg' | '4' | 'Rs 15,145' | 'Rs 757' (bold, right-aligned)
+  - Footer row: 'Total' (bold) | ... | 'Rs 757' (bold, right-aligned)
+- **Features:**
+  - Finance module with sub-tabs: P&L, Cash Flow, Receivables, Payables, Tax, Day Close
+  - Tax reporting 'filing view' aggregating tax collected by month and branch, with invoice count, taxable amount, and tax collected (~5% implied: 757/15,145)
+  - Date-range (From/To) and branch filters applied to finance reports
+  - Multi-branch support (Branch 1 – Gulberg; 'All branches' option)
+  - Currency formatted as 'Rs' (PKR)
+  - Collapsible report cards
+  - Totals row for filing reconciliation
+  - Day Close (end-of-day reconciliation) as a separate tab
+  - Global search, theme palette switcher, notifications badge
+- **NAIM translation:** Becomes NAIM COMMAND > Finance > Tax tab for Kenya compliance. It shows VAT (16%) collected per month per business unit/entity, replacing 'Branch' (e.g., 'Naim Automation – Recruitment AI', future side-businesses), along with invoice count, taxable (net) amount in KES, VAT collected, and a totals row. It is meant for KRA iTax/eTIMS filing and could add a WHT (withholding tax) column for retainers paid by agencies. Keep the same filters: From/To date and Business Unit (default 'All units'). Keep the sibling tabs: P&L, Cash Flow, Receivables (unpaid client invoices/retainers), Payables (tools/API/SaaS costs, contractors), Tax, and Day Close (renamed 'Month Close' or 'Week Close' for reconciliation). Also add an export to CSV/PDF for the accountant, and keep the 'Rs' formatting swapped to 'KES'.
+
+## #61 `download-61.png` — salon-system · Finance · Finance > Day Close tab (end-of-day reconciliation: date + branch selectors, 4 KPI cards, 'Expected vs counted' table)
+- **Theme:** Light content area (white cards, light grey #F1F2F4 page background) with a dark sidebar (near-black maroon #1E0F12 / #210F14). Accent/primary is coral-red (~#F0574A / #E8503F), used for the active sidebar item 'Finance', the active tab underline 'Day Close', and the top border of the 'Expected vs counted' card. Card header strips are light grey (#ECECEE). Table header is solid black (#111111) with white text. KPI cards use gradients: dark maroon-to-black (#3A0F18 → #1A0A0E), green (#3DAA4F → #2E8B3E), red-to-blue diagonal (#F05A4F → #5B8DEF), red (#E8463A → #C9302C).
+- **Layout:** Fixed left sidebar (~150px wide, dark, vertically scrollable with a thin scrollbar on its right edge; section labels in small uppercase grey caps; items with white icons + white text). Main area on light grey background. Top app bar is a white rounded card: left 'Finance' with pie-chart icon (page title); right side has a rounded search input 'Search everything...' with magnifier icon, a palette icon button (theme picker), a brush icon button (appearance), a bell icon with a red notification badge, and text 'Welcome, admin'. Below, a large white rounded page card: header 'Finance' with pie icon, then a horizontal tab bar (icon + label tabs) with a bottom divider; active tab in coral-red text with coral underline. Inside the tab: a grey-headed panel 'Day Close' (cash-register icon) containing a 2-column filter row (Date left, Branch right, each ~50% width). Then a 4-column grid of equal-width gradient KPI cards (~130px tall, rounded ~6px, large bold value top-left, small label beneath, large semi-transparent icon bottom-right). Then a full-width collapsible card 'Expected vs counted' (coral top border, '–' collapse button at right) containing a full-width table with a black header row.
+- **Sidebar:** (scrolled; items above cut off), Services (scissors icon), Memberships (id-card icon), INVENTORY (section label), Inventory (box icon), Purchases (truck icon), FINANCE (section label), Expenses (money icon), Finance (pie-chart icon) — ACTIVE, coral-red pill background, white text, Payroll (id/card icon), Cash Till (register icon), HR (section label), Staff (person icon), Leave Requests (plane icon), REPORTS (section label), Reports (chart icon), SYSTEM (section label), Branches (building icon), Users Management (users icon), Settings (gear icon)
+- **Client 360:** none
+- **Components:**
+  - Top bar: page title 'Finance' (pie-chart icon)
+  - Global search input placeholder 'Search everything...'
+  - Icon button: palette (theme/color palette switcher)
+  - Icon button: brush (appearance/customization)
+  - Notification bell with red badge (count, small)
+  - User greeting text: 'Welcome, admin'
+  - Page card heading: 'Finance' (pie-chart icon)
+  - Tabs (left to right): 'P&L' (line-chart icon), 'Cash Flow' (money icon), 'Receivables' (document icon), 'Payables' (truck icon), 'Tax' (percent icon), 'Day Close' (cash-register icon, ACTIVE, coral)
+  - Panel header: 'Day Close' (cash register icon), grey background with dark underline
+  - Field label 'DATE' (calendar icon, small uppercase bold) — native date input value '09/09/2026' with calendar picker icon at right
+  - Field label 'BRANCH' (building icon) — select dropdown value 'Branch 1 – Gulberg' with chevron-down
+  - KPI card 1 (dark maroon/black gradient): value '1', label 'Invoices', watermark receipt icon
+  - KPI card 2 (green): value 'Rs 0', label 'Collected (all methods)', watermark money-bag-with-$ icon
+  - KPI card 3 (red→blue gradient): value 'Rs 0', label 'Tips Collected', watermark hand-holding-$ icon
+  - KPI card 4 (red): value 'Rs 0', label 'Cash Paid Out', watermark up-arrow icon
+  - Collapsible card header: 'Expected vs counted' (balance-scale icon), collapse button '–' on right, coral top border
+  - Table header (black bg, white bold text): 'Line' (left) | 'Amount' (right-aligned)
+  - Row: 'Cash taken' — 'Rs 0'
+  - Row: 'Card taken' — 'Rs 0'
+  - Row: 'Bank taken' — 'Rs 0'
+  - Row: 'Online taken' — 'Rs 0'
+  - Row: 'Cash expenses paid out' — '-Rs 0' (shown in red as a negative/deduction)
+  - (Table continues below fold — likely expected cash in drawer, counted cash input, variance, and a close-day/submit button)
+- **Features:**
+  - Daily close / end-of-day cash reconciliation per branch and date
+  - Multi-branch filtering (Branch 1 – Gulberg)
+  - Aggregation of daily invoices count and collections across payment methods (cash, card, bank, online)
+  - Tips tracking separate from revenue
+  - Cash payouts/expenses deducted from expected cash (negative values in red)
+  - Expected vs counted variance check (cash-drawer count vs system)
+  - Finance module with P&L, Cash Flow, Receivables, Payables, Tax reports as sibling tabs
+  - Currency formatting with 'Rs' prefix (PKR) — to be localized
+  - Collapsible report sections
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** Becomes NAIM COMMAND > Finance > 'Day Close' (or better 'Period Close' — weekly/monthly for a B2B agency). Keep tabs P&L, Cash Flow, Receivables (outstanding retainer/setup invoices from recruitment agency clients), Payables (SaaS/API costs like OpenAI, Twilio, hosting, contractors), Tax (Kenya VAT 16%, withholding tax, KRA eTIMS), and Close. Replace 'Branch' selector with 'Business Unit' (Naim Automation core + future side-businesses). KPI cards: 'Invoices Issued', 'Collected (all methods)' in KES, 'Pending/Overdue Receivables' (replacing Tips), 'Expenses Paid Out'. Expected vs counted table lines map to payment channels: M-Pesa (Paybill/Till), Bank transfer, Card/Stripe/Paystack, Cash, minus expenses paid out — with a 'counted/actual statement balance' input and variance row for reconciliation against bank/M-Pesa statements. Use 'KES' currency prefix, keep the gradient KPI style, black table header, and coral accent (or NAIM brand accent via palette switcher).
+
+## #62 `download-62.png` — salon-system · Payroll · Payroll list page (Payroll tab) with 'Generate payroll' confirmation modal open (SweetAlert-style), page dimmed behind a grey overlay
+- **Theme:** Light content area with a dark sidebar (near-black/maroon #1a0a0a to #2a0f0f). The active sidebar item is red/coral (#e8574a). The header buttons are white pills, and 'Generate Payroll' is a dark pill (#111). The KPI cards use gradients: red→blue (#e74c3c→#4a7bd0), dark maroon→black (#3a0f14→#111), red→blue/purple, and yellow (#f1c40f / #e6b800). The modal 'Generate' button is navy (#0f1f3d), the 'Cancel' button is grey (#6c757d), and the question icon is a teal-grey outline circle (#8fb3b8). The status pipeline uses dark brown/grey (ALL), blue (#4a7bd0, APPROVED) and green (#5a9e5a, PAID).
+- **Layout:** Fixed left sidebar (~150px, dark) with uppercase section headers. Top header bar: page title with icon at left; action buttons, global search, theme icons and user greeting at right. Content area from top to bottom: page heading 'Payroll'; a half-width gradient KPI card; a tab strip (Payroll | Advances); a 4-column KPI card row; a chevron/arrow status pipeline filter bar; a collapsible 'Payroll Month' filter panel; then a DataTable with a 'Show N entries' control and a search box. A centered modal (~300px wide) overlays the page with a grey translucent backdrop.
+- **Sidebar:** Services (scissors icon, partially cut off at the top), Memberships, INVENTORY (section label), Inventory, Purchases, FINANCE (section label), Expenses, Finance, Payroll (active, red highlight), Cash Till, HR (section label), Staff, Leave Requests, REPORTS (section label), Reports, SYSTEM (section label), Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Header title: payroll icon + 'Payroll'
+  - Header buttons: 'Generate Payroll' (dark, icon), 'Approve All' (check icon), 'Pay All Approved' (money icon), 'CSV', 'PDF', 'Print'
+  - Global search input: 'Search everything...' with magnifier icon
+  - Icon buttons: palette (theme), brush (customize), bell with red badge
+  - 'Welcome, admin' text
+  - Page heading: 'Payroll' with icon
+  - KPI card (red→blue gradient, half width): '3' / 'Advances', with a faded hand-money icon at bottom right
+  - Tabs: 'Payroll' (active, red underline, icon) and 'Advances' (hand icon)
+  - KPI card 1 (dark maroon→black gradient): '3' / 'Slips', with a money icon
+  - KPI cards 2–3 hidden behind the modal; card 3 is a red→blue gradient with a percent icon (likely Deductions/Commission)
+  - KPI card 4 (yellow): 'Rs 1,414' / 'Advance Recovery', with an undo/refresh icon
+  - Status pipeline chevron tabs: 'ALL (3)' (dark), middle items hidden (likely DRAFT (n)), 'APPROVED (0)' (blue), 'PAID (0)' (green)
+  - Filter panel: funnel icon + 'Payroll Month' title, with a 'Clear' button (grey, x icon) at right and a dark divider line
+  - Field label: calendar icon + 'MONTH'
+  - Month picker input: 'September 2026' with a calendar icon
+  - DataTable controls: 'Show [10 ▾] entries' and a 'Search:' input
+  - Table header (dark/black background), sortable columns: Staff, Branch, Days, Prorated Base, Commission, Incent., Deduct., Adv. Rec., Net Pay, Status, Actions
+  - Modal: large outlined '?' circle icon; title 'Generate payroll for 2026-09?'
+  - Modal body text: 'Creates a draft slip for every active staff member who does not have one yet.'
+  - Modal buttons: 'Generate' (navy, primary) and 'Cancel' (grey); the mouse cursor is hovering 'Cancel'
+- **Features:**
+  - Monthly payroll generation that creates draft slips idempotently (skips staff who already have a slip)
+  - Payroll workflow statuses: Draft → Approved → Paid, with bulk 'Approve All' and 'Pay All Approved'
+  - Salary advances tracked in a separate tab, with advance recovery deducted from net pay
+  - Prorated base salary by days worked
+  - Commission and incentives added; deductions subtracted
+  - Net pay calculation per slip
+  - Per-branch payroll
+  - Export to CSV/PDF and Print
+  - Month filter
+  - Currency shown in Rs
+- **NAIM translation:** Map to NAIM COMMAND > Finance > Payroll / Team Payouts for staff, contractors and commissioned sales reps (SDRs, closers). Base retainer prorated by days; 'Commission' = % of closed recruitment-agency deals or MRR; 'Incentives' = bonuses for meetings booked or demos; 'Deductions' = statutory deductions (Kenya: PAYE, NSSF, SHIF, Housing Levy); 'Adv. Rec.' = recovery of salary advances. Keep the 'Generate payroll for YYYY-MM?' confirm modal that creates draft slips for active team members only, the Draft/Approved/Paid chevron pipeline, and bulk approve/pay, which could integrate with M-Pesa B2C or bank payouts. Use KES instead of Rs. The Branch column becomes Business Unit (NAIM Automation vs future side-businesses). Keep the Advances tab, the KPI cards (Slips, Total Net, Deductions, Advance Recovery), and CSV/PDF payslip export.
+
+## #63 `download-63.png` — salon-system · Payroll · Payroll page – Advances tab (staff salary advances list with status pipeline filter)
+- **Theme:** Light mode content area (white/very light grey #F4F4F5 background, white cards) with dark sidebar (near-black/deep maroon #1A0D10). The accent palette is a coral/red theme: the active sidebar item 'Payroll' is a coral pill (#F2604F) and the active tab underline/icon is red (#E0483A). The KPI card uses a dark maroon-to-black gradient (#3A0E14 → #1C0A0D) with a faint dollar-in-hand icon. Table header is near-black (#1E0F12) with white text. Status pipeline colors: ALL is dark taupe/brown-grey (#4A3A3D), OPEN is amber (#E9A23B), RECOVERED is green (#3E8E2F). Outstanding amounts are shown in red text (#C0282D).
+- **Layout:** Fixed dark left sidebar (~150px) with icon+label items grouped under uppercase small grey section headers. The main area holds a white rounded top header bar containing the page title with an icon on the left, then action buttons, a global search box, icon buttons, and a user greeting on the right. Below it is a content card with: a page title row; a single KPI card (~half width, left-aligned); a tab strip (Payroll | Advances); a full-width 3-segment chevron/arrow-style status pipeline bar; a collapsible Filters panel (light grey rounded box); a DataTables-style controls row (Show N entries on the left, Search on the right); and a data table with a dark header and zebra rows. The table continues below the fold.
+- **Sidebar:** (top, partially cut) Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll (active, coral highlight), Cash Till, HR (section header), Staff, Leave Requests, REPORTS (section header), Reports, SYSTEM (section header), Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Top header bar, left: payroll/money icon followed by the title 'Payroll' in bold.
+  - Header buttons, left to right: '+ Add Advance' (primary, black filled #1E1E1E with white text); 'CSV' (light grey button with file icon); 'PDF'; 'Print' (printer icon); 'Import CSV'; 'Template' (download icon).
+  - Global search input with magnifier icon and placeholder 'Search everything...'.
+  - Icon buttons: palette (theme switcher), brush/paint (customize).
+  - Notification bell with a red badge showing a count (likely '4').
+  - User greeting text 'Welcome, admin'.
+  - Page section title: icon followed by 'Payroll' (bold).
+  - KPI card: dark maroon gradient, large white number '3' with the label 'Advances' beneath it, and a faded hand-holding-dollar watermark icon at the bottom right.
+  - Tabs: 'Payroll' (with table/list icon, inactive grey) and 'Advances' (with hand/money icon, active red text with red underline).
+  - Status pipeline segmented arrow bar (clickable filter chips): 'ALL (3)' dark grey-brown; 'OPEN (2)' amber; 'RECOVERED (1)' green. The labels are uppercase, white, and bold, and each segment has a chevron edge.
+  - Filters panel: header with a funnel icon and the label 'Filters', and a 'Clear' button at the right (dark grey with an x-circle icon). A dark divider line follows the header. Inside is the label 'SEARCH ADVANCES' (with magnifier icon, small uppercase) and a text input with the placeholder 'Search advances...'.
+  - Table controls: 'Show [10 ▾] entries' dropdown on the left and 'Search:' input on the right (DataTables).
+  - Table columns (sortable, with sort arrows): 'Date' (sorted ascending ▲), 'Staff', 'Amount', 'Recovered', 'Outstanding', 'Reason', 'Status', 'Actions'.
+  - Row 1: Jul 12, 2026 | Staff 3 (bold) | Rs 3,000 | Rs 3,000 | — | Advance request | badge 'RECOVERED' (green pill) | actions: eye (view), pencil (edit), red trash (delete).
+  - Row 2: Aug 20, 2026 | Staff 1 | Rs 5,000 | Rs 2,000 | Rs 3,000 (red, bold) | Family emergency | badge 'OPEN' (amber pill) | eye/pencil/trash.
+  - Row 3: Sep 15, 2026 | Staff 1 | Rs 2,200 | Rs 0 | Rs 2,200 (red, bold) | — | badge 'OPEN' (amber pill) | eye/pencil/trash.
+  - The Date column cells have a slightly grey background, and rows alternate light zebra shading.
+- **Features:**
+  - Staff salary advances management: record an advance with amount and reason.
+  - Tracking of the recovered vs outstanding balance per advance, with recovery presumably deducted from payroll.
+  - Status lifecycle: OPEN → RECOVERED, with counts displayed in a clickable pipeline filter.
+  - KPI summary showing the total advance count.
+  - Two sub-modules under Payroll: payroll runs/salary sheet (Payroll tab) and Advances.
+  - Export to CSV/PDF, Print, bulk Import CSV with a downloadable Template.
+  - Search filter for advances plus a global table search, pagination, and column sorting.
+  - Row actions: view details, edit, and delete.
+  - Currency formatted as 'Rs'. This should be configurable; NAIM would use KES.
+  - Theme palette switcher and UI customization from the header.
+- **NAIM translation:** This maps to NAIM COMMAND > Finance > Payroll, which has two tabs: 'Payroll' (monthly salaries/contractor payouts for Naim staff, SDRs, and freelance automation builders) and 'Advances' (staff/contractor advances in KES with Amount, Recovered, Outstanding, Reason, Status OPEN/RECOVERED). Recovery should be auto-deducted on the next payroll run. Reuse the chevron status pipeline pattern (ALL/OPEN/RECOVERED) as a generic component, since it also suits commission payouts (PENDING/APPROVED/PAID) for sales reps closing recruitment-agency deals, and client retainer invoices. Keep the header action set (+ Add, CSV, PDF, Print, Import CSV, Template), the KPI card (count plus optionally total outstanding KES), the Filters panel, and the DataTable with view/edit/delete. Add a 'Business unit' column/filter so future side-businesses can share the same payroll and advances ledger.
+
+## #64 `download-64.png` — salon-system · Payroll (Finance group), Staff Advances sub-view · 'Add Advance' modal with a Live Preview panel, open over the Payroll advances list. The page behind is dimmed.
+- **Theme:** Light content area with a dark maroon/near-black sidebar (~#1a0f12). Modal header and primary buttons are deep maroon/black (~#1f0d10). Active sidebar item is a red/crimson pill (~#c0392b / #d9534f). Preview pane background is a very light pink (~#fdf1f1). 'Active' badge is coral red (~#e74c3c) with white text. Status badges: RECOVERED is dark green (~#1e6b2e) with a light green border; OPEN is amber/orange (~#e0a020). Outstanding amounts are shown in red (~#c0392b). Table header row is black (~#111). This appears to be the dark-maroon / 'wine' palette.
+- **Layout:** Fixed left sidebar (~150px, dark) with grouped sections. Top bar contains: page title with icon 'Payroll', then action buttons on the right, global search, theme/palette icons, a notification bell with a red badge, and 'Welcome, admin'. Below that sits a page header 'Payroll' and a KPI card row; the first card is dark maroon with a gradient and reads '3 Advances' with a large faded '$' icon at the right. A green button is partially visible at the right (likely a Filter/Apply button) next to a dark 'Clear' button. The data table is underneath. A centered modal (~900px wide) overlays everything and is split ~60/40: the form sits on the left and the LIVE PREVIEW sits on the right.
+- **Sidebar:** Services (scissors icon), Memberships, INVENTORY (section label), Inventory, Purchases, FINANCE (section label), Expenses (truncated 'Expen…'), Finance (truncated), Payroll (active, red highlight), Cash T… (Cash Transactions / Cash Till, truncated), HR (section label), Staff, Leave (truncated), REPORTS (section label), Reports, SYSTEM (section label), Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Top bar buttons: '+ Add Advance' (dark primary), 'CSV', 'PDF', 'Print', 'Import CSV', 'Template' (light buttons with icons)
+  - Search input: 'Search everything…' with a magnifier icon
+  - Icons: palette, brush (theme), bell with red count badge, 'Welcome, admin'
+  - KPI card: '3' / 'Advances', dark maroon gradient with a large '$' watermark
+  - Modal header (dark): hand-with-coin icon + 'Add Advance', an info (i) circle icon, and a close X
+  - Field 'Staff *' (person icon): select dropdown with placeholder 'Select staff' and a chevron
+  - Field 'Date *' (calendar icon): date input 'mm/dd/yyyy' with a calendar picker icon
+  - Field 'Advance Amount *' (money icon): text/number input
+  - Field 'Reason' (speech bubble icon): text input
+  - Buttons: 'Save' (dark, floppy icon) and '✕ Cancel' (grey)
+  - Live Preview panel: eye icon + label 'LIVE PREVIEW'; dark square avatar with the hand-coin icon; title '—'; subtitle 'Advance'; red pill badge 'Active'
+  - Preview key/value rows, each showing '—' until filled: Staff, Date, Advance Amount, Reason
+  - Footnote (info icon): 'Required fields are checked here and again server-side before the row is written.'
+  - Table headers (black row): Date (sortable ▲), Staff, Amount, Recovered, Outstanding, Reason, Status, Actions
+  - Row 1: 'Jul 12, 2026' | Staff 3 | Rs 3,000 | Rs 3,000 | — | Advance request | RECOVERED (green) | view/edit/delete icons
+  - Row 2: 'Aug 20, 2026' | Staff 1 | Rs 5,000 | Rs 2,000 | Rs 3,000 (red) | Family emergency | OPEN (amber) | actions
+  - Row 3: 'Sep 15, 2026' | Staff 1 | Rs 2,200 | Rs 0 | Rs 2,200 (red) | — | OPEN | actions
+  - Actions icons: eye (view), pencil (edit), red trash (delete)
+- **Features:**
+  - Staff salary advances, with recovery tracking split into amount / recovered / outstanding
+  - Advance status lifecycle: OPEN → RECOVERED
+  - Modal form with required-field validation on the client and again on the server
+  - Live preview card that updates as the user types
+  - Data export (CSV, PDF, Print), plus Import CSV with a downloadable Template
+  - Global search, theme palette switcher, notifications
+  - KPI summary card for advance count
+  - Multi-currency display (Rs)
+- **NAIM translation:** Maps to NAIM COMMAND under Finance → Payroll/Team Payouts. Use it for staff or contractor advances and commission draws for the sales and delivery team. Recommended fields: Team member, Date, Amount (KES), Reason. Track amounts as Recovered (deducted from future payouts or commissions) and Outstanding, with OPEN/RECOVERED badges. Reuse the modal pattern (form on the left, live preview on the right, server-side validation note) for every create form, such as adding a lead, recruitment-agency client, deal, or invoice. Keep the CSV/PDF/Print/Import CSV/Template toolbar on all list pages. Add a business-unit filter so future side-businesses keep separate payroll.
+
+## #65 `download-65.png` — salon-system · Cash Till (Finance group) · Cash Till sessions list/table view (one closed till session row); no modal or drawer open
+- **Theme:** Light content area with a dark sidebar. Sidebar is near-black (~#1A0F0F to #140C0C, warm/brown-tinted black). The active nav item is a coral/salmon pill (~#F25F4C / #FF6B5A) with white text. The content background is a very pale warm pink/off-white (~#FDF4F2). The table header bar is dark (~#1C1010) with white bold header text. The rows are white. The variance badge is blue (~#2F6FD6) with white text. The status badge is a grey pill (~#6B6B6B) with white uppercase text. The 'Open Till' button is black (~#111) with white text. This looks like a warm 'coral' theme palette.
+- **Layout:** Fixed left sidebar about 150px wide, dark, with a vertical scrollbar visible on its right edge. Section labels are small uppercase grey (INVENTORY, FINANCE, HR, REPORTS, SYSTEM), followed by icon+label items. The main area has a top header card (white, rounded, full width). On its left is a cash-register icon and the bold page title 'Cash Till'. On its right, in order: a black 'Open Till' button with a door/till icon, a rounded search input 'Search everything..' with a magnifier icon, a palette (theme) icon button, a brush (appearance) icon button, a notification bell with a red count badge, and the text 'Welcome, admin'. Below that is a full-width rounded table card with a dark header row and white data rows. The rest of the page is empty pale-pink space.
+- **Sidebar:** (scrolled; items above are cut off), Services (scissors icon), Memberships (id-card icon), INVENTORY (section label), Inventory (dolly/boxes icon), Purchases (truck icon), FINANCE (section label), Expenses (money/bill icon), Finance (pie-chart icon), Payroll (id/money card icon), Cash Till (cash-register icon) — ACTIVE, coral highlighted pill, HR (section label), Staff (user icon), Leave Requests (plane-departure icon), REPORTS (section label), Reports (bar-chart icon), SYSTEM (section label), Branches (store/warehouse icon), Users Management (users-group icon), Settings (gear icon)
+- **Client 360:** none
+- **Components:**
+  - Page title: 'Cash Till' with cash-register icon
+  - Primary button: 'Open Till' (black, icon at left), which opens a new till session (float entry likely)
+  - Global search input: placeholder 'Search everything..'
+  - Icon button: theme palette (color palette switcher)
+  - Icon button: paint brush (appearance/dark-light toggle)
+  - Notification bell with red badge (count, ~1-digit)
+  - User greeting: 'Welcome, admin'
+  - Table columns: Date | Cashier | Branch | Float | Taken | Paid out | Expected | Counted | Variance | Status
+  - Row 1: Date 'Sep 04, 2026' | Cashier 'reception1' (bold) | Branch 'Branch 1 – Gulberg' | Float 'Rs 2,000' | Taken 'Rs 0' | Paid out 'Rs 0' | Expected 'Rs 2,000' | Counted 'Rs 2,525' | Variance badge '+525' (blue pill) | Status badge 'CLOSED' (grey pill, uppercase)
+  - Currency format: 'Rs' prefix with thousands separator
+  - No pagination, filters or row actions visible; mouse cursor is in empty area
+- **Features:**
+  - Daily cash drawer/till session management per cashier and per branch
+  - Open till with an opening float amount
+  - Tracks cash taken (sales), paid out (petty cash), and expected balance (Float + Taken − Paid out)
+  - Close till with a counted amount; variance auto-calculated (Counted − Expected). Positive variance shows blue '+525'; negatives are likely red
+  - Status lifecycle: OPEN / CLOSED
+  - Multi-branch support (Branch 1 – Gulberg)
+  - User-role cashiers (reception1)
+  - Audit trail of cash reconciliation for finance
+- **NAIM translation:** Map this to a 'Cash & Petty Cash Ledger' or 'Payments Reconciliation' module under FINANCE in NAIM COMMAND. Each session or period is a reconciliation record: Date, Owner (team member), Business unit (Naim Automation / side-business, replacing Branch), Opening balance, Received (client payments via M-Pesa/bank), Paid out (expenses/tool subscriptions), Expected, Actual (bank/M-Pesa statement balance), Variance badge (blue for positive, red for negative), and Status (OPEN/CLOSED). Use KES instead of Rs. The 'Open Till' button becomes 'Open Period' or 'Start Reconciliation'. This is useful for M-Pesa float tracking and monthly close across multiple side-businesses. Keep the same table styling: dark header, pill badges, and the global search/theme/notification header.
+
+## #66 `download-66.png` — salon-system · Finance > Cash Till · 'Open till' modal (two-pane form + live preview) over the Cash Till sessions table, with a dimmed backdrop
+- **Theme:** Light content area with a dark sidebar. This appears to be a maroon/wine palette: sidebar near-black #1a1012. Modal header bar and table header use a dark maroon/near-black #2a1418. Primary button is maroon #5a1f2a. Active sidebar item is a coral/salmon pill #e0705a. The live preview pane has a very light pink tint #fdf6f5. 'Open' badge is coral red #e8574a. Variance badge is blue #2f6fd6. CLOSED badge is gray #6b6b6b. Cancel button is gray #7a7f85. Backdrop dims the page to about 50% gray.
+- **Layout:** Fixed dark left sidebar, about 150px wide. It has uppercase small gray section labels (INVENTORY, FINANCE, HR, REPORTS, SYSTEM) and icon + label items. Top bar on the light background contains: page title with a cash-register icon 'Cash Till' (left); a dark 'Open Till' button; a global search pill 'Search everything...'; a theme/palette icon; a brush icon; a bell with a red badge count; and 'Welcome, admin'. Below the top bar is a full-width data table card with a dark header row. A centered modal (about 900px wide) is overlaid, with a dark maroon header bar containing the title (left) and a white X close (right). The modal body is split into two columns: a left form at about 60%, and a right 'LIVE PREVIEW' panel at about 40% with a light pink background and a left border.
+- **Sidebar:** (top, partially cut) Services, Memberships, INVENTORY (section label), Inventory, Purchases, FINANCE (section label), Expenses (truncated 'Expens'), Finance (truncated 'Financ'), Payroll (truncated 'Payrol'), Cash Till (ACTIVE, coral highlight, truncated 'Cash T'), HR (section label), Staff, Leave (truncated), REPORTS (section label), Reports, SYSTEM (section label), Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Page header: icon + 'Cash Till' (bold).
+  - Top-right button: 'Open Till' (dark/maroon filled, unlock icon).
+  - Global search input placeholder: 'Search everything...'.
+  - Icon buttons: palette (theme), brush, and notification bell with red badge.
+  - User greeting: 'Welcome, admin'.
+  - Table columns: Date | Cashier | Branch | Float | Taken | Paid out | Expected | Counted | Variance | Status.
+  - Table row 1 values: Date 'Sep 04, 2026'; Cashier 'reception1' (bold); Branch 'Branch 1 – Gulberg'; Float 'Rs 2,000'; Taken 'Rs 0'; Paid out 'Rs 0'; Expected 'Rs 2,000'; Counted 'Rs 2,525'; Variance '+525' (blue pill badge); Status 'CLOSED' (gray pill badge).
+  - Modal title: unlock icon + 'Open till'. White 'X' close button on the right.
+  - Field 'Branch *' (required, with a building icon): select dropdown showing value 'Branch 1 – Gulberg' and a chevron.
+  - Field 'Opening float (Rs)' (money icon): number input with spinner arrows. Value '0'. It is focused and has a pink/maroon focus border.
+  - Primary button: 'Open till' (maroon, unlock icon). The cursor is hovering it.
+  - Secondary button: 'Cancel' (gray, X icon).
+  - Live preview header: eye icon + 'LIVE PREVIEW' (small uppercase gray).
+  - Preview card: dark rounded-square cash-register icon tile; large bold 'Rs 0'; caption 'Opening float'; coral pill badge 'Open'.
+  - Preview key-value rows, separated by thin dividers: 'Branch' → 'Branch 1 – Gulberg'; 'Opened by' → 'you'; 'Opened at' → 'now'.
+  - Info footnote with an (i) icon: 'Everything you take in cash from now until you close counts against this till.'
+- **Features:**
+  - Cash-drawer/till sessions per branch and per cashier: open a session with an opening float, then close it with a counted amount.
+  - Automatic reconciliation: Expected = Float + Taken − Paid out. Variance = Counted − Expected, shown as a signed colored badge (blue for over, presumably red for short).
+  - Session status lifecycle: Open → Closed.
+  - Multi-branch support, with the branch selector required.
+  - Real-time live preview that mirrors form inputs before submit. This is a reusable pattern: form on the left, preview on the right.
+  - Audit trail fields: opened by and opened at.
+  - Cash paid-outs tracked during the session.
+  - Global search, theme switcher and notifications in the top bar.
+- **NAIM translation:** Map to Finance > 'Cash & Petty Cash' or a 'Billing Period / Collections Session' module in NAIM COMMAND. Each session is opened per business unit, replacing 'Branch' with 'Business Unit' (e.g. NAIM Automation – Recruitment AI, plus future side businesses), plus the user and currency KES. Columns become: Date | Owner | Business Unit | Opening Balance | Collected (M-Pesa/bank/cash receipts) | Paid out (expenses/petty cash) | Expected | Counted/Reconciled | Variance | Status. Use it for M-Pesa till/paybill reconciliation and petty cash in the Nairobi office. Reuse the two-pane 'form + LIVE PREVIEW' modal pattern across NAIM COMMAND, for example: 'New Proposal' previewing deal value, stage and agency; 'New Invoice'; and 'Open Retainer' showing client, MRR and start date. Keep the explanatory footnote style, such as 'All M-Pesa receipts from now until you close count against this session'. Keep the signed variance badge for over/short and the Open/Closed status pills.
+
+## #67 `download-67.png` — salon-system · Staff (HR module) · Staff list – Staff tab active, 'All' status chevron selected, filters panel expanded, DataTable listing
+- **Theme:** Light content area (white #FFFFFF cards on very light grey #F4F5F7 page) with dark sidebar (near-black/maroon #1A0F12). Accent is coral/red: active sidebar item #F0605A and active tab underline #E8584F. KPI cards use gradients: card 1 dark maroon→black (#4A1F2A→#1C1214), card 2 coral→blue (#F06A5E→#5B8DEF), card 3 coral→blue (#F06A5E→#6C8FE8). Status chevrons: dark maroon/charcoal #3B2A2E (All), green #2E7D32 (Active), grey #BDBDBD (Inactive). Table header dark #1C1214 with white text. Status badge green #2E7D32 pill. Delete icon red #E53935.
+- **Layout:** Fixed left dark sidebar (~150px) with grouped uppercase section headers and icon+label items; sidebar is scrolled (top items hidden), scrollbar visible. Main area: sticky white top bar card with page title left ('Staff' with person icon) and action toolbar + global search + icons right. Below: page heading 'Staff', a 3-column row of equal-width gradient KPI cards (big number top-left, label beneath, large faded icon bottom-right). Then a horizontal tab strip (4 tabs, underline style). Then a full-width 3-segment chevron/arrow-style status filter bar (breadcrumb-like arrows). Then a light grey rounded Filters panel with header, Clear button right, divider line, and a labelled search input. Then a DataTables-style table: 'Show [10] entries' left, 'Search:' input right, dark header row with sortable columns, striped rows.
+- **Sidebar:** (above, scrolled off) …, Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll, Cash Till, HR (section header), Staff (active, coral pill highlight, cursor hovering), Leave Requests, REPORTS (section header), Reports, SYSTEM (section header), Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Top bar title: person icon + 'Staff'
+  - Toolbar buttons (left→right): '+ Add Staff' (primary, black #111 fill, white text), 'CSV' (file icon, light grey), 'PDF' (file icon), 'Print' (printer icon), 'Import CSV' (upload icon), 'Template' (download icon) — all small light grey (#EEEEEE) buttons with dark text
+  - Global search input with magnifier: placeholder 'Search everything...'
+  - Icon buttons: palette (theme picker), brush (appearance/customize), bell with red badge (notification count, ~1)
+  - Text: 'Welcome, admin'
+  - Section heading: person icon + 'Staff'
+  - KPI card 1: '4' / 'Staff' — dark maroon gradient, icon: person with tie (faded)
+  - KPI card 2: '4' / 'Departments' — coral→blue gradient, icon: org-chart/sitemap (faded)
+  - KPI card 3: '18' / 'Shifts' — coral→blue gradient, icon: calendar (faded)
+  - Tabs: 'Staff' (active, coral text + underline, person icon), 'Departments' (sitemap icon), 'Shifts' (calendar icon), 'Attendance' (user-check icon)
+  - Status chevron filter bar: 'ALL (4)' (selected, dark), 'ACTIVE (4)' (green), 'INACTIVE (0)' (grey)
+  - Filters panel: funnel icon + 'Filters' header; 'Clear' button (dark grey #6B6B6B, white text, x-circle icon) at right; horizontal rule
+  - Filter field label: magnifier + 'SEARCH STAFF'; input placeholder 'Search staff...'
+  - Table controls: 'Show [10 ▾] entries'; 'Search:' text input
+  - Table columns (all with sort arrows; Name sorted ascending): Name | Designation | Branch | Department | Mobile | Login | Svc % | Status | Actions
+  - Row 1: Raheem | Beautician | Branch 3 – Saddar | Beauty | 11111111 | — | 0% | ACTIVE | view/edit/delete
+  - Row 2: Staff 1 | Senior Stylist | Branch 1 – Gulberg | Hair | 03003000001 | stylist1 | 15% | ACTIVE | view/edit/delete
+  - Row 3: Staff 2 | Beautician | Branch 1 – Gulberg | Beauty | 03003000002 | stylist2 | 10% | ACTIVE | view/edit/delete
+  - Status badge: green pill, white uppercase 'ACTIVE'
+  - Action icons: eye (view, black), pencil (edit, black), trash (delete, red)
+  - Name cells bold; rows alternate light grey/white striping
+- **Features:**
+  - Staff directory with multi-branch assignment
+  - Departments management (tab + KPI)
+  - Shift scheduling (tab + KPI count of shifts)
+  - Attendance tracking tab
+  - Per-staff service commission percentage (Svc %)
+  - Staff linked to system login accounts (Login column)
+  - Active/inactive staff status with counts
+  - Bulk import via CSV with downloadable template; export CSV/PDF; print
+  - Global search, theme palette switcher, notifications
+  - Leave requests and payroll linked in HR/Finance sections
+- **NAIM translation:** Becomes NAIM COMMAND 'Team' page under HR: team members (founder, contractors, VAs, SDRs, automation engineers) with Designation (e.g., Sales Closer, n8n/AI Engineer, Appointment Setter), Branch → Business Unit (Naim Automation core, side-businesses), Department (Sales, Delivery, Ops), Mobile/WhatsApp, Login (app user), and 'Svc %' → Commission % on closed deals/retainers. KPI cards: Team Members, Departments, Shifts/Work schedules (or Active Projects). Tabs: Team, Departments, Schedules, Attendance/Time logs. Keep All/Active/Inactive chevron filter, Filters panel, CSV import/template, CSV/PDF export, and view/edit/delete row actions; commission % feeds Payroll/commissions on recruitment-agency deals.
+
+## #68 `download-68.png` — salon-system · Staff (HR module) · Staff page – Departments tab active, departments list with status chevron filter (ALL / ACTIVE / INACTIVE), filter panel and DataTables-style table. Cursor hovering the 'Shifts' tab.
+- **Theme:** Light mode content area (white/very light gray #F5F5F5 page bg, white cards) with dark sidebar (near-black #1A1A1A). Accent is coral/red (#F2645A) used for the active sidebar item and active tab underline. KPI cards use gradients: coral-red (#E8616A) to periwinkle blue (#6F8FD8) for the 1st and 3rd cards, and dark maroon/burgundy (#2A0F14 to #5A1A22) for the 2nd. Status chevrons: dark brown-gray #4A3B3B (ALL), green #2E8B2E (ACTIVE), light gray #B0B0B0 (INACTIVE). Table header near-black #1E1414. Status badges are green (#2E7D32) with white uppercase text.
+- **Layout:** Fixed dark left sidebar (~150px) with uppercase gray section headers and an icon + label per item, plus a thin scrollbar. The main area has a white top header bar card with the page title at left, and action buttons, global search and user controls at right. Below it is a content card titled 'Staff' (person icon) containing, from top to bottom: (1) a row of 3 equal-width KPI gradient cards with rounded corners (~8px) and a large faded icon at the bottom-right; (2) a horizontal tab bar with icons; (3) a full-width 3-segment chevron/arrow status filter bar; (4) a light-gray rounded Filters panel; (5) a 'Show N entries' control and a 'Search:' box; (6) a data table with a dark header row and alternating light-gray/white rows.
+- **Sidebar:** (scrolled; items above cut off), Services (scissors icon), Memberships (card icon), INVENTORY (section header), Inventory, Purchases (truck icon), FINANCE (section header), Expenses, Finance (pie icon), Payroll, Cash Till, HR (section header), Staff (ACTIVE – coral pill highlight #F2645A, white text), Leave Requests, REPORTS (section header), Reports (chart icon), SYSTEM (section header), Branches, Users Management, Settings (gear icon)
+- **Client 360:** none
+- **Components:**
+  - Header title: person icon + 'Staff' (bold)
+  - Header buttons, left to right: '+ Add Department' (primary, black bg, white text), 'CSV' (file icon, light gray), 'PDF' (file icon), 'Print' (printer icon), 'Import CSV' (file icon), 'Template' (download icon). The secondary buttons are small, light gray and rounded.
+  - Global search input: magnifier icon + placeholder 'Search everything...' (rounded, light gray)
+  - Icon buttons: palette (theme picker) and paintbrush (appearance/customize)
+  - Notification bell with red badge (count, ~6)
+  - Text 'Welcome, admin'
+  - Section title: person icon + 'Staff'
+  - KPI card 1 (coral-to-blue gradient): value '4', label 'Staff', faded icon of a person in a suit
+  - KPI card 2 (dark maroon gradient): value '4', label 'Departments', faded org-chart/sitemap icon
+  - KPI card 3 (coral-to-blue gradient): value '18', label 'Shifts', faded calendar icon
+  - Tabs: 'Staff' (person icon), 'Departments' (sitemap icon, ACTIVE with coral text and coral underline), 'Shifts' (calendar icon, hover cursor), 'Attendance' (person-check icon)
+  - Chevron status filter bar: 'ALL (4)' (dark brown-gray), 'ACTIVE (4)' (green, appears selected), 'INACTIVE (0)' (light gray). Labels are uppercase, white and small.
+  - Filters panel: funnel icon + 'Filters' heading, 'Clear' button at right (dark gray with x-circle icon), a dark divider line, label 'SEARCH DEPARTMENTS' (magnifier icon, uppercase), and a text input with placeholder 'Search departments...'
+  - DataTables controls: 'Show [10 ▾] entries' at left and 'Search:' with an input at right
+  - Table columns (dark header, sortable arrows): 'Department' (sorted asc ▲), 'Staff', 'Status', 'Actions'
+  - Row: Beauty | 2 | ACTIVE badge | view (eye), edit (pencil), delete (red trash)
+  - Row: Front Office | 0 | ACTIVE | eye, pencil, trash
+  - Row: Hair | 2 | ACTIVE | eye, pencil, trash
+  - (a 4th row is implied below the fold, since ALL = 4)
+- **Features:**
+  - HR staff management with sub-modules: Staff, Departments, Shifts, Attendance
+  - Department CRUD (add/view/edit/delete) with active/inactive status
+  - Staff count per department
+  - Status segmented filter with live counts
+  - Per-tab text search and filters with Clear
+  - Export to CSV/PDF, Print, Import CSV and a downloadable import Template
+  - Paginated, sortable, searchable data tables
+  - KPI summary cards (staff count, departments, shifts)
+  - Theme palette switcher and global search
+  - Notifications
+  - Leave requests and payroll linked within the HR/Finance sections
+- **NAIM translation:** Maps to NAIM COMMAND 'Team' (HR) module. The tabs become: Team Members, Departments/Units (e.g. Sales/Outreach, Delivery/Implementation, AI Engineering, Admin, and future side-business units), Schedules/Shifts (availability and delivery capacity per week), and Attendance/Timesheets (billable hours per client project). The KPI cards become Team Members, Departments and Scheduled Shifts/Capacity hours. Keep the ALL/ACTIVE/INACTIVE chevron filter, the filters panel, the table with Department | Members | Status | Actions, and the CSV/PDF/Print/Import/Template toolbar. Departments can carry a business-unit tag so side businesses share one HR backbone. Leave Requests and Payroll remain adjacent, with payroll linked to commissions on closed recruitment-agency deals.
+
+## #69 `download-69.png` — salon-system · Staff (HR) · Staff page, Shifts tab active: weekly shift roster grid (staff rows × Mon–Sun columns)
+- **Theme:** Light mode with a coral/red-to-blue gradient palette. Page background is a very light warm off-white (~#FBF6F5) and cards are white (#FFFFFF). The sidebar is dark near-black (~#1A1414) with white text. The active nav item is a coral/salmon pill (~#F0624F). KPI cards use gradients: coral (~#E8605A) to periwinkle blue (~#5B8BD6) for the first two, and dark maroon/black (~#2A0E12 to ~#5A1A20) for the third. Shift chips and the grid header are near-black (~#120A0A) with white text. The active tab underline and icon are coral red (~#E5533D).
+- **Layout:** There is a fixed dark left sidebar about 150px wide, with section group labels in small uppercase grey and a visible scrollbar. The main content area sits on a light background and is arranged top to bottom: (1) A white top bar card. It shows the page title '👤 Staff' on the left. On the right it holds a black 'Add Shift' button, a global search input, three circular icon buttons (palette/theme, brush/customize, notifications bell with red badge '6'), and the text 'Welcome, admin'. (2) A content card with the section header '👤 Staff'. (3) A row of 3 equal-width KPI gradient cards, each with a large number, a label, and a large faded icon at the bottom-right. (4) A horizontal tab bar with 4 icon tabs and an underline indicator. (5) A full-width table: an 8-column weekly roster with a dark header row. Empty space remains below.
+- **Sidebar:** (partially scrolled; items above are cut off), Services (scissors icon), Memberships (id-card icon), INVENTORY section: Inventory, Purchases, FINANCE section: Expenses, Finance, Payroll, Cash Till, HR section: Staff (ACTIVE, coral pill), Leave Requests, REPORTS section: Reports, SYSTEM section: Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Top bar title: person icon + 'Staff'
+  - Primary button (black, white text): '+ Add Shift' (label is contextual to the active Shifts tab)
+  - Global search input with magnifier: placeholder 'Search everything...'
+  - Icon button: palette (theme switcher)
+  - Icon button: brush (appearance/customize)
+  - Notification bell with red count badge '6'
+  - Text: 'Welcome, admin'
+  - Section header: person icon + 'Staff'
+  - KPI card 1 (coral→blue gradient): value '4', label 'Staff', faded person/user-tie icon
+  - KPI card 2 (coral→blue gradient): value '4', label 'Departments', faded org-chart/sitemap icon
+  - KPI card 3 (dark maroon/black gradient): value '18', label 'Shifts', faded calendar icon
+  - Tabs: 'Staff' (person icon), 'Departments' (sitemap icon), 'Shifts' (calendar icon, ACTIVE, coral text + coral underline), 'Attendance' (user-check icon)
+  - Roster table header (black background, white bold centered text): 'Staff' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun'
+  - Staff column cells show a bold name with a role subtitle, on a light pink/blush background (~#FBEFEE)
+  - Row 1: 'Raheem' / 'Beautician'. Mon–Sun are all empty and show a grey '+' (add shift).
+  - Row 2: 'Staff 3' / 'Stylist'. Mon is empty ('+'). Tue–Sun each show a black chip '10:00–19:00'.
+  - Row 3: 'Staff 2' / 'Beautician'. Mon–Sat each show '10:00–19:00'. Sun is empty ('+').
+  - Row 4: 'Staff 1' / 'Senior Stylist'. Mon–Sat each show '10:00–19:00'. Sun is empty ('+').
+  - Shift chips: black rounded rectangles that fill the cell width, with small white centered time-range text
+  - Mouse cursor (hand pointer) hovering over the Shifts tab
+- **Features:**
+  - HR module with staff, departments, shifts, and attendance sub-tabs
+  - Weekly shift roster: clicking '+' in an empty cell creates a shift for that staff member and day (likely opens an Add Shift modal prefilled); clicking a chip presumably edits or deletes it
+  - Shift count KPI (18 = the total number of filled shift cells)
+  - Department count KPI and staff headcount KPI
+  - Role or title per staff member (Beautician, Stylist, Senior Stylist)
+  - Context-aware primary action button that changes with the active tab ('Add Shift')
+  - Global search, theme palette switcher, and notifications in the header
+  - Linked HR flows: Leave Requests, Payroll (in the Finance section), Attendance tracking
+- **NAIM translation:** This maps to NAIM COMMAND → Team / HR. KPIs become: Team Members, Departments (Sales, Delivery/Automation Build, Support, Side-Ventures), and Scheduled Shifts or Blocks this week. The Shifts roster becomes a weekly capacity planner: rows are team members with roles (e.g. Sales Closer, Automation Engineer, SDR), and cells are work blocks (e.g. '09:00–18:00 EAT') or block types such as Outreach, Client Delivery, and On-call support. Clicking '+' adds a block. The Attendance tab tracks check-ins or remote availability. Departments can be scoped per business unit, so the recruitment-agency AI automation unit and future side-businesses can each have their own departments. The design should keep the black chips, coral active states, and gradient KPI cards. The contextual primary button should switch between 'Add Member', 'Add Department', 'Add Shift', and 'Log Attendance' depending on the tab. This screen should also tie into Leave Requests and Payroll for full team ops.
+
+## #70 `download-70.png` — salon-system · Staff (HR) · Staff page – Attendance tab, 'Mark Day' mode (daily attendance marking list with date picker)
+- **Theme:** Light mode content area (white #FFFFFF cards on very light grey/pinkish #F7F5F5 background) with near-black sidebar (#1A1010 / very dark maroon-black). Accent palette: coral/red #F0635A (active sidebar item, active tab underline/text, KPI gradient start) blending to blue #5B7FD6 (KPI gradient end). Black #111 for primary buttons (Save Attendance, Mark Day active toggle).
+- **Layout:** Fixed left dark sidebar (~150px) with uppercase grey section headers and icon+label items; sidebar is scrolled down (Services at top is partly cut). Main area: sticky white top bar card with page title left and actions/search/user right. Below: page header 'Staff', a 3-column row of equal-width gradient KPI cards, then a tab strip, then an 'Attendance' panel card (light grey #F3F3F3 background) containing a mode toggle (top-right) and date field, followed by a vertical list of full-width staff attendance row cards, each with a coral left border accent.
+- **Sidebar:** (scrolled; above) Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll, Cash Till, HR (section header), Staff (ACTIVE – coral #F0635A filled rounded pill, white text/icon), Leave Requests, REPORTS (section header), Reports, SYSTEM (section header), Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Top bar: person icon + title 'Staff' (bold) on left
+  - Top bar right: button '✓✓ All Present' (light grey pill, double-check icon), button '💾 Save Attendance' (black filled, white text), search input with magnifier placeholder 'Search everything...', palette icon button (theme switcher), brush icon button (appearance/customize), bell icon with red notification badge (count '8'-ish), text 'Welcome, admin'
+  - Section heading: person icon + 'Staff'
+  - KPI card 1: big number '4', label 'Staff', watermark icon person/user-tie bottom-right; red→blue horizontal gradient (#F0635A → #5B7FD6), white text, rounded ~10px, soft shadow
+  - KPI card 2: '4', label 'Departments', watermark sitemap/org-chart icon
+  - KPI card 3: '18', label 'Shifts', watermark calendar icon
+  - Tabs (icon + label): 'Staff', 'Departments', 'Shifts', 'Attendance' (ACTIVE – coral text with coral underline); thin grey divider beneath
+  - Attendance panel header: user-check icon + 'Attendance'
+  - Segmented toggle top-right: 'Mark Day' (active, black bg white text, calendar-day icon) | 'Month Matrix' (white bg, table/grid icon)
+  - Dark horizontal rule beneath header
+  - Field label: calendar icon + 'DATE' (small uppercase); full-width date input value '09/09/2026' with calendar picker icon at right
+  - Attendance row card (repeated): left bold name, below it 'Role · Branch N – Area'; right side status chip buttons '✓ Present', '◐ Half Day', '⛱ Leave', '✕ Absent' (outlined light grey pills, none selected), then two time inputs '--:-- ⏰' (check-in, check-out) with clock icon
+  - Row 1: 'Raheem' — 'Beautician · Branch 3 – Saddar'
+  - Row 2: 'Staff 3' — 'Stylist · Branch 2 – Blue Area'
+  - Row 3: 'Staff 2' — 'Beautician · Branch 1 – Gulberg'
+  - Row 4: 'Staff 1' — 'Senior Stylist · Branch 1 – Gulberg' (partially cut off at bottom)
+  - Each row card: white, rounded, thin coral/red left border (#F0635A), light grey outline
+- **Features:**
+  - HR staff management with tabs for Staff list, Departments, Shifts, Attendance
+  - KPI counts for staff, departments, shifts
+  - Daily attendance marking per staff: Present / Half Day / Leave / Absent
+  - Check-in and check-out time capture per staff per day
+  - Bulk 'All Present' quick action and explicit 'Save Attendance' commit
+  - Date selection for back/forward dated attendance
+  - Alternate 'Month Matrix' view (staff × days grid) for monthly attendance overview
+  - Multi-branch staff assignment shown on each row (role · branch – area)
+  - Feeds Payroll and Leave Requests modules
+  - Global search, theme palette switcher, notifications
+- **NAIM translation:** Becomes NAIM COMMAND 'Team / HR' module: KPI cards for Team Members, Departments (Sales, Delivery/Automation Engineering, Support, Side-businesses), and Shifts/work schedules. Attendance tab tracks daily presence of Nairobi team (Present / Half Day / Leave / Absent / optionally 'Remote' and 'Client Site') with check-in/out times, 'All Present' bulk action and Save. Row subtitle shows 'Role · Business unit – Location' (e.g. 'SDR · Recruitment Automation – Westlands'). Month Matrix gives a monthly grid for payroll in KES. Links to Payroll and Leave Requests; could later tie attendance to sales activity (calls/demos logged per day).
+
+## #71 `download-71.png` — salon-system · Staff (HR section) · Staff page, Attendance tab, 'Mark Day' mode: daily attendance marking list for a selected date
+- **Theme:** Light mode content area (white #FFFFFF cards on very light grey #F5F5F7 background) with a dark sidebar (near-black/dark maroon #1E1416). Accent is coral/red #F0605A, used for the active sidebar item and the active tab underline. KPI cards use a diagonal gradient from coral red (#E8606A) on the left to periwinkle blue (#6A8FE0) on the right, with white text. Primary buttons are solid black (#111111) with white text. The 'Present' status pill is filled green (#2E7D32). Inactive pills are white with a grey border (#D0D0D0). Each staff row has a coral/red left border accent.
+- **Layout:** The left sidebar is fixed and about 150px wide. It is dark, with small uppercase grey section labels and an icon plus label for each item. The main area has a sticky top header bar containing: page title with person icon 'Staff' on the left; on the right, buttons 'All Present' (light/outline with double-check icon) and 'Save Attendance' (black with save icon), a global search input 'Search everything...', a palette/theme icon, a brush icon, a notification bell with a red badge, and 'Welcome, admin'. Below the header is a white page card with the title '👤 Staff'. The page card contains, in order: (1) a row of 3 equal-width gradient KPI cards (3-column grid), each with a large white icon at the bottom right; (2) a horizontal tab bar; (3) an Attendance panel (light grey #F2F2F4 rounded box) holding the header, mode toggle and date picker; (4) a vertical list of staff attendance rows, each a white rounded card with a coral left border; (5) a full-width black 'Save Attendance' button at the bottom (partially cut off).
+- **Sidebar:** (above, cut off) ... Services, Memberships, INVENTORY (section label), Inventory, Purchases, FINANCE (section label), Expenses, Finance, Payroll, Cash Till, HR (section label), Staff (ACTIVE: coral #F0605A filled rounded pill, white text), Leave Requests, REPORTS (section label), Reports, SYSTEM (section label), Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Top bar title: 'Staff' with person icon
+  - Top bar button: 'All Present' (double-check icon, light style); marks every staff member Present
+  - Top bar button: 'Save Attendance' (save/disk icon, black filled)
+  - Global search input with placeholder 'Search everything...' and magnifier icon
+  - Theme palette icon button and brush/customize icon button
+  - Notification bell with red count badge
+  - User greeting: 'Welcome, admin'
+  - Page card heading: '👤 Staff'
+  - KPI card 1: value '4', label 'Staff', person/user icon
+  - KPI card 2: value '4', label 'Departments', org-chart/hierarchy icon
+  - KPI card 3: value '18', label 'Shifts', calendar icon
+  - Tabs (each with an icon): 'Staff', 'Departments', 'Shifts', 'Attendance'. 'Attendance' is ACTIVE, shown in coral text with a coral underline.
+  - Attendance panel header: 'Attendance' with user-check icon, with a dark divider line below it
+  - Segmented toggle (top right of panel): 'Mark Day' (ACTIVE, black filled, calendar-day icon) and 'Month Matrix' (outline, grid icon)
+  - Field label 'DATE' (small uppercase, with calendar icon) above a date input showing value '09/09/2026' and a native calendar picker icon
+  - Staff attendance row 1: name 'Raheem' (bold); subtitle 'Beautician · Branch 3 – Saddar'; status pills '✓ Present' (SELECTED, green filled), '◐ Half Day', '⛱ Leave', '✕ Absent'; then two time inputs '--:--' with clock icons (check-in and check-out)
+  - Staff attendance row 2: 'Staff 3' with subtitle 'Stylist · Branch 2 – Blue Area'; Present is SELECTED (green), and the cursor is hovering over it; Half Day / Leave / Absent pills; in/out time inputs
+  - Staff attendance row 3: 'Staff 2' with subtitle 'Beautician · Branch 1 – Gulberg'; no status selected (all pills outline); in/out time inputs
+  - Staff attendance row 4: 'Staff 1' with subtitle 'Senior Stylist · Branch 1 – Gulberg'; no status selected; in/out time inputs
+  - Bottom full-width black button: 'Save Attendance' with save icon (partially visible)
+- **Features:**
+  - Daily attendance marking per staff member with 4 states: Present / Half Day / Leave / Absent (single-select pill group)
+  - Optional check-in and check-out time capture per staff member per day
+  - Date selector to mark or edit attendance for any day
+  - Bulk 'All Present' quick action
+  - Batch save of the whole day's attendance (top and bottom Save Attendance buttons)
+  - Alternate 'Month Matrix' view: a staff × days grid for the month
+  - Staff linked to a role and a branch (multi-branch HR)
+  - HR module with Staff, Departments and Shifts tabs and KPI counts
+  - Attendance likely feeds the Payroll and Leave Requests modules
+- **NAIM translation:** Map this to NAIM COMMAND > Team > Attendance (HR module).
+
+- **KPI cards:** Team Members, Departments (e.g. Sales, Delivery/Implementation, Ops, plus side-businesses), and Shifts/Work Schedules (e.g. office, remote, field).
+- **Mark Day list:** shows each team member with their role and location, e.g. 'Sales Exec · Nairobi HQ – Westlands' or 'Automation Engineer · Remote'.
+- **Status pills:** Present / Half Day / Leave / Absent. Consider adding 'Remote' and 'Client Site' (for on-site implementation at recruitment agencies).
+- **Time inputs:** check-in and check-out time inputs per person.
+- **Bulk actions:** 'All Present' plus a Save button.
+- **Month Matrix:** use it for monthly review and export.
+- **Integrations:** feed attendance into Payroll (KES salaries, half-day deductions) and Leave Requests.
+- **Business units:** scope by business unit (the agency automation business vs. future side-businesses), analogous to Branches.
+- **Styling:** keep the gradient KPI cards, the coral active-tab and sidebar accent, the black primary buttons and the green selected state.
+
+## #72 `download-72.png` — salon-system · HR > Leave Requests · Leave Requests list, 'ALL (2)' status filter active, with chevron status pipeline and two request cards (one Pending, one Approved)
+- **Theme:** Light content area with a dark sidebar. Sidebar background is near-black/very dark brown (~#1E1414). The active nav item is a coral/salmon pill (~#F0645A) with white text. The page background is very light warm off-white (~#FBF5F4) and cards are white. Status colors: ALL dark taupe (~#4A3C3C), PENDING burnt orange/brown (~#B5541C), APPROVED green (~#3E8E3A), REJECTED muted pink/rose (~#E08585), CANCELLED grey (~#B0B0B0). Primary 'Request Leave' button is black (~#111) with white text. Info banner has a left accent border in coral/red.
+- **Layout:** Fixed left sidebar (~150px wide, dark) with grouped sections. Each section has a small uppercase grey header and items made of an icon plus a label. The sidebar has its own thin scrollbar. The main area contains: (1) a white top header bar card with rounded corners, holding the page icon and title on the left and the actions on the right; (2) a full-width horizontal chevron/arrow-shaped status stepper with 5 equal segments that act as filter tabs; (3) an info banner; (4) a vertical stack of full-width leave request cards. Each card has a colored left border matching its status, details on the left, and the status badge and actions right-aligned. There is lots of empty whitespace below the list.
+- **Sidebar:** (scrolled, upper items cut off) Services, Memberships, INVENTORY (section header), Inventory, Purchases, FINANCE (section header), Expenses, Finance, Payroll, Cash Till, HR (section header), Staff, Leave Requests (ACTIVE, coral pill), REPORTS (section header), Reports, SYSTEM (section header), Branches, Users Management, Settings
+- **Client 360:** none
+- **Components:**
+  - Header: airplane-departure icon + title 'Leave Requests' (bold, dark).
+  - Header right: black button '+ Request Leave'.
+  - Header right: global search input with magnifier icon and placeholder 'Search everything..' (rounded, light grey).
+  - Header right: palette icon button (theme palette switcher).
+  - Header right: brush icon button (appearance/customize).
+  - Header right: bell notification icon with red badge count '6'.
+  - Header right: text 'Welcome, admin'.
+  - Status chevron filter bar, 5 arrow-shaped segments, uppercase white labels with counts: 'ALL (2)' (dark taupe, currently selected), 'PENDING (1)' (orange-brown), 'APPROVED (1)' (green), 'REJECTED (0)' (pink), 'CANCELLED (0)' (grey).
+  - Info banner with circled 'i' icon and coral left border. Text: 'Approving a request writes real attendance rows, so the booking guard stops offering that stylist on those days.'
+  - Card 1, pending (orange-brown left border): name 'Staff 2' bold + role 'Beautician' in grey. Line: calendar icon 'Sep 11, 2026 – Sep 10, 2026 · 2 days · Annual' (bold '2 days'). Line: speech-bubble icon 'Family function'. Line: 'Balance 12 days'. Right side: badge 'PENDING' (orange-brown, white text). Buttons, all slate-grey (~#5F6B73) with white text: '✓ Approve', '✕ Reject', '↺ Withdraw'. Red trash icon (delete) at far right.
+  - Card 2, approved (green left border, slightly faded/muted text): 'Staff 3' + role 'Stylist'. Line: 'Sep 04, 2026 – Sep 04, 2026 · 1 day · Casual'. Line: speech icon 'Personal leave'. Line: 'Balance 10 days · decided by hr1'. Right side: badge 'APPROVED' (green), plus a lighter grey '↺ Withdraw' button. No delete icon is shown on this card.
+  - Mouse cursor visible near card 2 (no hover state shown).
+- **Features:**
+  - Staff leave request workflow with statuses Pending → Approved / Rejected / Cancelled (withdrawn).
+  - Status pipeline doubles as a filter with live counts.
+  - Leave types (Annual, Casual) with date range and auto-computed day count.
+  - Reason/note per request.
+  - Leave balance shown per staff member, decremented on approval (12 vs 10).
+  - Audit of the approver ('decided by hr1'), implying role-based HR users.
+  - Approve/Reject actions for HR/admin. Withdraw is available on both pending and approved requests (cancels them). Delete is available on pending requests.
+  - Integration: approval writes attendance records, and the booking engine blocks that staff member's availability on those dates (a capacity guard).
+  - Self-service 'Request Leave' creation (likely opens a modal with staff, type, dates and reason).
+  - Data quirk: card 1's end date is before its start date (Sep 11 → Sep 10) yet it computes '2 days'. Validation is needed when rebuilding.
+  - Global search, notifications, and theme palette switching.
+- **NAIM translation:** Map this to NAIM COMMAND > Team > Time Off / Availability. Requests come from team members (automation engineers, sales reps, VAs) with types Annual, Sick, Casual and Unpaid. Keep the 5-segment chevron filter (All/Pending/Approved/Rejected/Cancelled) with counts, the colored left-border cards, the balance display and the 'decided by' audit trail. Replace the booking guard with a delivery capacity guard: approved leave blocks that person in the project/onboarding scheduler, discovery-call booking links (Calendly-style availability) and task auto-assignment for recruitment-agency client implementations. The banner copy would read: 'Approving leave blocks this person's calendar slots and pauses auto-assignment of client tasks on those days.' Add validation (end ≥ start) and working-day computation using the Kenya public holiday calendar. Keep the feature multi-business so future side-businesses share HR. Make it role-gated so only HR/Admin can Approve or Reject, while the requester can Withdraw.
+
+## #73 `download-73.png` — salon-system · Reports · Reports & Analytics landing/index: grid of 7 report category cards. No report is open yet.
+- **Theme:** Light content area with a dark sidebar, in a coral/red palette. Sidebar background is near-black with a warm tint (~#1A1010). The active nav pill is coral (~#F0564A) with white text. The main canvas is a very pale blush (~#FDF3F2). Cards are white (#FFFFFF) with a ~3px coral top border (~#E8604C) and a faint grey outline. Icons are coral (~#E8604C). Titles are near-black (#111) and descriptions are grey (#666).
+- **Layout:** Fixed left sidebar, about 150px wide and dark. Section headers are small uppercase grey labels (INVENTORY, FINANCE, HR, REPORTS, SYSTEM) with a thin scrollbar. The main area has two white rounded cards stacked vertically. (1) Top header bar: the page title 'Reports' with a bar-chart icon on the left, and utilities on the right. (2) A content card titled 'Reports & Analytics' with a bar-chart icon. Inside it is a responsive grid of 5 columns. Row 1 has 5 cards and row 2 has 2 cards, left-aligned. Each card holds an icon top-left, then a bold title, then a 1–2 line grey description. Cards are about 160x75px with rounded corners of about 6px. The rest of the page below is empty blush.
+- **Sidebar:** (scrolled; top partially cut, a red accent line is visible at the very top), Services (scissors icon), Memberships (id-card icon), INVENTORY section: Inventory (dolly icon), Purchases (truck icon), FINANCE section: Expenses (cash icon), Finance (pie icon), Payroll (id/money icon), Cash Till (cash-register icon), HR section: Staff (person icon), Leave Requests (plane icon), REPORTS section: Reports (bar-chart icon), ACTIVE with a coral pill and the mouse cursor hovering, SYSTEM section: Branches (building/layers icon), Users Management (users icon), Settings (gear icon)
+- **Client 360:** none
+- **Components:**
+  - Header title: 'Reports' with a bar-chart icon
+  - Global search input: placeholder 'Search everything...' with a magnifier icon and a rounded light-grey fill
+  - Icon button: palette (theme switcher)
+  - Icon button: brush/paintbrush (appearance/customize)
+  - Notification bell with a red badge showing '6'
+  - Text: 'Welcome, admin'
+  - Section heading: 'Reports & Analytics' (bar-chart icon)
+  - Card 'Sales': cash-register icon. Description: 'Revenue, tax, paid and due by day'
+  - Card 'Services': scissors icon. Description: 'Top sellers and true profitability after recipe cost'
+  - Card 'Staff': person icon. Description: 'Revenue, commission, tips and no-show impact'
+  - Card 'Customers': contact-book icon. Description: 'Top spenders, lifetime value and churn risk'
+  - Card 'Inventory': stacked-boxes icon. Description: 'Valuation, movement and shrinkage at cost'
+  - Card 'Finance': pie-chart icon. Description: 'Monthly P&L trend'
+  - Card 'Utilization': gauge/speedometer icon. Description: 'Booked hours against shift capacity — where the unbooked time is'
+  - Mouse cursor (hand) over the sidebar 'Reports' item
+- **Features:**
+  - Central reports hub with category cards that drill into individual report pages
+  - Sales report: daily revenue, tax, paid vs due (receivables)
+  - Service profitability report net of recipe/consumable cost (COGS per service)
+  - Staff performance report: revenue, commission, tips, no-show impact
+  - Customer analytics: top spenders, lifetime value (LTV), churn-risk scoring
+  - Inventory valuation at cost, stock movement, shrinkage
+  - Finance: monthly P&L trend
+  - Capacity utilization: booked hours vs shift capacity, highlighting unbooked time
+  - Global search, theme palette switcher, notifications with count, role greeting (admin)
+  - Role-based sidebar grouped by domain (Inventory, Finance, HR, Reports, System), multi-branch support
+- **NAIM translation:** Build a NAIM COMMAND 'Reports & Analytics' hub with the same card-grid pattern: a coral top-border card, an icon, a title and a one-line description, with each card drilling into a report. The salon reports map to NAIM reports as follows:
+- Sales → 'Revenue': MRR/one-off invoiced, VAT 16%, paid vs outstanding by day/month in KES.
+- Services → 'Offers/Packages': top-selling automation packages (e.g., CV screening bot, WhatsApp candidate follow-up), with true margin after delivery cost (dev hours, API/LLM tokens, tooling).
+- Staff → 'Team': revenue sourced/closed per rep, commissions, delivery hours, missed-meeting/no-show impact.
+- Customers → 'Clients': top agencies by spend, lifetime value, churn risk (usage drop, overdue invoices, renewal date).
+- Inventory → 'Assets/Subscriptions': SaaS/API spend, licenses, template library value. Make this optional per side-business.
+- Finance → 'P&L': monthly trend.
+- Utilization → 'Capacity': billable/booked hours vs available team hours, showing idle capacity.
+Also add a Leads Engine report card for the funnel: leads → contacted → replied → demo → won, with conversion by source.
+Keep the global search, palette switcher, notification badge and 'Welcome, <user>' header. Make the report set scoped per business unit, mirroring 'Branches' as Business Units for future side-businesses.
+
+## #74 `download-74.png` — salon-system · Reports · Services report (drill-down from 'Reports & Analytics' hub): filter bar, 'Services — top view' bar chart and services DataTable (header only visible)
+- **Theme:** Light content area (white cards #FFFFFF on very light grey page #F4F5F7, filter card light grey #EEF0F2) with dark sidebar (near-black/dark maroon #1E1215 to #241417). Active nav pill coral/salmon #F25C54 (approx). Chart bars medium blue #3170D8. Table header bar black #111111 with white text. Thin coral/red top border on the chart card (#F08080 approx). Dark grey 'All reports' button #6C757D.
+- **Layout:** Fixed left dark sidebar (~150px) with uppercase grey section labels (INVENTORY, FINANCE, HR, REPORTS, SYSTEM) and icon+label items; a vertical scrollbar on its right edge. Main area: top white header bar (rounded card) with page title 'Reports' (chart icon) at left and a toolbar on the right. Below: section heading 'Reports & Analytics' (chart icon). Then a light-grey filter card containing a title row ('Services report' + 'All reports' button right) separated by a dark divider line, and a 3-column filter row (FROM | TO | BRANCH), equal widths. Next, a white card with a red top border titled 'Services — top view' with a collapse '—' control at right, containing an inner bordered chart panel. Below the card, DataTables controls ('Show 10 entries' left, 'Search:' right) and a full-width black table header row.
+- **Sidebar:** (scrolled; items above cut off), Services (scissors icon), Memberships (id-card icon), — INVENTORY —, Inventory (boxes icon), Purchases (truck icon), — FINANCE —, Expenses (money icon), Finance (pie-chart icon), Payroll (card icon), Cash Till (cash-register icon), — HR —, Staff (user icon), Leave Requests (plane icon), — REPORTS —, Reports (bar-chart icon) [ACTIVE, coral pill], — SYSTEM —, Branches (building icon), Users Management (users icon), Settings (gear icon)
+- **Client 360:** none
+- **Components:**
+  - Header title: 'Reports' with bar-chart icon (bold, dark)
+  - Header toolbar buttons (small light-grey pill buttons with icons): '← All Reports', 'CSV' (file icon), 'PDF' (file icon), 'Print' (printer icon)
+  - Global search input with magnifier icon, placeholder 'Search everything...'
+  - Icon button: palette (theme palette switcher)
+  - Icon button: brush/paint (theme/appearance toggle)
+  - Notification bell with red badge (count, ~'8')
+  - Text: 'Welcome, admin'
+  - Section heading: 'Reports & Analytics' with chart icon
+  - Filter card title: 'Services report' with scissors icon
+  - Button (dark grey, right): '← All reports'
+  - Date input label 'FROM' (calendar icon, uppercase small bold) value '08/10/2026' with native calendar picker icon
+  - Date input label 'TO' (calendar icon) value '09/09/2026' with calendar picker icon
+  - Select label 'BRANCH' (building icon) value/placeholder 'All branches' with chevron dropdown
+  - Card: 'Services — top view' (scissors icon) with collapse '—' icon top-right; card top border red/coral
+  - Vertical bar chart titled 'Services' (small bold label top-left); Y-axis 0, 500, 1,000, 1,500, 2,000, 2,500 with light gridlines; vertical dividers between categories; blue bars: 'Hair Color – Full' ≈2,350, 'Facial – Gold' ≈1,680, 'Haircut – Classic' ≈470 (sorted descending)
+  - DataTable length control: 'Show [10 ▾] entries'
+  - DataTable search: 'Search:' with text input
+  - Table header (black background, white bold text, sort arrows): 'Service' | 'Qty' | 'Revenue' | 'Actual cost' | 'Profit' | 'Margin %' (rows below fold)
+- **Features:**
+  - Reports hub with per-report drill-down pages and 'All reports' back navigation
+  - Report export: CSV, PDF, Print from header
+  - Date range filter (From/To) and branch filter (multi-branch support, 'All branches')
+  - Top-N service performance bar chart ranked by revenue/quantity
+  - Service profitability table: quantity sold, revenue, actual cost, profit, margin %
+  - Sortable, searchable, paginated tables (DataTables style)
+  - Collapsible report cards
+  - Global search, notifications, theme palette switcher, user greeting
+- **NAIM translation:** Becomes NAIM COMMAND 'Reports → Services/Offerings Profitability report'. Replace salon services with Naim's productized offerings (e.g., 'AI Candidate Screening Bot', 'CV Parsing Automation', 'WhatsApp Recruiter Assistant', 'Setup/Retainer packages') and later side-business products. Filters: From/To date range plus 'Business unit' (instead of Branch: Naim Automation, side-business A/B) and optionally 'Client/Agency'. Chart: top offerings by revenue (KES) — bar chart. Table columns: Offering | Deals/Qty | Revenue (KES) | Delivery cost (hours×rate + API/tool costs) | Profit | Margin %. Keep CSV/PDF/Print export, 'All reports' hub navigation, collapsible cards, black table header, coral active nav, blue chart bars, and light/dark + palette theming. Sidebar sections map to: Sales (Leads, Pipeline), Delivery (Projects, Services), Finance (Invoices, Expenses, Payroll, Cash), HR (Team, Leave), Reports, System (Business Units, Users, Settings).
+
+## #75 `download-75.png` — salon-system · Reports · Services report: date/branch filter header, 'Services — top view' revenue bar chart, and a sortable DataTables service profitability table. The page is scrolled; the table bottom and pagination are cut off.
+- **Theme:** Light content area (#F4F5F7 page bg, white cards) with a dark near-black sidebar (#140A0A / #1A1010). Accent coral/red (#F0605A) marks the active nav item 'Reports' and the thin top border of the chart card. Chart bars are blue (#2F6FD6). The table header row is near-black (#1A0F0F) with white text. The 'All reports' button is slate grey (#5F6670).
+- **Layout:** Fixed left sidebar about 150px wide, dark, with uppercase grey section labels (small, letter-spaced) and white icon+label items. It has its own scrollbar. The main content is fluid with about 16px padding and stacks three blocks vertically. (1) A light-grey filter card with a header row and a 3-column filter grid. (2) A white collapsible card with a coral top border, containing an inner bordered chart panel. (3) A full-width DataTable directly on the page background, with controls above it.
+- **Sidebar:** Services (scissors icon, partially visible at top, under an unseen section), Memberships (id-card icon), INVENTORY (section label), Inventory (dolly icon), Purchases (truck icon), FINANCE (section label), Expenses (money icon), Finance (pie-chart icon), Payroll (card icon), Cash Till (register icon), HR (section label), Staff (user icon), Leave Requests (plane icon), REPORTS (section label), Reports (bar-chart icon) — ACTIVE, coral pill highlight #F0605A, white text, SYSTEM (section label), Branches (building icon), Users Management (users icon), Settings (gear icon, cut off at bottom)
+- **Client 360:** none
+- **Components:**
+  - Header card, left: scissors icon + title 'Services report' (bold, dark).
+  - Header card, right: dark grey button '← All reports' (arrow-left icon, white text, rounded).
+  - A thin dark divider line runs under the header.
+  - Filter label 'FROM' (calendar icon, small uppercase bold) with native date input showing '08/10/2026' and a calendar picker icon.
+  - Filter label 'TO' (calendar icon) with date input showing '09/09/2026'.
+  - Filter label 'BRANCH' (building icon) with select 'All branches' and a chevron. The three inputs sit in equal-width columns.
+  - Card 'Services — top view' (scissors icon, bold title) with a collapse '−' icon at top right and a 2px coral top border.
+  - Inner chart panel titled 'Services'. Vertical bar chart (Chart.js style) with light vertical gridlines.
+  - Y-axis ticks: 0, 500, 1,000, 1,500, 2,000, 2,500.
+  - Bars: 'Hair Color – Full' ≈2,500; 'Facial – Gold' ≈1,800; 'Haircut – Classic' ≈500. Bars are solid blue and wide, with tiny x-axis labels. The metric charted is revenue.
+  - DataTables control 'Show [10 ▾] entries' (left).
+  - DataTables control 'Search:' text input (right).
+  - Table header (dark bg, white bold text, sort arrows on each column): Service (actively sorted ▲) | Qty | Revenue | Actual cost | Profit | Margin %.
+  - Row 1: Facial – Gold | 2 | Rs 1,800 | Rs 500 | Rs 1,300 | 72.22%.
+  - Row 2: Hair Color – Full | 1 | Rs 2,500 | Rs 227 | Rs 2,273 | 90.92%.
+  - Row 3: Haircut – Classic | 2 | Rs 500 | Rs 100 | Rs 400 | 80%.
+  - Table rows use zebra striping (light grey on alternate rows), small grey text, and thin row borders.
+  - Currency prefix is 'Rs'.
+  - Pagination and info text are cut off below the visible area.
+- **Features:**
+  - A report hub with sub-reports, reached via the 'All reports' back navigation.
+  - Date-range filter (From/To) plus a branch filter with an 'All branches' option.
+  - A top-N services chart by revenue.
+  - Per-service profitability: quantity sold, revenue, actual cost (from consumables/inventory cost), profit, and margin %.
+  - Sortable, searchable, paginated table.
+  - Collapsible report cards.
+  - Multi-branch support.
+- **NAIM translation:** Becomes NAIM COMMAND 'Reports → Services/Offer Profitability Report'.
+
+- **Rows:** each automation package or service, e.g. 'AI Candidate Screening Bot', 'CV Parsing Automation', 'WhatsApp Recruiter Assistant', 'Monthly Retainer – Standard'.
+- **Qty:** deals closed or deployments.
+- **Revenue:** invoiced amount in KES.
+- **Actual cost:** delivery cost, i.e. API/LLM tokens, hosting, contractor hours, tools.
+- **Profit and Margin %:** computed from revenue minus actual cost.
+- **Filters:** keep From/To. Replace BRANCH with 'Business unit' ('All business units': Recruitment Automation, plus future side-businesses), and optionally add 'Client industry' or 'Sales owner'.
+- **Chart:** 'Offers — top view' bar chart of revenue per offer. Optionally toggle to profit or margin.
+- **Currency:** use 'KES' instead of 'Rs'.
+- **Styling and navigation:** keep the dark sidebar with section groups (SALES, DELIVERY, FINANCE, HR, REPORTS, SYSTEM), the coral active state (or the NAIM brand accent), and the '← All reports' back button to the reports hub.
+
+## #76 `download-76.png` — salon-system · Settings · Settings page – 'Salon Settings' collapsible card (global business parameters form), sidebar scrolled down to the HR/Reports/System sections
+- **Theme:** Light mode content area (white #FFFFFF cards on very light grey/pinkish #F7F5F5 background) with a dark sidebar (near-black/dark brown #1E1414 to #241818). Accent is coral/salmon red (#F2614F / #FF6B57), used for the active 'Settings' nav pill, the top border of the Salon Settings card and the left border of the info banner (banner background is a very light pink, #FDF1EF). Text is dark charcoal (#222). The 'Dark Mode' toggle button at the bottom of the sidebar is navy (#1F2A44) with a light border and a moon icon.
+- **Layout:** Two-column app shell. Left: fixed dark sidebar (~150px wide) with grouped nav (uppercase small grey section headers HR / REPORTS / SYSTEM), white icons + labels, active item as rounded coral pill, a vertical scrollbar, and a pinned 'Dark Mode' toggle at the bottom. Right: content area with (1) a top header bar card (white, rounded, subtle shadow) showing gear icon + page title 'Settings' at left and, on the right, a rounded global search input 'Search everything...' with magnifier icon, a palette (theme) icon button, a brush (customize) icon button, a bell icon with red notification badge, and text 'Welcome, admin'. (2) Below: large bold page heading with gear icon 'Settings'. (3) A full-width collapsible card 'Salon Settings' (sliders icon in header, '—' collapse control at the far right, coral top border). Card body: an info banner, then a 2-column form grid (equal columns, ~16px gap); each field = small bold label with icon above, full-width rounded input (light grey border), and a helper caption below in normal dark text. The page scrolls; more fields continue below the fold.
+- **Sidebar:** Expenses (partially cut off at top; icon: money/expense), Finance (icon: bank/columns), Payroll (icon: money bill), Cash Till (icon: cash register), — section header: HR —, Staff (icon: user), Leave Requests (icon: plane), — section header: REPORTS —, Reports (icon: chart/file), — section header: SYSTEM —, Branches (icon: sitemap/building), Users Management (icon: users), Settings (ACTIVE – coral pill background, white text, gear icon), Activity Logs (icon: history/clock), Roles & Permissions (icon: user-shield), My Account (icon: user-circle), About App (icon: info-circle), Bottom pinned button: 'Dark Mode' (moon icon, full-width, navy)
+- **Client 360:** none
+- **Components:**
+  - Header bar: title 'Settings' with gear icon
+  - Global search input: placeholder 'Search everything...'
+  - Icon button: palette (theme palette picker)
+  - Icon button: paint brush (appearance/customizer)
+  - Notification bell with small red count badge
+  - User greeting text: 'Welcome, admin'
+  - Page H1: '⚙ Settings'
+  - Collapsible card header: 'Salon Settings' (sliders icon) with collapse '—' button
+  - Info banner (info-circle icon, light pink bg, coral left border): 'These drive the whole business — tax on every invoice, loyalty maths, no-show fees and payroll proration. They apply to everyone.'
+  - Field (left col, store icon): label 'Salon Name', value 'Salon ERP', helper 'Printed on receipts and payslips'
+  - Field (right col, money icon): label 'Currency Symbol', value 'Rs', helper 'Shown beside every amount'
+  - Field (left col, % icon): label 'Default Tax %', number input with up/down spinner, value '5', helper 'Pre-filled on every invoice'
+  - Field (right col, star icon): label 'Loyalty — spend per point', value '100', helper 'points_earned = floor(paid ÷ this)'
+  - Field (left col, coins icon): label 'Loyalty — value of one point', value '1', helper 'What a redeemed point takes off the bill'
+  - Field (right col, user-x icon): label 'Default No-Show Fee', value '500', helper 'Pre-filled when marking a no-show'
+  - Field (left col, calendar icon): label 'Expiry Alert (days)', value '30', helper 'How far ahead expiring stock is flagged'
+  - Field (right col, user-clock icon): label 'Lapsed Client (days)', value '60', helper 'No completed visit in this many days → win-back list'
+  - Field (left col, calendar icon, cut off): label 'Working Days per Month' (input below fold)
+  - Field (right col, refresh icon, cut off): label 'Rebook Suggestion (weeks)' (input below fold)
+  - No save button visible in this viewport (likely below fold at card bottom)
+- **Features:**
+  - Central global business-config: business name used on receipts/payslips
+  - Currency symbol applied app-wide to every amount
+  - Default tax % auto-filled on invoices
+  - Loyalty program math: spend-per-point earning formula (floor(paid ÷ X)) and redemption value per point
+  - Default no-show fee pre-filled when marking appointment as no-show
+  - Inventory expiry alert window (days)
+  - Lapsed client threshold feeding an automated win-back list
+  - Payroll proration via working days per month
+  - Rebook suggestion interval (weeks) for retention prompts
+  - Each setting has inline helper text explaining downstream effect (self-documenting config)
+  - Settings are org-wide (apply to everyone); admin-only via Roles & Permissions
+  - Global search, theme palette switcher, dark mode toggle, notifications
+- **NAIM translation:** Becomes NAIM COMMAND > Settings > 'Business Settings' card with the same info banner pattern ('These drive the whole business — VAT on every invoice, commission maths, follow-up rules and payroll proration'). Map fields: Salon Name → Company Name 'Naim Automation Systems Co.' (printed on proposals, invoices, payslips); Currency Symbol → 'KES'; Default Tax % → 16 (Kenya VAT) pre-filled on invoices; Loyalty spend/point → Referral/partner credit rules (e.g., credit per KES spent by a recruitment-agency client, value of a credit); Default No-Show Fee → Missed discovery-call/demo policy or late-payment fee; Expiry Alert (days) → Contract/retainer/subscription renewal alert window and API-key/licence expiry warning; Lapsed Client (days) → Days without activity before a lead/client drops into a 'Win-back / Re-engage' list (feeds the Leads Engine actions panel); Working Days per Month → payroll proration (keep as-is); Rebook Suggestion (weeks) → Follow-up / check-in cadence for delivered automations (QBR suggestion). Support multiple businesses: add a business selector at card top so side-businesses can have their own currency, tax and cadence values. Keep 2-column form grid, icon labels, helper captions with formulas, collapsible cards, coral accent, and admin-only access.

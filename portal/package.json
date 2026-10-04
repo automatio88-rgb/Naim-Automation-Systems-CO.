@@ -1,0 +1,14 @@
+{
+  "name": "naim-portal",
+  "private": true,
+  "type": "module",
+  "description": "Naim Automation Systems Co. — Digital Document Portal (read + sign online). Netlify static + Functions, Supabase storage",
+  "scripts": {
+    "build": "tsx build.mjs",
+    "dev": "npm run build && npx serve dist -l 4200",
+    "test:functions": "tsx ../scripts/test-functions.mjs portal"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}
