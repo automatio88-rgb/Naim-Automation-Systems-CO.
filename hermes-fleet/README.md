@@ -30,15 +30,24 @@ sudo cp systemd/*.service /etc/systemd/system/ && sudo systemctl enable --now na
 - `python runner.py --once` processes pending commands once and exits.
 
 ## Hermes Agent / any MCP client
-- `server.py` is a FastMCP server with these tools:
-  - `get_status`, `get_funnel`, `list_leads`, `get_lead`, `add_leads`, `update_lead`
-  - `run_bot`, `preview_outreach_queue`, `approve_and_send`, `set_kill_switch`, `set_min_score`
-  - `book_call`, `convert_lead`, `overdue_invoices`, `record_payment`, `daily_summary`
+- `server.py` is a FastMCP server with **68 tools** (the full masterprompt Part 5.4 surface):
+  - Fleet: `get_status`, `get_funnel`, `run_bot`, `preview_outreach_queue`, `approve_and_send`, `set_kill_switch`, `set_min_score`, `morning_briefing`, `daily_summary`
+  - Leads: `list_leads`, `get_lead`, `add_leads`, `update_lead`, `score_lead`, `queue_lead`, `disqualify_lead`, `convert_lead`, `book_call`
+  - Clients: CRUD + `client360` · Deals: CRUD + `move_stage`, `create_deal_invoices` · Projects: CRUD + `update_progress`
+  - Invoices, payments, subscriptions: CRUD + `record_payment`, `overdue_invoices` · Appointments: CRUD + `cancel_appointment` · Tasks: CRUD + `complete_task`
+  - Documents: `list_documents`, `get_document` · Activities: `log_activity`, `list_activities`
+  - Stats: `dashboard_stats`, `funnel_stats`, `finance_stats`, `report(period)`
+  - Automation: `get_settings`, `set_setting`, `log_run`, `get_commands`, `ack_command`
+- Every tool validates its inputs and returns clean JSON. Every change writes to the activity feed.
 - Copy `config.yaml` to `~/.hermes/config.yaml` and `SOUL.md` to `~/.hermes/SOUL.md`.
 - Claude Desktop, Cursor and Claude Code can use the same server over stdio. To serve it over HTTP instead, set `MCP_TRANSPORT=http`.
+
+## Per-bot SOULs, setup and briefing
+- `SOUL.md` is Hermes himself; `souls/scout.md` … `souls/ledger.md` are each bot's job, rules, tools and schedule.
+- Full install guide: [SETUP.md](SETUP.md). Morning briefing spec: [BRIEFING.md](BRIEFING.md).
 
 ## Telegram cockpit
 1. Create a bot with @BotFather.
 2. Put `TELEGRAM_BOT_TOKEN` and your `TELEGRAM_CHAT_ID` in `.env`.
-3. Commands: `/status`, `/funnel`, `/pause`, `/resume`, `/enrich`, `/approve`, `/overdue`, `/summary`.
+3. Commands: `/status`, `/funnel`, `/pause`, `/resume`, `/enrich`, `/approve`, `/overdue`, `/briefing`, `/summary`.
 4. Only your chat ID is obeyed.

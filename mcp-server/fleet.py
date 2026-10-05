@@ -344,6 +344,51 @@ class Fleet:
         return "success", text.replace("\n", " · "), {**{k: v for k, v in n.items() if k != "funnel"}, "telegram": sent}
 
 
+# ---------- LEDGER: morning briefing (spec in hermes-fleet/BRIEFING.md) ----------
+    def briefing_data(self) -> dict:
+        t = now(); d0 = t.replace(hour=0, minute=0, second=0, microsecond=0); d1 = d0 + dt.timedelta(days=1); y0 = d0 - dt.timedelta(days=1)
+        rng = lambda col, a, b: {"and": f"({col}.gte.{a.isoformat()},{col}.lt.{b.isoformat()})"}
+        pays = self.db.select("payments", select="amount_kes", **rng("paid_at", y0, d0))
+        appts = self.db.select("appointments", select="title,starts_at,meet_link,status", deleted_at="is.null", status="neq.cancelled", order="starts_at.asc", **rng("starts_at", d0, d1))
+        replies = self.db.select("replies", select="body,intent,leads(business_name)", order="received_at.desc", limit=10, **rng("received_at", y0, t))
+        tasks = self.db.select("tasks", select="title,priority,due_at", deleted_at="is.null", status="neq.done", due_at=f"lt.{d1.isoformat()}", order="due_at.asc", limit=10)
+        od = self.db.select("v_receivables_ageing", select="number,business_name,outstanding_kes,bucket", bucket="neq.current", order="outstanding_kes.desc", limit=5)
+        runs = self.db.select("automation_runs", select="bot_name,routine,summary", status="eq.failed", **rng("started_at", y0, t))
+        queued = self.db.count("outreach_messages", status="eq.queued")
+        due = self.db.select("subscriptions", select="amount_kes,next_due,clients(business_name)", status="eq.active", next_due=f"lte.{(d0 + dt.timedelta(days=7)).date().isoformat()}", order="next_due.asc", limit=5)
+        mrr = (self.db.select("v_mrr") or [{}])[0]
+        return {"date": f"{t:%a %d %b %Y}", "collected_yesterday_kes": sum(float(p["amount_kes"]) for p in pays), "mrr_kes": float(mrr.get("mrr_kes") or 0),
+                "appointments": appts, "replies": replies, "tasks": tasks, "overdue": od, "overdue_kes": sum(float(o["outstanding_kes"]) for o in od),
+                "failed_runs": runs, "drafts_waiting": queued, "renewals_7d": due, "outreach_paused": bool(self.settings().get("outreach_paused")),
+                "new_leads_yesterday": self.db.count("leads", deleted_at="is.null", **rng("created_at", y0, d0))}
+
+    def ledger_briefing(self) -> tuple[str, str, dict]:
+        b = self.briefing_data()
+        hot = [r for r in b["replies"] if r["intent"] == "interested"]
+        L = [f"NAIM morning briefing · {b['date']}", "",
+             f"Money: KES {b['collected_yesterday_kes']:,.0f} collected yesterday · MRR KES {b['mrr_kes']:,.0f} · overdue KES {b['overdue_kes']:,.0f}"]
+        if b["appointments"]:
+            L += ["", f"Today ({len(b['appointments'])}):"] + [f"- {dt.datetime.fromisoformat(a['starts_at']).astimezone(TZ):%H:%M} {a['title']}" for a in b["appointments"][:6]]
+        if hot:
+            L += ["", f"Hot replies ({len(hot)}):"] + [f"- {(r.get('leads') or {}).get('business_name', 'Lead')}: {(r['body'] or '')[:80]}" for r in hot[:4]]
+        if b["tasks"]:
+            L += ["", "Due today:"] + [f"- [{x['priority']}] {x['title']}" for x in b["tasks"][:5]]
+        if b["overdue"]:
+            L += ["", "Chase:"] + [f"- {o['number']} {o['business_name']} KES {float(o['outstanding_kes']):,.0f} ({o['bucket']} days)" for o in b["overdue"][:3]]
+        if b["renewals_7d"]:
+            L += ["", "Renewals this week:"] + [f"- {(s.get('clients') or {}).get('business_name', '')} KES {float(s['amount_kes']):,.0f} on {s['next_due']}" for s in b["renewals_7d"]]
+        flags = []
+        if b["drafts_waiting"]: flags.append(f"{b['drafts_waiting']} outreach drafts waiting for your approval (/approve)")
+        if b["outreach_paused"]: flags.append("Kill switch is ON, outreach is paused")
+        if b["failed_runs"]: flags.append(f"{len(b['failed_runs'])} bot runs failed: " + ", ".join(sorted({r['bot_name'] for r in b['failed_runs']})))
+        if flags: L += ["", "Needs you:"] + [f"- {x}" for x in flags]
+        text = "\n".join(L)
+        self.notify("Morning briefing", text, "info")
+        sent = telegram_send(text)
+        return "success", f"Briefing ready: {len(b['appointments'])} appointments, {len(hot)} hot replies, KES {b['overdue_kes']:,.0f} overdue.", {
+            "appointments": len(b["appointments"]), "hot_replies": len(hot), "tasks_due": len(b["tasks"]), "overdue_kes": b["overdue_kes"], "telegram": sent, "text": text}
+
+
 def telegram_send(text: str) -> bool:
     tok, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
     if not (tok and chat):
@@ -362,6 +407,9 @@ COMMANDS = {
     "check_replies": ("echo", "replies", lambda f, p: f.echo_check()),
     "chase_overdue": ("ledger", "chase_overdue", lambda f, p: f.ledger_overdue()),
     "daily_summary": ("ledger", "daily_summary", lambda f, p: f.ledger_summary()),
+    "morning_briefing": ("ledger", "morning_briefing", lambda f, p: f.ledger_briefing()),
+    "trigger_scrape": ("scout", "sourcing", lambda f, p: f.scout_source(int(p.get("target", 25)))),
+    "trigger_enrichment": ("sage", "enrichment", lambda f, p: f.sage_enrich(int(p.get("limit", 40)), p.get("lead_id"))),
 }
 
 # scheduled routine per bot (cron lives in hermes_bots.schedule)
@@ -370,5 +418,5 @@ SCHEDULED = {
     "sage": lambda f, cfg, t: [("enrichment", lambda: f.sage_enrich(int(cfg.get("batch", 40))))],
     "herald": lambda f, cfg, t: [("queue", lambda: f.queue_outreach()), ("outreach", lambda: f.herald_send())],
     "echo": lambda f, cfg, t: [("replies", lambda: f.echo_check())],
-    "ledger": lambda f, cfg, t: [("chase_overdue", lambda: f.ledger_overdue())] if t.hour < 12 else [("daily_summary", lambda: f.ledger_summary())],
+    "ledger": lambda f, cfg, t: [("chase_overdue", lambda: f.ledger_overdue()), ("morning_briefing", lambda: f.ledger_briefing())] if t.hour < 12 else [("daily_summary", lambda: f.ledger_summary())],
 }

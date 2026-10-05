@@ -149,6 +149,21 @@ def daily_summary() -> dict:
     return F().summary_numbers()
 
 
+@mcp.tool
+def morning_briefing(send: bool = False) -> dict:
+    """The founder's 07:00 briefing (money, today's calls, hot replies, tasks due, chase list, renewals, what needs approval).
+    send=false returns the text only; send=true runs Ledger's routine (notification + Telegram)."""
+    f = F()
+    if send:
+        return f.run("ledger", "morning_briefing", f.ledger_briefing)
+    return f.briefing_data()
+
+
+import crm_tools  # noqa: E402  full Part 5.4 surface: clients, deals, projects, invoices, appointments, tasks, docs, stats, automation
+
+crm_tools.register(mcp, F)
+
+
 if __name__ == "__main__":
     if os.environ.get("MCP_TRANSPORT") == "http":
         mcp.run(transport="http", host=os.environ.get("MCP_HOST", "127.0.0.1"), port=int(os.environ.get("MCP_PORT", "8765")))

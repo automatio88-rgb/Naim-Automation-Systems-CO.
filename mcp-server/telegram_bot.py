@@ -1,6 +1,6 @@
 """Telegram cockpit: run the fleet from your phone. Only TELEGRAM_CHAT_ID is obeyed.
 
-  /status /funnel /pause /resume /enrich /approve /overdue /summary
+  /status /funnel /pause /resume /enrich /approve /overdue /briefing /summary
 """
 from __future__ import annotations
 
@@ -33,9 +33,11 @@ def handle(f: Fleet, cmd: str) -> str:
         return f.run("herald", "outreach", lambda: f.herald_send(ids))["summary"]
     if cmd == "/overdue":
         return f.run("ledger", "chase_overdue", lambda: f.ledger_overdue())["summary"]
+    if cmd == "/briefing":
+        return f.ledger_briefing()[2]["text"]
     if cmd == "/summary":
         return f.ledger_summary()[1]
-    return "Commands: /status /funnel /pause /resume /enrich /approve /overdue /summary"
+    return "Commands: /status /funnel /pause /resume /enrich /approve /overdue /briefing /summary"
 
 
 def main() -> None:
