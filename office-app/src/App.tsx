@@ -9,6 +9,7 @@ import { BusinessProvider } from './lib/business'
 import { TipProvider, Skeleton } from './components/ui'
 import { Layout } from './components/layout'
 import Login from './pages/login'
+import { ErrorBoundary } from './components/error-boundary'
 
 const P = {
   dashboard: lazy(() => import('./pages/dashboard')),
@@ -34,6 +35,9 @@ const P = {
   reports: lazy(() => import('./pages/reports')),
   hermes: lazy(() => import('./pages/hermes')),
   roles: lazy(() => import('./pages/roles')),
+  leave: lazy(() => import('./pages/leave')),
+  users: lazy(() => import('./pages/users')),
+  activity: lazy(() => import('./pages/activity')),
   settings: lazy(() => import('./pages/settings')),
 }
 
@@ -49,7 +53,7 @@ function Gate() {
     ['/', 'dashboard'], ['/my-day', 'myday'], ['/leads', 'leads'], ['/deals', 'deals'], ['/clients', 'clients'], ['/appointments', 'appointments'],
     ['/projects', 'projects'], ['/tasks', 'tasks'], ['/documents', 'documents'], ['/pos', 'pos'], ['/invoices', 'invoices'], ['/services', 'services'],
     ['/memberships', 'memberships'], ['/inventory', 'inventory'], ['/purchases', 'purchases'], ['/finance', 'finance'], ['/expenses', 'expenses'],
-    ['/till', 'till'], ['/payroll', 'payroll'], ['/hr', 'hr'], ['/reports', 'reports'], ['/hermes', 'hermes'], ['/roles', 'roles'], ['/settings', 'settings'],
+    ['/till', 'till'], ['/payroll', 'payroll'], ['/hr', 'hr'], ['/reports', 'reports'], ['/hermes', 'hermes'], ['/roles', 'roles'], ['/settings', 'settings'], ['/leave', 'leave'], ['/users', 'users'], ['/activity', 'activity'],
   ]
   return (
     <BusinessProvider>
@@ -57,7 +61,7 @@ function Gate() {
         <Route element={<Layout />}>
           {routes.map(([path, k]) => {
             const C = P[k]
-            return <Route key={path} path={path} element={<Suspense fallback={<PageFallback />}><C /></Suspense>} />
+            return <Route key={path} path={path} element={<ErrorBoundary resetKey={path}><Suspense fallback={<PageFallback />}><C /></Suspense></ErrorBoundary>} />
           })}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
@@ -73,6 +77,7 @@ function Toasts() {
 
 export default function App() {
   return (
+    <ErrorBoundary full>
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <TipProvider>
@@ -83,5 +88,6 @@ export default function App() {
         </TipProvider>
       </QueryClientProvider>
     </ThemeProvider>
+    </ErrorBoundary>
   )
 }

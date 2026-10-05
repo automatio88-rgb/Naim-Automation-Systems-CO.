@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Bot, Plus } from 'lucide-react'
-import { useList, update, logActivity, type Row } from '@/services/db'
+import { useList, insert, update, logActivity, type Row } from '@/services/db'
 import { useAuth } from '@/lib/auth'
 import { cn, fmtDate, humanize } from '@/lib/utils'
 import { TASK_PRIORITY } from '@/lib/status'
-import { Avatar, Badge, Button, Kpi, PageHeader, Segmented } from '@/components/ui'
+import { Avatar, Badge, Button, ChevronFilter, Input, Kpi, PageHeader, Segmented } from '@/components/ui'
 import { DataTable } from '@/components/data-table'
 import { RecordForm } from '@/components/form'
 import { useStaffOptions } from '@/components/shared'
@@ -21,8 +21,19 @@ export default function Tasks() {
   const [mine, setMine] = useState<'all' | 'hermes'>('all')
   const [edit, setEdit] = useState<Row | null | undefined>(undefined)
   const [drag, setDrag] = useState<string | null>(null)
-  const rows = (t.data || []).filter((r) => mine === 'all' || r.created_by_kind === 'hermes')
-  const open = rows.filter((r) => r.status !== 'done')
+  const [q, setQ] = useState('all')
+  const [quick, setQuick] = useState('')
+  const base = (t.data || []).filter((r) => mine === 'all' || r.created_by_kind === 'hermes')
+  const open = base.filter((r) => r.status !== 'done')
+  const eod = new Date(); eod.setHours(23, 59, 59, 999)
+  const late = (r: Row) => r.status !== 'done' && r.due_at && new Date(r.due_at) < new Date()
+  const SMART: Record<string, (r: Row) => boolean> = { all: () => true, overdue: (r) => !!late(r), today: (r) => r.status !== 'done' && !!r.due_at && new Date(r.due_at) <= eod, urgent: (r) => r.status !== 'done' && ['urgent', 'high'].includes(r.priority), unassigned: (r) => r.status !== 'done' && !r.assignee_id }
+  const rows = base.filter(SMART[q])
+  const addQuick = async () => {
+    const title = quick.trim(); if (!title) return
+    const row = await insert('tasks', { title, status: 'todo', priority: 'medium', created_by_kind: 'human', due_at: eod.toISOString() })
+    await logActivity(`Created task: ${title}`, 'task_created', 'task', row?.id); setQuick(''); toast.success('Task added for today')
+  }
   const move = async (r: Row, status: string) => {
     if (r.status === status) return
     await update('tasks', r.id, { status, completed_at: status === 'done' ? new Date().toISOString() : null })
@@ -39,6 +50,10 @@ export default function Tasks() {
         <Kpi tone="warning" label="Urgent" value={open.filter((r) => r.priority === 'urgent').length} />
         <Kpi tone="info" label="Created by Hermes" value={open.filter((r) => r.created_by_kind === 'hermes').length} icon={<Bot />} />
       </div>
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <ChevronFilter value={q} onChange={setQ} items={[{ id: 'all', label: 'All', count: base.length }, { id: 'overdue', label: 'Overdue', tone: 'danger', count: base.filter(SMART.overdue).length }, { id: 'today', label: 'Due today', tone: 'warning', count: base.filter(SMART.today).length }, { id: 'urgent', label: 'High and urgent', tone: 'violet', count: base.filter(SMART.urgent).length }, { id: 'unassigned', label: 'Unassigned', tone: 'info', count: base.filter(SMART.unassigned).length }]} />
+        {can('tasks', 'create') && <form className="flex gap-2 ml-auto w-full sm:w-auto" onSubmit={(e) => { e.preventDefault(); addQuick() }}><Input value={quick} onChange={(e) => setQuick(e.target.value)} placeholder="Quick add a task for today" className="sm:w-[260px]" /><Button type="submit" variant="soft" disabled={!quick.trim()}><Plus />Add</Button></form>}
+      </div>
       {view === 'board' ? (
         <div className="grid md:grid-cols-3 gap-3">
           {COLS.map((c) => {
@@ -47,15 +62,16 @@ export default function Tasks() {
               <div key={c.id} onDragOver={(e) => e.preventDefault()} onDrop={() => { const r = rows.find((x) => x.id === drag); if (r) move(r, c.id); setDrag(null) }} className="rounded-panel bg-foreground/[.035] p-2.5 min-h-[200px]" data-reveal>
                 <div className="px-2 py-1.5 text-[13px] font-medium">{c.label} <span className="text-muted-foreground num">{rows.filter((r) => r.status === c.id).length}</span></div>
                 <div className="space-y-2">{list.map((r) => {
-                  const late = r.status !== 'done' && r.due_at && new Date(r.due_at) < new Date()
+                  const isLate = late(r)
                   return (
                     <div key={r.id} draggable onDragStart={() => setDrag(r.id)} onClick={() => setEdit(r)} className={cn('rounded-card bg-card border border-border/70 shadow-e1 p-3.5 cursor-grab hover:shadow-e2 transition-shadow', drag === r.id && 'opacity-50')}>
                       <div className="flex items-start gap-2"><span className={cn('text-[13.5px] font-medium flex-1', r.status === 'done' && 'line-through text-muted-foreground')}>{r.title}</span><Badge tone={TASK_PRIORITY[r.priority]}>{humanize(r.priority)}</Badge></div>
                       {r.description && <p className="text-[12.5px] text-muted-foreground mt-1 line-clamp-2">{r.description}</p>}
+                      {r.entity_type && <div className="mt-2"><Badge tone="info">{humanize(r.entity_type)}</Badge></div>}
                       <div className="flex items-center gap-2 mt-3 text-[12px]">
                         {r.staff?.full_name ? <><Avatar name={r.staff.full_name} size={20} /><span className="text-muted-foreground truncate">{r.staff.full_name}</span></> : <span className="text-muted-foreground">Unassigned</span>}
                         {r.created_by_kind === 'hermes' && <Bot className="size-3.5 text-muted-foreground" />}
-                        <span className={cn('ml-auto num', late ? 'text-danger font-medium' : 'text-muted-foreground')}>{fmtDate(r.due_at, 'd MMM')}</span>
+                        <span className={cn('ml-auto num', isLate ? 'text-danger font-medium' : 'text-muted-foreground')}>{fmtDate(r.due_at, 'd MMM')}</span>
                       </div>
                       <select aria-label="Move" value={r.status} onClick={(e) => e.stopPropagation()} onChange={(e) => move(r, e.target.value)} className="mt-2 w-full h-8 rounded-[9px] bg-foreground/[.04] text-[12.5px] px-2 outline-none md:hidden">{COLS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}</select>
                     </div>)

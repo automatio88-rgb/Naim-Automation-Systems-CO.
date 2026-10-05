@@ -15,7 +15,7 @@ import { Avatar, Badge, Button, Popover, Segmented, Sheet, Switch, Tip } from '.
 function Brand() {
   return (
     <Link to="/" className="flex items-center gap-3 px-5 h-[72px] shrink-0">
-      <span className="size-9 rounded-[12px] grid place-items-center bg-primary text-primary-foreground font-display text-[19px] font-semibold shadow-e2">N</span>
+      <img src="/naim-logo.png" alt="NaiM Agency logo" className="size-14 -my-1 object-contain shrink-0 brightness-125 drop-shadow-[0_1px_8px_rgba(200,162,74,.35)]" />
       <span className="leading-tight">
         <span className="block font-display text-[17px] font-semibold tracking-[.01em] text-rail-foreground">NAIM COMMAND</span>
         <span className="block text-[11.5px] text-rail-muted">Naim Automation Systems</span>

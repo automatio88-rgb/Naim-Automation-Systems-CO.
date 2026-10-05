@@ -5,8 +5,8 @@ import { queryClient } from './query'
 
 export type Role = 'owner' | 'admin' | 'manager' | 'staff' | 'viewer'
 export type Profile = { id: string; full_name: string | null; email: string | null; role: Role; avatar_url: string | null }
-type Perm = { module: string; can_view: boolean; can_create: boolean; can_edit: boolean; can_delete: boolean }
-type Action = 'view' | 'create' | 'edit' | 'delete'
+type Perm = { module: string; can_view: boolean; can_create: boolean; can_edit: boolean; can_delete: boolean; can_approve?: boolean; can_export?: boolean }
+export type Action = 'view' | 'create' | 'edit' | 'delete' | 'approve' | 'export'
 type Ctx = {
   session: Session | null; profile: Profile | null; perms: Perm[]; loading: boolean
   can: (module?: string, action?: Action) => boolean
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setProfile(p as Profile | null)
     currentActor = (p as Profile | null)?.full_name || s.session?.user.email || 'Office'
     if (p && p.role !== 'owner') {
-      const { data: rp } = await supabase.from('role_permissions').select('module, can_view, can_create, can_edit, can_delete').eq('role', p.role)
+      const { data: rp } = await supabase.from('role_permissions').select('module, can_view, can_create, can_edit, can_delete, can_approve, can_export').eq('role', p.role)
       setPerms((rp as Perm[]) || [])
     } else setPerms([])
   }, [])

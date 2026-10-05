@@ -40,3 +40,4 @@ export const RUN_STATUS: Record<string, Tone> = { running: 'info', success: 'suc
 export const PAY_METHODS = [{ value: 'mpesa', label: 'M-PESA' }, { value: 'bank', label: 'Bank transfer' }, { value: 'cash', label: 'Cash' }, { value: 'card', label: 'Card' }]
 export const methodLabel = (m: string) => PAY_METHODS.find((x) => x.value === m)?.label || m
 export const opts = (o: Record<string, { label: string }>) => Object.entries(o).map(([value, v]) => ({ value, label: v.label }))
+export const ROLE_TONE: Record<string, Tone> = { owner: 'brand', admin: 'violet', manager: 'info', staff: 'teal', viewer: 'neutral' }

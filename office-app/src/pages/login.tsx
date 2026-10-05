@@ -36,7 +36,7 @@ export default function Login() {
     <div ref={root} className="min-h-dvh grid lg:grid-cols-[1.1fr_1fr] bg-background">
       <div className="rail-surface grain relative hidden lg:flex flex-col justify-between p-12 text-rail-foreground overflow-hidden">
         <div className="flex items-center gap-3" data-l="fade">
-          <span className="size-10 rounded-[13px] grid place-items-center bg-primary text-primary-foreground font-display text-[21px] font-semibold">N</span>
+          <img src="/naim-logo.png" alt="NaiM Agency logo" className="size-16 object-contain shrink-0 brightness-125 drop-shadow-[0_1px_8px_rgba(200,162,74,.35)]" />
           <span className="font-display text-[18px] font-semibold">NAIM COMMAND</span>
         </div>
         <div>
@@ -52,7 +52,7 @@ export default function Login() {
       <div className="flex items-center justify-center p-6">
         <form data-l="card" onSubmit={submit} className="w-full max-w-[400px]">
           <div className="lg:hidden flex items-center gap-3 mb-10">
-            <span className="size-10 rounded-[13px] grid place-items-center bg-primary text-primary-foreground font-display text-[21px] font-semibold">N</span>
+            <img src="/naim-logo.png" alt="NaiM Agency logo" className="size-16 object-contain shrink-0 brightness-125 drop-shadow-[0_1px_8px_rgba(200,162,74,.35)]" />
             <span className="font-display text-[18px] font-semibold">NAIM COMMAND</span>
           </div>
           <h2 className="font-display text-[32px] font-semibold leading-tight">{mode === 'in' ? 'Welcome back' : 'Create your account'}</h2>

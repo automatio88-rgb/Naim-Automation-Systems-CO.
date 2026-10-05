@@ -5,14 +5,14 @@ import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import {
   Bot, CalendarCheck, CalendarClock, ChevronRight, CircleDollarSign, FileSignature, FileText, Handshake, Mail, MessageSquare,
-  Phone, Printer, Radar, ReceiptText, Send, Sparkles, UserRound, Download, CreditCard, Wallet,
+  Phone, Printer, Radar, ReceiptText, Send, Sparkles, UserRound, Download, CreditCard, Wallet, HeartHandshake, Trash2, Clock, Ban, RotateCcw,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { run, insert, update, logActivity, useList, type Row } from '@/services/db'
 import { ago, cn, fmtDate, fmtDT, fmtTime, humanize, kes, pct, sum } from '@/lib/utils'
 import { useGrow } from '@/lib/motion'
 import { APPT_STATUS, INVOICE_STATUS, PAY_METHODS, PROJECT_STATUS, dealStage, methodLabel } from '@/lib/status'
-import { Avatar, Badge, Button, Dialog, Empty, Field, Input, Progress, Select, Skeleton, StatusBadge, TabPanel, Tabs, Textarea, type Tone } from './ui'
+import { Avatar, Badge, Button, Dialog, Empty, Field, Input, Progress, Select, Skeleton, StatusBadge, Switch, TabPanel, Tabs, Textarea, type Tone } from './ui'
 
 /* ---------------- Funnel (Lead Engine pattern, conversion % between every stage) ---------------- */
 const FUNNEL_TONES: Tone[] = ['neutral', 'info', 'teal', 'brand', 'success', 'violet', 'warning']
@@ -89,9 +89,11 @@ export function ActivityList({ items, loading, max = 12, empty = 'No activity ye
 }
 
 /* ---------------- 360 shell: left profile panel + tabbed right panel ---------------- */
-export function Shell360({ open, onOpenChange, icon, title, badge, rows, actions, tabs, tab, setTab, children }: {
+export function Shell360({ open, onOpenChange, icon, title, badge, rows, actions, tabs, tab, setTab, children, kpis }: {
   open: boolean; onOpenChange: (v: boolean) => void; icon: ReactNode; title: string; badge?: ReactNode; rows: [string, ReactNode][]
-  actions?: ReactNode; tabs: { id: string; label: string; count?: number }[]; tab: string; setTab: (t: string) => void; children: ReactNode
+  actions?: ReactNode; tabs: { id: string; label: ReactNode; count?: number }[]; tab: string; setTab: (t: string) => void; children: ReactNode
+  /** 2x2 mini KPI cards under the avatar: [label, value, icon?, tone?] */
+  kpis?: [string, ReactNode, ReactNode?, Tone?][]
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange} size="xl" title={<span className="inline-flex items-center gap-2">{title}<span className="text-[14px] font-sans font-normal text-muted-foreground">360 View</span></span>}>
@@ -102,6 +104,15 @@ export function Shell360({ open, onOpenChange, icon, title, badge, rows, actions
             <div className="mt-3 font-semibold text-[16px] leading-tight">{title}</div>
             {badge && <div className="mt-2">{badge}</div>}
           </div>
+          {kpis && kpis.length > 0 && (
+            <div className="grid grid-cols-2 gap-2 mt-5">
+              {kpis.map(([k, v, ic, tone]) => (
+                <div key={k} className={cn('tone-' + (tone || 'neutral'), 'rounded-[14px] bg-card border border-border/70 px-3 py-2.5 min-w-0')}>
+                  <div className="flex items-center gap-1.5 text-[11.5px] text-muted-foreground [&_svg]:size-3.5 [&_svg]:ink">{ic}{k}</div>
+                  <div className="font-semibold num text-[15px] mt-0.5 truncate">{v}</div>
+                </div>))}
+            </div>
+          )}
           <dl className="mt-5 divide-y divide-border/70 text-[13px]">
             {rows.map(([k, v]) => (
               <div key={k} className="flex justify-between gap-3 py-2"><dt className="text-muted-foreground shrink-0">{k}</dt><dd className="font-medium text-right min-w-0 break-words">{v ?? '—'}</dd></div>
@@ -117,7 +128,7 @@ export function Shell360({ open, onOpenChange, icon, title, badge, rows, actions
   )
 }
 
-const MiniTable = ({ head, rows, empty }: { head: string[]; rows: ReactNode[][]; empty: string }) =>
+export const MiniTable = ({ head, rows, empty }: { head: string[]; rows: ReactNode[][]; empty: string }) =>
   rows.length ? (
     <div className="overflow-x-auto scroll-thin rounded-[14px] border border-border/70">
       <table className="w-full text-[13px]">
@@ -128,14 +139,15 @@ const MiniTable = ({ head, rows, empty }: { head: string[]; rows: ReactNode[][];
   ) : <Empty title={empty} />
 
 /* ---------------- CLIENT 360 (Customers page): Visits · Invoices · Memberships · Packages · Preferences (+ Deals & projects, Documents, Timeline) ---------------- */
-export function Client360({ id, onOpenChange }: { id: string | null; onOpenChange: (v: boolean) => void }) {
+export function Client360({ id, onOpenChange, onEdit, onDelete }: { id: string | null; onOpenChange: (v: boolean) => void; onEdit?: (c: Row) => void; onDelete?: (c: Row) => void }) {
   const [tab, setTab] = useState('visits')
   const [inv, setInv] = useState<string | null>(null)
+  const [confirmDel, setConfirmDel] = useState(false)
   const q = useQuery({
     queryKey: ['client360', id], enabled: !!id,
     queryFn: async () => {
       const [c, appts, invoices, subs, pkgs, deals, projects, docs, acts, tasks] = await Promise.all([
-        run(supabase.from('clients').select('*').eq('id', id).single()),
+        run(supabase.from('clients').select('*, pref_staff:preferred_staff_id(full_name)').eq('id', id).single()),
         run(supabase.from('appointments').select('*, staff(full_name)').eq('client_id', id).order('starts_at', { ascending: false })),
         run(supabase.from('invoices').select('*').eq('client_id', id).is('deleted_at', null).order('issued_at', { ascending: false })),
         run(supabase.from('subscriptions').select('*, membership_plans(name,color,benefits)').eq('client_id', id).order('started_at', { ascending: false })),
@@ -159,23 +171,35 @@ export function Client360({ id, onOpenChange }: { id: string | null; onOpenChang
   const ltv = sum(d?.invoices, 'paid_kes'), due = sum(d?.invoices?.filter((i) => i.status !== 'void'), (i) => i.total_kes - i.paid_kes)
   const health = c?.health ?? 0
   const healthTone: Tone = health >= 75 ? 'success' : health >= 50 ? 'warning' : 'danger'
+  const paidInv = d?.invoices.filter((i) => Number(i.paid_kes) > 0) || []
+  const avgTicket = paidInv.length ? ltv / paidInv.length : 0
+  const noShows = d?.appts.filter((a) => a.status === 'no_show').length || 0
+  const T = (ic: ReactNode, label: string) => <span className="inline-flex items-center gap-1.5 [&_svg]:size-3.5">{ic}{label}</span>
   return (
     <>
       <Shell360 open={!!id} onOpenChange={onOpenChange} icon={<UserRound />} title={c?.business_name || 'Loading'} tab={tab} setTab={setTab}
-        badge={c && <div className="flex gap-1.5 justify-center"><Badge tone={healthTone} dot>{health >= 75 ? 'Active' : health >= 50 ? 'At risk' : 'Churn risk'}</Badge><Badge tone="brand">{humanize(c.tier)}</Badge></div>}
+        badge={c && <div className="flex gap-1.5 justify-center"><Badge tone={c.status === 'inactive' ? 'neutral' : 'success'} dot>{humanize(c.status || 'active')}</Badge><Badge tone={healthTone}>{health >= 75 ? 'Healthy' : health >= 50 ? 'At risk' : 'Churn risk'}</Badge><Badge tone="brand">{humanize(c.tier)}</Badge></div>}
+        kpis={d ? [['Visits', d.appts.length, <CalendarCheck />, 'info'], ['Lifetime value', kes(ltv), <Wallet />, 'success'], ['Avg ticket', kes(avgTicket), <ReceiptText />, 'brand'], ['Points', (c?.loyalty_points || 0).toLocaleString('en-KE'), <Sparkles />, 'violet']] : undefined}
         rows={c ? [
-          ['Contact', c.contact_name], ['Mobile', c.phone], ['Email', c.email], ['Location', c.location], ['Licence', c.licence_no], ['Size', c.company_size],
-          ['Health', `${health}/100`], ['Lifetime paid', kes(ltv)], ['Outstanding', kes(due)], ['Client since', fmtDate(c.created_at)], ['Source', humanize(c.source)],
+          ['Contact', c.contact_name], ['Mobile', c.phone], ['Email', c.email], ['Location', c.location], ['Licence', c.licence_no], ['Team size', c.company_size],
+          ['Director DOB', c.birthday ? fmtDate(c.birthday) : '—'], ['Anniversary', c.anniversary ? fmtDate(c.anniversary) : '—'],
+          ['Preferred staff', c.pref_staff?.full_name || '—'], ['No-shows', noShows ? <span className="text-danger">{noShows}</span> : 0],
+          ['Health', `${health}/100`], ['Outstanding', due > 0 ? <span className="text-danger">{kes(due)}</span> : kes(0)], ['Marketing', c.marketing_consent ? 'Opted in' : 'No'],
+          ['Client since', fmtDate(c.created_at)], ['Source', humanize(c.source)],
         ] : []}
         actions={c && <>
-          {c.phone && <Button variant="outline" size="sm" onClick={() => window.open(`https://wa.me/${String(c.phone).replace(/\D/g, '')}`, '_blank')}><Phone />WhatsApp</Button>}
-          {c.email && <Button variant="outline" size="sm" onClick={() => window.open(`mailto:${c.email}`)}><Mail />Email</Button>}
+          <div className="grid grid-cols-2 gap-2">
+            {c.phone && <Button variant="outline" size="sm" onClick={() => window.open(`https://wa.me/${String(c.phone).replace(/\D/g, '')}`, '_blank')}><Phone />WhatsApp</Button>}
+            {c.email && <Button variant="outline" size="sm" onClick={() => window.open(`mailto:${c.email}`)}><Mail />Email</Button>}
+          </div>
+          {onEdit && <Button size="sm" onClick={() => onEdit(c)}><UserRound />Edit client</Button>}
+          {onDelete && <Button size="sm" variant="danger-soft" onClick={() => setConfirmDel(true)}>Delete client</Button>}
         </>}
         tabs={[
-          { id: 'visits', label: 'Visits', count: d?.appts.length }, { id: 'invoices', label: 'Invoices', count: d?.invoices.length },
-          { id: 'memberships', label: 'Memberships', count: d?.subs.length }, { id: 'packages', label: 'Packages', count: d?.pkgs.length },
-          { id: 'preferences', label: 'Preferences' }, { id: 'deals', label: 'Deals & projects', count: (d?.deals.length || 0) + (d?.projects.length || 0) },
-          { id: 'documents', label: 'Documents', count: d?.docs.length }, { id: 'timeline', label: 'Timeline' },
+          { id: 'visits', label: T(<CalendarCheck />, 'Visits'), count: d?.appts.length }, { id: 'invoices', label: T(<ReceiptText />, 'Invoices'), count: d?.invoices.length },
+          { id: 'memberships', label: T(<CalendarClock />, 'Memberships'), count: d?.subs.length }, { id: 'packages', label: T(<Sparkles />, 'Packages'), count: d?.pkgs.length },
+          { id: 'preferences', label: T(<HeartHandshake />, 'Preferences') }, { id: 'deals', label: T(<Handshake />, 'Deals & projects'), count: (d?.deals.length || 0) + (d?.projects.length || 0) },
+          { id: 'documents', label: T(<FileSignature />, 'Documents'), count: d?.docs.length }, { id: 'timeline', label: T(<Radar />, 'Timeline') },
         ]}>
         {!d ? <Skeleton className="h-60 mt-4" /> : <>
           <TabPanel id="visits">
@@ -183,13 +207,13 @@ export function Client360({ id, onOpenChange }: { id: string | null; onOpenChang
               <MiniStat label="Total visits" value={d.appts.length} /><MiniStat label="Completed" value={d.appts.filter((a) => a.status === 'completed').length} />
               <MiniStat label="Last visit" value={fmtDate(d.appts.find((a) => new Date(a.starts_at) < new Date())?.starts_at)} />
             </div>
-            <MiniTable head={['Date', 'Visit', 'With', 'Status', 'Value']} empty="No visits yet"
-              rows={d.appts.map((a) => [fmtDT(a.starts_at), a.title, a.staff?.full_name || '—', <StatusBadge map={APPT_STATUS} value={a.status} />, kes(sum(a.services || [], 'price_kes'))])} />
+            <MiniTable head={['Date', 'Time', 'Visit', 'With', 'Status', 'Value']} empty="No visits yet"
+              rows={d.appts.map((a) => [fmtDate(a.starts_at), `${fmtTime(a.starts_at)}–${fmtTime(a.ends_at)}`, a.title, a.staff?.full_name || '—', <StatusBadge map={APPT_STATUS} value={a.status} />, kes(sum(a.services || [], 'price_kes'))])} />
           </TabPanel>
           <TabPanel id="invoices">
             <div className="grid grid-cols-3 gap-3 mb-4"><MiniStat label="Billed" value={kes(sum(d.invoices, 'total_kes'))} /><MiniStat label="Paid" value={kes(ltv)} /><MiniStat label="Outstanding" value={kes(due)} /></div>
-            <MiniTable head={['Invoice', 'Type', 'Issued', 'Status', 'Total']} empty="No invoices yet"
-              rows={d.invoices.map((i) => [<button className="font-medium text-brand-strong hover:underline" onClick={() => setInv(i.id)}>{i.number}</button>, humanize(i.type), fmtDate(i.issued_at), <StatusBadge map={INVOICE_STATUS} value={i.status} />, kes(i.total_kes)])} />
+            <MiniTable head={['Invoice', 'Issued', 'Status', 'Total', 'Paid', 'Due']} empty="No invoices yet"
+              rows={d.invoices.map((i) => { const bal = Number(i.total_kes) - Number(i.paid_kes); return [<button className="font-medium text-brand-strong hover:underline" onClick={() => setInv(i.id)}>{i.number}</button>, fmtDate(i.issued_at), <StatusBadge map={INVOICE_STATUS} value={i.status} />, kes(i.total_kes), kes(i.paid_kes), bal > 0 && i.status !== 'void' ? <span className="text-danger font-medium">{kes(bal)}</span> : '—'] })} />
           </TabPanel>
           <TabPanel id="memberships">
             {d.subs.length ? <div className="grid sm:grid-cols-2 gap-3">{d.subs.map((s) => (
@@ -205,8 +229,16 @@ export function Client360({ id, onOpenChange }: { id: string | null; onOpenChang
               <div key={p.id} className="rounded-card bg-foreground/[.035] p-4">
                 <div className="flex items-center justify-between gap-3"><div className="font-semibold">{p.packages?.name}</div><Badge tone={p.status === 'active' ? 'success' : 'neutral'} dot>{humanize(p.status)}</Badge></div>
                 <div className="flex items-center gap-3 mt-3"><Progress value={pct(p.sessions_used, p.sessions_total)} className="flex-1" /><span className="text-[13px] num">{p.sessions_used}/{p.sessions_total} used</span></div>
-                <div className="text-[12.5px] text-muted-foreground mt-2">Bought {fmtDate(p.purchased_at)} · expires {fmtDate(p.expires_at)}</div>
-              </div>))}</div> : <Empty title="No packages" />}
+                <div className="flex items-center justify-between gap-3 mt-2">
+                  <div className="text-[12.5px] text-muted-foreground">Bought {fmtDate(p.purchased_at)} · expires {fmtDate(p.expires_at)}</div>
+                  {p.status === 'active' && p.sessions_used < p.sessions_total && <Button size="sm" variant="soft" onClick={async () => {
+                    const used = p.sessions_used + 1
+                    await update('client_packages', p.id, { sessions_used: used, status: used >= p.sessions_total ? 'used_up' : 'active' })
+                    await logActivity(`${c!.business_name} redeemed 1 session of ${p.packages?.name} (${used}/${p.sessions_total})`, 'package_redeemed', 'client', c!.id)
+                    toast.success('Session redeemed'); q.refetch()
+                  }}>Redeem session</Button>}
+                </div>
+              </div>))}</div> : <Empty title="No packages" body="Assign a package from Services → Packages → 360, or sell one at the POS." />}
           </TabPanel>
           <TabPanel id="preferences"><ClientPreferences c={c!} /></TabPanel>
           <TabPanel id="deals">
@@ -229,6 +261,10 @@ export function Client360({ id, onOpenChange }: { id: string | null; onOpenChang
         </>}
       </Shell360>
       <Invoice360 id={inv} onOpenChange={(v) => !v && setInv(null)} />
+      {c && onDelete && <Dialog open={confirmDel} onOpenChange={setConfirmDel} size="sm" title={`Delete ${c.business_name}?`}
+        footer={<><Button variant="outline" onClick={() => setConfirmDel(false)}>Cancel</Button><Button variant="danger" onClick={() => { setConfirmDel(false); onDelete(c) }}>Delete</Button></>}>
+        <div className="text-[14px] text-muted-foreground">The client is archived (soft delete). Invoices and history stay for the books.</div>
+      </Dialog>}
     </>
   )
 }
@@ -236,22 +272,47 @@ const MiniStat = ({ label, value }: { label: string; value: ReactNode }) => (
   <div className="rounded-[14px] bg-foreground/[.035] px-3.5 py-3 min-w-0"><div className="text-[12px] text-muted-foreground">{label}</div><div className="font-semibold num mt-0.5 truncate">{value}</div></div>
 )
 
+export const PREF_OPTS: Record<'channel' | 'meeting' | 'best_time' | 'language', [string, string][]> = {
+  channel: [['whatsapp', 'WhatsApp'], ['email', 'Email'], ['phone', 'Phone call'], ['sms', 'SMS']],
+  meeting: [['online', 'Online (Meet)'], ['office', 'At our office'], ['client_site', 'At their office']],
+  best_time: [['morning', 'Morning'], ['afternoon', 'Afternoon'], ['evening', 'Evening']],
+  language: [['English', 'English'], ['Swahili', 'Swahili'], ['Arabic', 'Arabic']],
+}
+const po = (k: keyof typeof PREF_OPTS) => PREF_OPTS[k].map(([value, label]) => ({ value, label }))
+
 function ClientPreferences({ c }: { c: Row }) {
+  const { options: staffOpts } = useStaffOptions()
   const [notes, setNotes] = useState(c.notes || '')
   const [tags, setTags] = useState((c.tags || []).join(', '))
   const [birthday, setBirthday] = useState(c.birthday || '')
+  const [anniversary, setAnniversary] = useState(c.anniversary || '')
+  const [pref, setPref] = useState<Row>(c.preferences || {})
+  const [staffId, setStaffId] = useState(c.preferred_staff_id || '')
+  const [consent, setConsent] = useState(!!c.marketing_consent)
   const [busy, setBusy] = useState(false)
+  const sp = (k: string, v: unknown) => setPref((s) => ({ ...s, [k]: v }))
   return (
-    <div className="grid gap-4 max-w-[640px]">
-      <Field label="Notes & preferences" hint="How they like to be contacted, decision makers, sensitivities."><Textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="min-h-[140px]" /></Field>
+    <div className="grid gap-4 max-w-[720px]">
       <div className="grid sm:grid-cols-2 gap-4">
-        <Field label="Tags"><Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="vip, whatsapp-first" /></Field>
+        <Field label="Preferred channel"><Select value={pref.channel} onChange={(v) => sp('channel', v)} options={po('channel')} /></Field>
+        <Field label="Meeting style"><Select value={pref.meeting} onChange={(v) => sp('meeting', v)} options={po('meeting')} /></Field>
+        <Field label="Best time to reach"><Select value={pref.best_time} onChange={(v) => sp('best_time', v)} options={po('best_time')} /></Field>
+        <Field label="Language"><Select value={pref.language} onChange={(v) => sp('language', v)} options={po('language')} /></Field>
+        <Field label="Preferred account manager"><Select value={staffId} onChange={setStaffId} options={staffOpts} allowClear="No preference" /></Field>
+        <Field label="Decision maker"><Input value={pref.decision_maker || ''} onChange={(e) => sp('decision_maker', e.target.value)} placeholder="Name and role" /></Field>
         <Field label="Director's birthday"><Input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} /></Field>
+        <Field label="Client anniversary"><Input type="date" value={anniversary} onChange={(e) => setAnniversary(e.target.value)} /></Field>
+        <Field label="Tags" className="sm:col-span-2"><Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="vip, whatsapp-first" /></Field>
       </div>
+      <Field label="Sensitivities / do-not" hint="Things the team must avoid: topics, times, competitors."><Input value={pref.avoid || ''} onChange={(e) => sp('avoid', e.target.value)} /></Field>
+      <Field label="Notes"><Textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="min-h-[110px]" /></Field>
+      <label className="flex items-center gap-3 text-[13.5px]"><Switch checked={consent} onChange={setConsent} label="Marketing consent" />Agrees to marketing messages (Kenya DPA consent)</label>
       <div><Button loading={busy} onClick={async () => {
         setBusy(true)
-        try { await update('clients', c.id, { notes, tags: tags.split(',').map((t: string) => t.trim()).filter(Boolean), birthday: birthday || null }); toast.success('Preferences saved') }
-        catch (e: any) { toast.error(e.message) } finally { setBusy(false) }
+        try {
+          await update('clients', c.id, { notes, tags: tags.split(',').map((t: string) => t.trim()).filter(Boolean), birthday: birthday || null, anniversary: anniversary || null, preferences: pref, preferred_staff_id: staffId || null, marketing_consent: consent })
+          await logActivity(`Updated preferences for ${c.business_name}`, 'client_updated', 'client', c.id); toast.success('Preferences saved')
+        } catch (e: any) { toast.error(e.message) } finally { setBusy(false) }
       }}>Save preferences</Button></div>
     </div>
   )
@@ -263,24 +324,38 @@ export function Appointment360({ id, onOpenChange, onEdit }: { id: string | null
   const q = useQuery({
     queryKey: ['appointments', 'a360', id], enabled: !!id,
     queryFn: async () => {
-      const a = await run<Row>(supabase.from('appointments').select('*, staff(full_name), clients(business_name, phone), leads(business_name, phone)').eq('id', id).single())
-      const acts = await run<Row[]>(supabase.from('activities').select('*').in('entity_id', [a.id, a.client_id, a.lead_id].filter(Boolean)).order('created_at', { ascending: false }).limit(40))
-      return { a, acts }
+      const a = await run<Row>(supabase.from('appointments').select('*, staff(full_name), clients(business_name, phone), leads(business_name, phone), office_spaces(name), businesses(name)').eq('id', id).single())
+      const [acts, invs] = await Promise.all([
+        run<Row[]>(supabase.from('activities').select('*').in('entity_id', [a.id, a.client_id, a.lead_id].filter(Boolean)).order('created_at', { ascending: false }).limit(40)),
+        run<Row[]>(supabase.from('invoices').select('id,number,total_kes,paid_kes,status').or(`appointment_id.eq.${a.id}${a.invoice_id ? `,id.eq.${a.invoice_id}` : ''}`).limit(1)),
+      ])
+      return { a, acts, inv: invs[0] as Row | undefined }
     },
   })
   const a = q.data?.a
   const who = a?.clients?.business_name || a?.leads?.business_name || a?.title
   const [note, setNote] = useState('')
+  const [consult, setConsult] = useState<string | null>(null)
+  const [outcome, setOutcome] = useState<string | null>(null)
+  const [del, setDel] = useState(false)
+  const [invOpen, setInvOpen] = useState<string | null>(null)
   const setStatus = async (status: string) => {
-    await update('appointments', a!.id, { status }); await logActivity(`${who}: appointment ${humanize(status).toLowerCase()}`, 'appointment_' + status, 'appointment', a!.id)
+    const stamp: Row = status === 'checked_in' ? { checked_in_at: new Date().toISOString() } : status === 'in_progress' ? { started_at: new Date().toISOString() } : status === 'completed' ? { completed_at: new Date().toISOString() } : {}
+    await update('appointments', a!.id, { status, ...stamp }); await logActivity(`${who}: appointment ${humanize(status).toLowerCase()}`, 'appointment_' + status, 'appointment', a!.id)
     if (status === 'no_show') await insert('tasks', { title: `Follow up no-show: ${who}`, priority: 'urgent', status: 'todo', due_at: new Date().toISOString(), entity_type: a!.client_id ? 'client' : 'lead', entity_id: a!.client_id || a!.lead_id, created_by_kind: 'system', created_by: 'No-show rule' })
     toast.success(status === 'no_show' ? 'Marked no-show. Follow-up task created.' : 'Status updated'); q.refetch()
   }
   const total = sum(a?.services || [], 'price_kes')
+  const durMin = a ? Math.round((+new Date(a.ends_at || a.starts_at) - +new Date(a.starts_at)) / 6e4) : 0
+  const inv = q.data?.inv
   return (
+    <>
     <Shell360 open={!!id} onOpenChange={onOpenChange} icon={<CalendarCheck />} title={a ? `${who}${a.queue_no ? ` · #${a.queue_no}` : ''}` : 'Loading'} tab={tab} setTab={setTab}
       badge={a && <StatusBadge map={APPT_STATUS} value={a.status} />}
+      kpis={a ? [['Services', (a.services || []).length, <Sparkles />, 'info'], ['Est. amount', kes(total), <Wallet />, 'success'], ['Duration', `${durMin} min`, <Clock />, 'violet'],
+        ['Invoice', inv ? <button className="text-brand-strong hover:underline" onClick={() => setInvOpen(inv.id)}>{inv.number}</button> : '—', <ReceiptText />, 'brand']] : undefined}
       rows={a ? [['Date', fmtDate(a.starts_at)], ['Time', `${fmtTime(a.starts_at)}–${fmtTime(a.ends_at)}`], ['With', a.staff?.full_name], ['Type', humanize(a.type)],
+        ['Business', a.businesses?.name], ['Office space', a.office_spaces?.name || '—'], ['Deposit', Number(a.deposit_kes) ? kes(a.deposit_kes) : '—'], ['No-show fee', Number(a.no_show_fee_kes) ? kes(a.no_show_fee_kes) : '—'],
         ['Source', humanize(a.source)], ['Meet link', a.meet_link ? <a href={a.meet_link} target="_blank" rel="noreferrer" className="text-brand-strong hover:underline">Join</a> : '—'], ['Booked on', fmtDT(a.created_at)]] : []}
       actions={a && <>
         <div className="grid grid-cols-2 gap-2">
@@ -290,15 +365,24 @@ export function Appointment360({ id, onOpenChange, onEdit }: { id: string | null
           {!['completed', 'cancelled'].includes(a.status) && <Button size="sm" variant="ghost" onClick={() => setStatus('cancelled')}>Cancel</Button>}
         </div>
         {onEdit && <Button size="sm" variant="outline" onClick={() => onEdit(a)}>Edit appointment</Button>}
+        <Button size="sm" variant="danger-soft" onClick={() => setDel(true)}><Trash2 />Delete appointment</Button>
       </>}
-      tabs={[{ id: 'services', label: 'Services', count: a?.services?.length }, { id: 'notes', label: 'Notes' }, { id: 'timeline', label: 'Timeline' }]}>
+      tabs={[{ id: 'services', label: <span className="inline-flex items-center gap-1.5 [&_svg]:size-3.5"><Sparkles />Services</span>, count: a?.services?.length }, { id: 'notes', label: <span className="inline-flex items-center gap-1.5 [&_svg]:size-3.5"><FileText />Notes</span> }, { id: 'timeline', label: <span className="inline-flex items-center gap-1.5 [&_svg]:size-3.5"><Clock />Timeline</span> }]}>
       {!a ? <Skeleton className="h-60 mt-4" /> : <>
         <TabPanel id="services">
-          <MiniTable head={['Service', 'Duration', 'Price']} empty="No services on this appointment"
-            rows={(a.services || []).map((s: Row) => [s.name, `${s.duration_min || 0} min`, kes(s.price_kes)])} />
-          <div className="flex justify-end mt-3 text-[14px]"><span className="text-muted-foreground mr-3">Total</span><span className="font-semibold num">{kes(total)}</span></div>
+          <MiniTable head={['Service', 'With', 'Duration', 'Price']} empty="No services on this appointment"
+            rows={[...(a.services || []).map((s: Row) => [s.name, s.staff_name || a.staff?.full_name || '—', `${s.duration_min || 0} min`, kes(s.price_kes)]),
+              ...((a.services || []).length ? [[<b>Total</b>, '', <b className="num">{sum(a.services || [], 'duration_min')} min</b>, <b>{kes(total)}</b>]] : [])]} />
         </TabPanel>
         <TabPanel id="notes">
+          <div className="grid sm:grid-cols-2 gap-3 mb-4">
+            <Field label="Before the meeting (brief / agenda)"><Textarea value={consult ?? a.consult_notes ?? ''} onChange={(e) => setConsult(e.target.value)} placeholder="Goals, questions to ask, context" className="min-h-[110px]" /></Field>
+            <Field label="After the meeting (outcome)"><Textarea value={outcome ?? a.outcome_notes ?? ''} onChange={(e) => setOutcome(e.target.value)} placeholder="Decisions, next steps, follow-ups" className="min-h-[110px]" /></Field>
+          </div>
+          <Button size="sm" className="mb-5" onClick={async () => {
+            await update('appointments', a.id, { consult_notes: consult ?? a.consult_notes, outcome_notes: outcome ?? a.outcome_notes }); setConsult(null); setOutcome(null); q.refetch(); toast.success('Notes saved')
+          }}>Save notes</Button>
+          <div className="text-[12px] font-medium text-muted-foreground mb-2">Running log</div>
           <div className="rounded-card bg-foreground/[.035] p-4 text-[14px] whitespace-pre-wrap min-h-[80px]">{a.notes || <span className="text-muted-foreground">No notes yet.</span>}</div>
           <div className="mt-4 grid gap-2">
             <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add a note" />
@@ -307,9 +391,22 @@ export function Appointment360({ id, onOpenChange, onEdit }: { id: string | null
             }}>Add note</Button></div>
           </div>
         </TabPanel>
-        <TabPanel id="timeline"><ActivityList items={q.data?.acts} max={40} /></TabPanel>
+        <TabPanel id="timeline">
+          <MiniTable head={['Step', 'When']} empty="—"
+            rows={[['Booked', fmtDT(a.created_at)], ['Checked in', a.checked_in_at ? fmtDT(a.checked_in_at) : '—'], ['Started', a.started_at ? fmtDT(a.started_at) : '—'],
+              ['Checked out / completed', a.completed_at ? fmtDT(a.completed_at) : '—'], ['Last update', fmtDT(a.updated_at)]]} />
+          <div className="text-[12px] font-medium text-muted-foreground mt-5 mb-1">Activity</div>
+          <ActivityList items={q.data?.acts} max={40} />
+        </TabPanel>
       </>}
     </Shell360>
+    {a && <Dialog open={del} onOpenChange={setDel} size="sm" title="Delete this appointment?"
+      footer={<><Button variant="outline" onClick={() => setDel(false)}>Cancel</Button><Button variant="danger" onClick={async () => {
+        await update('appointments', a.id, { deleted_at: new Date().toISOString() }); await logActivity(`Deleted appointment ${a.title}`, 'appointment_deleted', 'appointment', a.id)
+        setDel(false); onOpenChange(false); toast.success('Appointment deleted')
+      }}>Delete</Button></>}><div className="text-[14px] text-muted-foreground">It disappears from the calendar and queue. The activity log keeps a record.</div></Dialog>}
+    <Invoice360 id={invOpen} onOpenChange={(v) => !v && setInvOpen(null)} />
+    </>
   )
 }
 
@@ -320,7 +417,7 @@ export function Invoice360({ id, onOpenChange }: { id: string | null; onOpenChan
   const q = useQuery({
     queryKey: ['invoices', 'i360', id], enabled: !!id,
     queryFn: async () => {
-      const i = await run<Row>(supabase.from('invoices').select('*, clients(business_name, contact_name, phone, email, location), staff(full_name)').eq('id', id).single())
+      const i = await run<Row>(supabase.from('invoices').select('*, clients(business_name, contact_name, phone, email, location), staff(full_name), businesses(name), appointments:appointment_id(id,title,starts_at)').eq('id', id).single())
       const [payments, comms] = await Promise.all([
         run<Row[]>(supabase.from('payments').select('*, staff:received_by(full_name)').eq('invoice_id', id).order('paid_at')),
         run<Row[]>(supabase.from('commissions').select('*, staff(full_name)').eq('invoice_id', id)),
@@ -335,8 +432,11 @@ export function Invoice360({ id, onOpenChange }: { id: string | null; onOpenChan
     <>
       <Shell360 open={!!id} onOpenChange={onOpenChange} icon={<ReceiptText />} title={i?.number || 'Loading'} tab={tab} setTab={setTab}
         badge={i && <StatusBadge map={INVOICE_STATUS} value={i.status} />}
-        rows={i ? [['Client', i.clients?.business_name || 'Walk-in'], ['Type', humanize(i.type)], ['Issued', fmtDate(i.issued_at)], ['Due', fmtDate(i.due_date)],
-          ['Subtotal', kes(i.subtotal_kes)], ['Discount', kes(i.discount_kes)], ['Tax', kes(i.tax_kes)], ['Tip', kes(i.tip_kes)], ['Total', kes(i.total_kes)], ['Paid', kes(i.paid_kes)], ['Balance', kes(out)]] : []}
+        kpis={i ? [['Total', kes(i.total_kes), <ReceiptText />, 'brand'], ['Paid', kes(i.paid_kes), <Wallet />, 'success'], ['Due', out > 0 ? <span className="text-danger">{kes(out)}</span> : kes(0), <CircleDollarSign />, 'danger'], ['Tips', kes(i.tip_kes), <HeartHandshake />, 'violet']] : undefined}
+        rows={i ? [['Client', i.clients?.business_name || 'Walk-in'], ['Business', i.businesses?.name], ['Type', humanize(i.type)], ['Issued', fmtDT(i.issued_at)], ['Due date', fmtDate(i.due_date)],
+          ['Served by', i.staff?.full_name], ['Appointment', i.appointments ? `${i.appointments.title} · ${fmtDate(i.appointments.starts_at)}` : '—'],
+          ['Subtotal', kes(i.subtotal_kes)], ['Discount', kes(i.discount_kes)], [`Tax${Number(i.tax_rate) ? ` ${Number(i.tax_rate)}%` : ''}`, kes(i.tax_kes)], ['Total', kes(i.total_kes)], ['Paid', kes(i.paid_kes)],
+          ['Refunded', Number(i.refunded_kes) ? kes(i.refunded_kes) : '—'], ['Balance', kes(out)]] : []}
         actions={i && <>
           {out > 0 && i.status !== 'void' && <Button size="sm" onClick={() => setPay(true)}><CreditCard />Record payment</Button>}
           <div className="grid grid-cols-2 gap-2">
@@ -348,17 +448,21 @@ export function Invoice360({ id, onOpenChange }: { id: string | null; onOpenChan
         tabs={[{ id: 'items', label: 'Items', count: items.length }, { id: 'payments', label: 'Payments', count: q.data?.payments.length }, { id: 'tips', label: 'Tips & Commissions' }, { id: 'stock', label: 'Stock posted' }]}>
         {!i ? <Skeleton className="h-60 mt-4" /> : <>
           <TabPanel id="items">
-            <MiniTable head={['Item', 'Kind', 'Qty', 'Unit', 'Amount']} empty="No line items"
-              rows={items.map((li) => [li.name, humanize(li.kind), li.qty, kes(li.unit_price_kes), kes(li.qty * li.unit_price_kes)])} />
+            <MiniTable head={['Item', 'Kind', 'Staff', 'Qty', 'Unit', 'Discount', 'Net']} empty="No line items"
+              rows={items.map((li) => { const gross = li.qty * li.unit_price_kes, disc = Number(li.discount_kes || 0); return [li.name, humanize(li.kind), li.staff_name || i.staff?.full_name || '—', li.qty, kes(li.unit_price_kes), disc ? kes(disc) : '—', kes(gross - disc)] })} />
           </TabPanel>
           <TabPanel id="payments">
             <MiniTable head={['Date', 'Method', 'Reference', 'Received by', 'Amount']} empty="No payments yet"
               rows={q.data!.payments.map((p) => [fmtDT(p.paid_at), methodLabel(p.method), <span className="font-mono text-[12px]">{p.reference || '—'}</span>, p.staff?.full_name || '—', kes(p.amount_kes)])} />
           </TabPanel>
           <TabPanel id="tips">
-            <div className="grid grid-cols-2 gap-3 mb-4"><MiniStat label="Tip on invoice" value={kes(i.tip_kes)} /><MiniStat label="Commission" value={kes(sum(q.data!.comms, 'amount_kes'))} /></div>
-            <MiniTable head={['Staff', 'Kind', 'Status', 'Amount']} empty="No commissions on this invoice"
-              rows={q.data!.comms.map((c) => [c.staff?.full_name, humanize(c.kind), <Badge tone={c.status === 'paid' ? 'success' : 'warning'} dot>{humanize(c.status)}</Badge>, kes(c.amount_kes)])} />
+            <div className="grid grid-cols-3 gap-3 mb-4"><MiniStat label="Tips (pass-through)" value={kes(i.tip_kes)} /><MiniStat label="Commission" value={kes(sum(q.data!.comms, 'amount_kes'))} /><MiniStat label="Staff involved" value={new Set(q.data!.comms.map((c) => c.staff_id)).size} /></div>
+            <div className="text-[12px] font-medium text-muted-foreground mb-2">Commissions</div>
+            <MiniTable head={['Staff', 'Line', 'Basis', 'Rate', 'Status', 'Amount']} empty="No commissions on this invoice"
+              rows={q.data!.comms.map((c) => [c.staff?.full_name, c.line_label || humanize(c.kind), humanize(c.basis || 'net_of_cost'), c.rate_pct != null ? `${Number(c.rate_pct)}%` : '—', <Badge tone={c.status === 'paid' ? 'success' : 'warning'} dot>{humanize(c.status)}</Badge>, kes(c.amount_kes)])} />
+            <div className="text-[12px] font-medium text-muted-foreground mt-5 mb-2">Tips (pass-through, not revenue)</div>
+            <MiniTable head={['Staff', 'Method', 'Amount']} empty="No tips"
+              rows={(i.tips?.length ? i.tips : Number(i.tip_kes) ? [{ staff_name: i.staff?.full_name, method: '—', amount_kes: i.tip_kes }] : []).map((t: Row) => [t.staff_name || '—', methodLabel(t.method) || t.method, kes(t.amount_kes)])} />
           </TabPanel>
           <TabPanel id="stock">
             <MiniTable head={['Product', 'Qty out', 'Unit price']} empty="No stock was posted by this invoice"
@@ -402,6 +506,13 @@ export function PaymentDialog({ open, onOpenChange, invoice, onDone }: { open: b
   )
 }
 
+let naimLogo: Promise<string | null> | null = null
+/** The real NaiM Agency logo as a data URL for PDFs. Cached; null if it can't be loaded. */
+export function logoDataUrl(): Promise<string | null> {
+  if (!naimLogo) naimLogo = fetch('/naim-logo.png').then((r) => (r.ok ? r.blob() : null)).then((b) => (b ? new Promise<string>((res, rej) => { const f = new FileReader(); f.onload = () => res(String(f.result)); f.onerror = rej; f.readAsDataURL(b) }) : null)).catch(() => null)
+  return naimLogo
+}
+
 /* ---------------- Branded invoice PDF (jsPDF) ---------------- */
 export async function invoicePdf(i: Row, payments: Row[] = [], print = false) {
   const [{ jsPDF }, { default: autoTable }] = await Promise.all([import('jspdf'), import('jspdf-autotable')])
@@ -412,8 +523,8 @@ export async function invoicePdf(i: Row, payments: Row[] = [], print = false) {
   const W = doc.internal.pageSize.getWidth()
   const gold: [number, number, number] = [200, 162, 74], esp: [number, number, number] = [33, 24, 18]
   doc.setFillColor(...esp); doc.rect(0, 0, W, 110, 'F')
-  doc.setFillColor(...gold); doc.roundedRect(40, 32, 44, 44, 10, 10, 'F')
-  doc.setTextColor(...esp); doc.setFont('times', 'bold'); doc.setFontSize(26); doc.text('N', 62, 63, { align: 'center' })
+  const logo = await logoDataUrl(); if (logo) doc.addImage(logo, 'PNG', 32, 23, 62, 62); else { doc.setFillColor(...gold); doc.roundedRect(40, 32, 44, 44, 10, 10, 'F') }
+  doc.setTextColor(...esp); doc.setFont('times', 'bold'); doc.setFontSize(26); if (!logo) doc.text('N', 62, 63, { align: 'center' })
   doc.setTextColor(239, 230, 214); doc.setFontSize(17); doc.text(co.name || 'Naim Automation Systems Co.', 98, 52)
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(200, 186, 160)
   doc.text([co.city || 'Nairobi, Kenya', [co.phone, co.email].filter(Boolean).join('   '), co.kra_pin ? `KRA PIN ${co.kra_pin}` : ''].filter(Boolean), 98, 68)
@@ -455,6 +566,7 @@ export async function tablePdf(title: string, head: string[], body: (string | nu
   const [{ jsPDF }, { default: autoTable }] = await Promise.all([import('jspdf'), import('jspdf-autotable')])
   const doc = new jsPDF({ unit: 'pt', format: 'a4', orientation: head.length > 6 ? 'landscape' : 'portrait' })
   doc.setFont('times', 'bold'); doc.setFontSize(18); doc.setTextColor(33, 24, 18); doc.text(title, 40, 50)
+  const lg = await logoDataUrl(); if (lg) doc.addImage(lg, 'PNG', doc.internal.pageSize.getWidth() - 88, 20, 48, 48)
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(120, 110, 98)
   doc.text(subtitle || `Naim Automation Systems Co. · generated ${fmtDT(new Date())}`, 40, 66)
   autoTable(doc, { startY: 84, head: [head], body, margin: { left: 40, right: 40 }, styles: { fontSize: 9, cellPadding: 5 }, headStyles: { fillColor: [33, 24, 18], textColor: [239, 230, 214] }, alternateRowStyles: { fillColor: [248, 245, 239] } })

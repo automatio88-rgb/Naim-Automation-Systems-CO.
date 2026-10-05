@@ -67,6 +67,26 @@ async function auth(req, res, url) {
   return send(res, 404, { msg: `auth emulation: ${path} not supported locally` })
 }
 
+// Local stand-in for netlify/functions/users-invite.mts: no email locally, so it returns a one-time password.
+async function inviteUser(req, res) {
+  const c = verify((req.headers.authorization || '').replace(/^Bearer /i, ''))
+  if (!c) return send(res, 401, { error: 'Sign in first.' })
+  const me = (await adminPool.query('select role, full_name, email from public.profiles where id = $1 and active', [c.sub])).rows[0]
+  if (!me || !['owner', 'admin'].includes(me.role)) return send(res, 403, { error: 'Only the owner or an admin can add users.' })
+  const b = JSON.parse((await readBody(req)).toString() || '{}')
+  const email = String(b.email || '').trim().toLowerCase()
+  const role = ['admin', 'manager', 'staff', 'viewer'].includes(b.role) ? b.role : 'staff'
+  if (!/^\S+@\S+\.\S+$/.test(email)) return send(res, 400, { error: 'Enter a valid email.' })
+  if (role === 'admin' && me.role !== 'owner') return send(res, 403, { error: 'Only the owner can add admins.' })
+  if ((await adminPool.query('select 1 from auth.users where lower(email) = $1', [email])).rowCount) return send(res, 409, { error: 'That email already has an account.' })
+  const pw = 'Naim-' + randomUUID().slice(0, 6)
+  const full = String(b.full_name || '').trim() || null
+  const u = (await adminPool.query("insert into auth.users (email, encrypted_password, raw_user_meta_data) values ($1, crypt($2, gen_salt('bf')), $3) returning id", [email, pw, { full_name: full }])).rows[0]
+  await adminPool.query('update public.profiles set role = $2, full_name = coalesce($3, full_name), phone = $4 where id = $1', [u.id, role, full, b.phone || null])
+  await adminPool.query("insert into public.activities (actor_kind, actor_name, verb, entity_type, entity_id, summary, metadata) values ('human', $1, 'role_changed', 'profile', $2, $3, $4)", [me.full_name || me.email, u.id, `Added ${full || email} as ${role}`, { email, role }])
+  return send(res, 200, { ok: true, id: u.id, temp_password: pw })
+}
+
 async function rest(req, res, url) {
   const headers = { ...req.headers }
   delete headers.host; delete headers.apikey
@@ -103,6 +123,7 @@ http.createServer(async (req, res) => {
     if (url.pathname === '/readyz') return send(res, ready ? 204 : 503)
     if (url.pathname.startsWith('/auth/v1')) return await auth(req, res, url)
     if (url.pathname.startsWith('/rest/v1')) return await rest(req, res, url)
+    if (url.pathname === '/api/users/invite' && req.method === 'POST') return await inviteUser(req, res)
     if (url.pathname.startsWith('/realtime/v1')) return send(res, 404, { msg: 'realtime not emulated locally; app polls instead' })
     return stat(req, res, url)
   } catch (e) {

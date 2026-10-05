@@ -15,7 +15,7 @@ const COMMANDS: Record<string, { cmd: string; label: string }[]> = {
   sage: [{ cmd: 'run_enrichment', label: 'Enrich waiting leads' }],
   herald: [{ cmd: 'send_outreach', label: 'Send approved outreach' }],
   echo: [{ cmd: 'check_replies', label: 'Check replies' }],
-  ledger: [{ cmd: 'chase_overdue', label: 'Chase overdue invoices' }, { cmd: 'daily_summary', label: 'Send daily summary' }],
+  ledger: [{ cmd: 'chase_overdue', label: 'Chase overdue invoices' }, { cmd: 'morning_briefing', label: 'Send morning briefing' }, { cmd: 'daily_summary', label: 'Send daily summary' }],
 }
 const botTone = (b: Row) => (!b.enabled ? 'neutral' : b.status === 'error' ? 'danger' : b.status === 'running' ? 'info' : b.status === 'paused' ? 'warning' : 'success') as any
 

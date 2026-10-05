@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { addDays, format, startOfWeek } from 'date-fns'
 import { CalendarOff, Clock, Plus, UserPlus, Users } from 'lucide-react'
-import { useList, insert, update, logActivity, type Row } from '@/services/db'
+import { useList, insert, update, logActivity, run, type Row } from '@/services/db'
+import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import { cn, fmtDate, humanize, kes, fmtTime } from '@/lib/utils'
-import { Avatar, Badge, Button, Card, Kpi, PageHeader, Select, TabPanel, Tabs } from '@/components/ui'
+import { Avatar, Badge, Button, Card, Input, Kpi, PageHeader, Segmented, Select, TabPanel, Tabs } from '@/components/ui'
 import { DataTable } from '@/components/data-table'
 import { RecordForm } from '@/components/form'
 
@@ -79,11 +80,24 @@ function Shifts({ staff }: { staff: Row[] }) {
   const days = Array.from({ length: 7 }, (_, i) => addDays(week, i))
   const sh = useList('shifts', { filter: (b) => b.gte('day', days[0].toISOString().slice(0, 10)).lte('day', format(days[6], 'yyyy-MM-dd')), key: [week.toISOString()], limit: 1000 })
   const [add, setAdd] = useState<Row | null>(null)
+  const [editShift, setEditShift] = useState<Row | null>(null)
+  const [copying, setCopying] = useState(false)
+  const copyLast = async () => {
+    setCopying(true)
+    try {
+      const prev = await run<Row[]>(supabase.from('shifts').select('staff_id,day,start_time,end_time,role').gte('day', format(addDays(days[0], -7), 'yyyy-MM-dd')).lte('day', format(addDays(days[6], -7), 'yyyy-MM-dd')))
+      const have = new Set((sh.data || []).map((y) => y.staff_id + y.day))
+      const recs = prev.map((y): Row => ({ ...y, day: format(addDays(new Date(y.day + 'T00:00:00'), 7), 'yyyy-MM-dd') })).filter((y) => !have.has(y.staff_id + y.day))
+      if (!recs.length) toast.info('Nothing to copy'); else { await insert('shifts', recs); toast.success(`Copied ${recs.length} shifts from last week`) }
+    } catch (e: any) { toast.error(e.message) } finally { setCopying(false) }
+  }
   return (
     <Card pad={false}>
       <div className="flex items-center gap-2 p-4 border-b border-border/70">
         <Button size="sm" variant="outline" onClick={() => setWeek(addDays(week, -7))}>Previous</Button><Button size="sm" variant="outline" onClick={() => setWeek(startOfWeek(new Date(), { weekStartsOn: 1 }))}>This week</Button><Button size="sm" variant="outline" onClick={() => setWeek(addDays(week, 7))}>Next</Button>
         <span className="ml-2 font-medium">{format(days[0], 'd MMM')} – {format(days[6], 'd MMM yyyy')}</span>
+        <span className="flex-1" /><Button size="sm" variant="soft" loading={copying} onClick={copyLast}>Copy last week</Button>
+        <Button size="sm" onClick={() => setAdd({ day: format(days[0], 'yyyy-MM-dd'), start_time: '08:30', end_time: '17:30' })}>Add shift</Button>
       </div>
       <div className="overflow-x-auto scroll-thin">
         <table className="w-full text-[13px] min-w-[860px]">
@@ -92,13 +106,15 @@ function Shifts({ staff }: { staff: Row[] }) {
             <tr key={s.id} className="border-t border-border/60"><td className="px-4 py-2 font-medium">{s.full_name}</td>
               {days.map((d) => {
                 const k = format(d, 'yyyy-MM-dd'), x = (sh.data || []).find((y) => y.staff_id === s.id && y.day === k)
-                return <td key={k} className="px-1.5 py-1.5">{x ? <span className="tone-brand chip block rounded-[9px] px-2 py-1.5 text-[12px] num">{String(x.start_time).slice(0, 5)}–{String(x.end_time).slice(0, 5)}</span>
+                return <td key={k} className="px-1.5 py-1.5">{x ? <button onClick={() => setEditShift(x)} title="Edit shift" className="tone-brand chip block w-full text-left rounded-[9px] px-2 py-1.5 text-[12px] num hover:brightness-95">{String(x.start_time).slice(0, 5)}–{String(x.end_time).slice(0, 5)}{x.role && <span className="block text-[10.5px] opacity-75 truncate">{x.role}</span>}</button>
                   : <button onClick={() => setAdd({ staff_id: s.id, day: k, start_time: '08:30', end_time: '17:30', role: s.title })} className="w-full h-8 rounded-[9px] border border-dashed border-border text-muted-foreground hover:bg-foreground/[.04] text-[12px]">Add</button>}</td>
               })}</tr>))}</tbody>
         </table>
       </div>
       <RecordForm open={!!add} onOpenChange={(v) => !v && setAdd(null)} table="shifts" title="Add shift" initial={null} defaults={add || {}}
-        fields={[{ name: 'day', label: 'Day', type: 'date', required: true }, { name: 'role', label: 'Role' }, { name: 'start_time', label: 'Start', type: 'time', required: true }, { name: 'end_time', label: 'End', type: 'time', required: true }]} />
+        fields={[{ name: 'staff_id', label: 'Staff', type: 'select', required: true, options: staff.map((x) => ({ value: x.id, label: x.full_name })) }, { name: 'day', label: 'Day', type: 'date', required: true }, { name: 'role', label: 'Role' }, { name: 'start_time', label: 'Start', type: 'time', required: true }, { name: 'end_time', label: 'End', type: 'time', required: true }]} />
+      <RecordForm open={!!editShift} onOpenChange={(v) => !v && setEditShift(null)} table="shifts" title="Edit shift" initial={editShift}
+        fields={[{ name: 'staff_id', label: 'Staff', type: 'select', required: true, options: staff.map((x) => ({ value: x.id, label: x.full_name })) }, { name: 'day', label: 'Day', type: 'date', required: true }, { name: 'role', label: 'Role' }, { name: 'start_time', label: 'Start', type: 'time', required: true }, { name: 'end_time', label: 'End', type: 'time', required: true }]} />
     </Card>
   )
 }
@@ -106,25 +122,60 @@ function Shifts({ staff }: { staff: Row[] }) {
 function Attendance({ staff, rows }: { staff: Row[]; rows: Row[] }) {
   const today = new Date().toISOString().slice(0, 10)
   const days = useMemo(() => Array.from({ length: 14 }, (_, i) => format(addDays(new Date(), -13 + i), 'yyyy-MM-dd')), [])
-  const mark = async (s: Row, status: string) => {
-    const ex = rows.find((r) => r.staff_id === s.id && r.day === today)
-    const now = new Date().toTimeString().slice(0, 8)
-    if (ex) await update('attendance', ex.id, { status, check_in: ex.check_in || (['present', 'late'].includes(status) ? now : null) })
-    else await insert('attendance', { staff_id: s.id, day: today, status, check_in: ['present', 'late', 'half_day'].includes(status) ? now : null })
-    toast.success(`${s.full_name}: ${humanize(status)}`)
+  const [mode, setMode] = useState('day')
+  const [day, setDay] = useState(today)
+  const [draft, setDraft] = useState<Record<string, Row>>({})
+  const [busy, setBusy] = useState(false)
+  const active = staff.filter((s) => s.status === 'active')
+  useEffect(() => {
+    const d: Record<string, Row> = {}
+    active.forEach((s) => { const r = rows.find((x) => x.staff_id === s.id && x.day === day); d[s.id] = { id: r?.id, status: r?.status || '', check_in: r?.check_in ? String(r.check_in).slice(0, 5) : '', check_out: r?.check_out ? String(r.check_out).slice(0, 5) : '', notes: r?.notes || '' } })
+    setDraft(d)
+  }, [day, rows.length, staff.length]) // eslint-disable-line
+  const set = (id: string, k: string, v: unknown) => setDraft((s) => ({ ...s, [id]: { ...s[id], [k]: v } }))
+  const PILLS: [string, string][] = [['present', 'P'], ['late', 'L'], ['half_day', 'H'], ['absent', 'A'], ['leave', 'Lv']].filter(([k]) => k in ATT) as [string, string][]
+  const counts = PILLS.map(([k]) => [k, Object.values(draft).filter((d) => d.status === k).length] as const)
+  const save = async () => {
+    setBusy(true)
+    try {
+      let n = 0
+      for (const s of active) {
+        const d = draft[s.id]; if (!d?.status) continue
+        const payload = { status: d.status, check_in: d.check_in || null, check_out: d.check_out || null, notes: d.notes || null }
+        if (d.id) await update('attendance', d.id, payload); else await insert('attendance', { staff_id: s.id, day, ...payload })
+        n++
+      }
+      toast.success(`Saved attendance for ${n} staff on ${fmtDate(day)}`)
+    } catch (e: any) { toast.error(e.message) } finally { setBusy(false) }
   }
   return (
     <div className="grid gap-4">
-      <Card title="Today" sub={fmtDate(new Date(), 'EEEE d MMMM')}>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">{staff.filter((s) => s.status === 'active').map((s) => {
-          const a = rows.find((r) => r.staff_id === s.id && r.day === today)
-          return (
-            <div key={s.id} className="rounded-[14px] bg-foreground/[.035] p-3 flex items-center gap-3">
-              <Avatar name={s.full_name} size={34} /><div className="min-w-0 flex-1"><div className="font-medium text-[13.5px] truncate">{s.full_name}</div><div className="text-[12px] text-muted-foreground">{a?.check_in ? `In ${String(a.check_in).slice(0, 5)}` : 'Not checked in'}</div></div>
-              <Select size="sm" className="w-[118px]" value={a?.status || ''} onChange={(v) => mark(s, v)} placeholder="Mark" options={Object.keys(ATT).map((k) => ({ value: k, label: humanize(k) }))} />
-            </div>)
-        })}</div>
-      </Card>
+      <div className="flex flex-wrap items-center gap-2">
+        <Segmented value={mode} onChange={setMode} items={[{ id: 'day', label: 'Mark day' }, { id: 'matrix', label: '14-day matrix' }]} />
+      </div>
+      {mode === 'day' ? (
+      <Card title="Mark attendance" sub={fmtDate(day, 'EEEE d MMMM')}
+        action={<div className="flex flex-wrap items-center gap-2">
+          <Input type="date" className="h-9 w-[150px]" value={day} max={today} min={days[0]} onChange={(e) => e.target.value && setDay(e.target.value)} />
+          <Button size="sm" variant="outline" onClick={() => setDraft((s) => Object.fromEntries(Object.entries(s).map(([k, v]) => [k, { ...v, status: 'present', check_in: v.check_in || '08:30' }])))}>All present</Button>
+          <Button size="sm" loading={busy} onClick={save}>Save</Button></div>}>
+        <div className="flex flex-wrap gap-2 mb-3">{counts.map(([k, n]) => <Badge key={k} tone={(ATT as Row)[k]} dot>{humanize(k)} {n}</Badge>)}<Badge>Unmarked {active.length - counts.reduce((a, [, n]) => a + n, 0)}</Badge></div>
+        <div className="overflow-x-auto scroll-thin rounded-[14px] border border-border/70">
+          <table className="w-full text-[13px] min-w-[720px]">
+            <thead><tr className="bg-foreground/[.025] text-muted-foreground">{['Staff', 'Status', 'Check in', 'Check out', 'Note'].map((h) => <th key={h} className="text-left font-medium px-3 h-10">{h}</th>)}</tr></thead>
+            <tbody>{active.map((s) => { const d = draft[s.id] || {}; return (
+              <tr key={s.id} className="border-t border-border/60">
+                <td className="px-3 py-2"><div className="flex items-center gap-2.5"><Avatar name={s.full_name} size={30} /><div className="min-w-0"><div className="font-medium truncate">{s.full_name}</div><div className="text-[11.5px] text-muted-foreground truncate">{s.title}</div></div></div></td>
+                <td className="px-3 py-2"><div className="inline-flex gap-1">{PILLS.map(([k, l]) => (
+                  <button key={k} title={humanize(k)} onClick={() => set(s.id, 'status', k)} className={cn('tone-' + (ATT as Row)[k], 'h-8 min-w-8 px-2 rounded-[8px] text-[12px] font-semibold border transition-colors', d.status === k ? 'fill-tone text-white border-transparent' : 'border-border text-muted-foreground hover:bg-foreground/[.05]')}>{l}</button>))}</div></td>
+                <td className="px-3 py-2"><Input type="time" className="h-9 w-[110px]" value={d.check_in || ''} onChange={(e) => set(s.id, 'check_in', e.target.value)} /></td>
+                <td className="px-3 py-2"><Input type="time" className="h-9 w-[110px]" value={d.check_out || ''} onChange={(e) => set(s.id, 'check_out', e.target.value)} /></td>
+                <td className="px-3 py-2"><Input className="h-9 min-w-[140px]" value={d.notes || ''} onChange={(e) => set(s.id, 'notes', e.target.value)} placeholder="Optional" /></td>
+              </tr>) })}</tbody>
+          </table>
+        </div>
+        <div className="text-[12px] text-muted-foreground mt-2">P present · L late · H half day · A absent · Lv on leave. Changes save only when you press Save.</div>
+      </Card>) : (
       <Card title="Last 14 days" pad={false}>
         <div className="overflow-x-auto scroll-thin p-4">
           <table className="text-[12px] min-w-[760px] w-full">
@@ -134,6 +185,7 @@ function Attendance({ staff, rows }: { staff: Row[]; rows: Row[] }) {
           <div className="flex flex-wrap gap-3 mt-3">{Object.entries(ATT).map(([k, t]) => <span key={k} className={cn('tone-' + t, 'inline-flex items-center gap-1.5 text-[12px] text-muted-foreground')}><span className="fill-tone size-3 rounded-[4px]" />{humanize(k)}</span>)}</div>
         </div>
       </Card>
+      )}
     </div>
   )
 }

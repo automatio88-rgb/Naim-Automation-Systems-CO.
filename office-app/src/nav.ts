@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, SunMedium, Radar, Handshake, Users, CalendarClock, FolderKanban, ListChecks, FileSignature,
   ShoppingBag, ReceiptText, Sparkles, BadgeCheck, Boxes, Truck, Landmark, Wallet, Banknote, HandCoins, UserRound,
-  ChartNoAxesCombined, Bot, ShieldCheck, Settings2, type LucideIcon,
+  ChartNoAxesCombined, Bot, ShieldCheck, Settings2, PlaneTakeoff, UsersRound, History, type LucideIcon,
 } from 'lucide-react'
 
 export type NavItem = { to: string; label: string; icon: LucideIcon; module?: string; keywords?: string }
@@ -36,14 +36,17 @@ export const NAV: { group: string; items: NavItem[] }[] = [
     { to: '/payroll', label: 'Payroll', icon: HandCoins, module: 'payroll', keywords: 'salary advances payslips commission' },
   ] },
   { group: 'Team', items: [
-    { to: '/hr', label: 'Staff & HR', icon: UserRound, module: 'staff', keywords: 'staff departments shifts attendance leave' },
+    { to: '/hr', label: 'Staff & HR', icon: UserRound, module: 'staff', keywords: 'staff departments shifts attendance' },
+    { to: '/leave', label: 'Leave Requests', icon: PlaneTakeoff, module: 'leave', keywords: 'leave holiday sick off time annual approve' },
   ] },
   { group: 'Intelligence', items: [
     { to: '/reports', label: 'Reports', icon: ChartNoAxesCombined, module: 'reports', keywords: 'analytics export' },
     { to: '/hermes', label: 'Hermes Fleet', icon: Bot, module: 'hermes', keywords: 'automation bots scout sage herald echo ledger' },
   ] },
   { group: 'System', items: [
-    { to: '/roles', label: 'Roles & Permissions', icon: ShieldCheck, module: 'settings', keywords: 'rbac access users' },
+    { to: '/users', label: 'Users', icon: UsersRound, module: 'users', keywords: 'users accounts invite logins team access' },
+    { to: '/roles', label: 'Roles & Permissions', icon: ShieldCheck, module: 'settings', keywords: 'rbac access permissions matrix approve export' },
+    { to: '/activity', label: 'Activity Logs', icon: History, module: 'activity_logs', keywords: 'audit trail history log who did what' },
     { to: '/settings', label: 'Settings', icon: Settings2, module: 'settings', keywords: 'company theme banking' },
   ] },
 ]

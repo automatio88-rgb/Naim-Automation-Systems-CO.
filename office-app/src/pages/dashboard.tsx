@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUpRight, Banknote, Bot, CalendarCheck, CircleDollarSign, Clock, Coins, Handshake, Radar, Repeat, TrendingDown, TrendingUp, Users, Video, ReceiptText } from 'lucide-react'
+import { CalendarPlus, ClipboardList, Hourglass, Package, PackageOpen, PlaneTakeoff, ShoppingCart, UserPlus, Wallet, Zap, AlertTriangle, ArrowUpRight, Banknote, Bot, CalendarCheck, CircleDollarSign, Clock, Coins, Handshake, Radar, Repeat, TrendingDown, TrendingUp, Users, Video, ReceiptText } from 'lucide-react'
 import { useList, type Row } from '@/services/db'
 import { useAuth } from '@/lib/auth'
 import { useBiz } from '@/lib/business'
 import { ago, cn, fmtTime, kes, kesShort, sum, fmtDate, humanize } from '@/lib/utils'
 import { RANGES, rangeBounds, inRange, series, delta, type RangeId } from '@/lib/range'
 import { methodLabel, dealStage } from '@/lib/status'
-import { Badge, Button, Card, Empty, Kpi, Segmented, Skeleton } from '@/components/ui'
+import { Avatar, Badge, Button, Card, Empty, Kpi, Progress, Segmented, Skeleton } from '@/components/ui'
 import { ActivityList, Funnel, cumulativeFunnel } from '@/components/shared'
 import { AreaTrend, Donut, Bars } from '@/components/charts'
 
@@ -32,6 +32,43 @@ export default function Dashboard() {
   const bots = useList('hermes_bots', { order: ['name', true], enabled: can('hermes') })
   const tasks = useList('tasks', { select: 'id,title,priority,status,due_at', filter: (b) => b.is('deleted_at', null).neq('status', 'done'), order: ['due_at', true], limit: 200, enabled: can('tasks') })
 
+  const todayStr = new Date().toISOString().slice(0, 10)
+  const d14 = new Date(Date.now() - 13 * 864e5); d14.setHours(0, 0, 0, 0)
+  const wl = useList('waitlist', { select: 'id,status', filter: (b) => b.eq('status', 'waiting'), limit: 500 })
+  const lv = useList('leave_requests', { select: 'id,status', filter: (b) => b.eq('status', 'pending'), limit: 500 })
+  const ps = useList('payslips', { select: 'id,status,net_kes', filter: (b) => b.neq('status', 'paid'), limit: 500 })
+  const po = useList('purchase_orders', { select: 'id,status,total_kes', filter: (b) => b.in('status', ['ordered', 'partial']), limit: 500 })
+  const prod = useList('products', { select: 'id,stock_qty,reorder_level,active', filter: (b) => b.is('deleted_at', null).eq('active', true), limit: 5000 })
+  const subsExp = useList('subscriptions', { select: 'id,next_due,status', filter: (b) => b.eq('status', 'active').lte('next_due', new Date(Date.now() + 14 * 864e5).toISOString().slice(0, 10)), limit: 500 })
+  const pkgExp = useList('client_packages', { select: 'id,expires_at,status', filter: (b) => b.eq('status', 'active').lte('expires_at', new Date(Date.now() + 14 * 864e5).toISOString()), limit: 500 })
+  const roster = useList('staff', { select: 'id,full_name,title,color', filter: (b) => b.is('deleted_at', null).eq('status', 'active'), order: ['full_name', true] })
+  const shiftsToday = useList('shifts', { select: 'staff_id,start_time,end_time,role', filter: (b) => b.eq('day', todayStr), limit: 500 })
+  const attToday = useList('attendance', { select: 'staff_id,status,check_in', filter: (b) => b.eq('day', todayStr), limit: 500 })
+  const foot = useList('appointments', { select: 'id,staff_id,status,starts_at,ends_at', filter: (b) => scope(b.is('deleted_at', null).gte('starts_at', d14.toISOString())), limit: 5000 })
+  const lowStock = (prod.data || []).filter((x) => Number(x.stock_qty) <= Number(x.reorder_level || 0))
+  const tiles = [
+    { k: 'wl', label: 'Waitlist', n: (wl.data || []).length, icon: <Hourglass />, tone: 'info', to: '/appointments' },
+    { k: 'lv', label: 'Leave requests', n: (lv.data || []).length, icon: <PlaneTakeoff />, tone: 'violet', to: '/hr' },
+    { k: 'ps', label: 'Payroll to pay', n: (ps.data || []).length, icon: <Wallet />, tone: 'warning', to: '/payroll' },
+    { k: 'po', label: 'POs awaiting', n: (po.data || []).length, icon: <PackageOpen />, tone: 'teal', to: '/purchases' },
+    { k: 'ls', label: 'Low stock', n: lowStock.length, icon: <Package />, tone: 'danger', to: '/inventory' },
+    { k: 'ex', label: 'Expiring plans', n: (subsExp.data || []).length + (pkgExp.data || []).length, icon: <Repeat />, tone: 'brand', to: '/memberships' },
+  ]
+  const todayAppts = (foot.data || []).filter((a) => String(a.starts_at).slice(0, 10) === todayStr && a.status !== 'cancelled')
+  const team = (roster.data || []).map((st): Row => {
+    const sh = (shiftsToday.data || []).find((x) => x.staff_id === st.id), at = (attToday.data || []).find((x) => x.staff_id === st.id)
+    const mine = todayAppts.filter((a) => a.staff_id === st.id)
+    const shiftMin = sh ? (Number(String(sh.end_time).slice(0, 2)) * 60 + Number(String(sh.end_time).slice(3, 5))) - (Number(String(sh.start_time).slice(0, 2)) * 60 + Number(String(sh.start_time).slice(3, 5))) : 0
+    const bookedMin = mine.reduce((t, a) => t + Math.max(0, (+new Date(a.ends_at || a.starts_at) - +new Date(a.starts_at)) / 6e4), 0)
+    return { ...st, sh, at, done: mine.filter((a) => a.status === 'completed').length, booked: mine.length, util: shiftMin ? Math.min(100, Math.round((bookedMin / shiftMin) * 100)) : 0, shiftMin, bookedMin }
+  }).filter((t) => t.sh || t.at || t.booked).sort((a, b) => b.booked - a.booked)
+  const capShift = sum(team, 'shiftMin'), capBooked = sum(team, 'bookedMin')
+  const footfall = Array.from({ length: 14 }, (_, i) => { const d = new Date(d14.getTime() + i * 864e5), k = d.toISOString().slice(0, 10)
+    const x = (foot.data || []).filter((a) => String(a.starts_at).slice(0, 10) === k)
+    return { day: fmtDate(d, 'd MMM'), visits: x.filter((a) => ['completed', 'checked_in', 'in_progress'].includes(a.status)).length, noshow: x.filter((a) => a.status === 'no_show').length } })
+  const f14 = foot.data || [], past14 = f14.filter((a) => +new Date(a.starts_at) < Date.now())
+  const rate = (st: string) => past14.length ? Math.round((past14.filter((a) => a.status === st).length / past14.length) * 100) : 0
+  const ATT_TONE: Record<string, any> = { present: 'success', late: 'warning', absent: 'danger', half_day: 'info', leave: 'violet', off: 'neutral' }
   const m = useMemo(() => {
     const P = payments.data || [], E = expenses.data || [], L = leads.data || [], A = appts.data || [], D = deals.data || []
     const rev = sum(P.filter((p) => inRange(p.paid_at, from, to)), 'amount_kes'), revPrev = sum(P.filter((p) => inRange(p.paid_at, prevFrom, prevTo)), 'amount_kes')
@@ -76,6 +113,17 @@ export default function Dashboard() {
         </div>
         <Segmented value={range} onChange={setRange} items={RANGES} />
       </div>
+
+      <div className="flex flex-wrap gap-2 mb-4" data-reveal>{([
+        ['New booking', <CalendarPlus />, '/appointments?new=1', 'appointments'], ['Walk-in sale', <ShoppingCart />, '/pos', 'pos'], ['Add lead', <UserPlus />, '/leads', 'leads'],
+        ['Add task', <ClipboardList />, '/tasks', 'tasks'], ['Morning briefing', <Zap />, '/hermes', 'hermes'],
+      ] as const).filter(([, , , mod]) => can(mod)).map(([l, ic, to]) => <Button key={l} size="sm" variant="outline" onClick={() => nav(to)}>{ic}{l}</Button>)}</div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 mb-4" data-reveal>{tiles.map((t) => (
+        <button key={t.k} onClick={() => nav(t.to)} className={cn('tone-' + t.tone, 'text-left rounded-card border border-border/70 bg-card px-4 py-3 shadow-e1 hover:shadow-e2 transition flex items-center gap-3', !t.n && 'opacity-70')}>
+          <span className="chip size-9 rounded-[11px] grid place-items-center shrink-0 [&_svg]:size-4">{t.icon}</span>
+          <span className="min-w-0"><span className="block text-[20px] font-semibold num leading-none">{t.n}</span><span className="block text-[12px] text-muted-foreground mt-1 truncate">{t.label}</span></span>
+        </button>))}</div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-4">
         <Kpi solid tone="brand" label="Revenue collected" value={m.rev} format={kesShort} icon={<CircleDollarSign />} foot={deltaFoot(m.rev, m.revPrev)} onClick={() => nav('/finance')} />
@@ -138,7 +186,30 @@ export default function Dashboard() {
             data={['discovery', 'consultation', 'proposal', 'contract', 'deposit_paid'].map((s) => ({ stage: dealStage(s).label, value: sum(m.open.filter((d) => d.stage === s), 'value_kes') }))} />
         </Card>
       </div>
-      <div className="hidden"><Users /></div>
+      <div className="grid lg:grid-cols-[1.4fr_1fr] gap-4 mt-4">
+        <Card data-scroll title="Team on duty today" sub={`${team.length} on the roster · ${todayAppts.length} appointments`} action={<Button size="sm" variant="ghost" onClick={() => nav('/hr')}>Roster<ArrowUpRight /></Button>}>
+          {team.length ? <div className="overflow-x-auto scroll-thin"><table className="w-full text-[13px] min-w-[520px]">
+            <thead><tr className="text-muted-foreground">{['Staff', 'Shift', 'Attendance', 'Done / booked', 'Utilisation'].map((h) => <th key={h} className="text-left font-medium pb-2">{h}</th>)}</tr></thead>
+            <tbody>{team.map((t) => <tr key={t.id} className="border-t border-border/60">
+              <td className="py-2"><div className="flex items-center gap-2"><Avatar name={t.full_name} size={28} /><div className="min-w-0"><div className="font-medium truncate">{t.full_name}</div><div className="text-[11.5px] text-muted-foreground truncate">{t.sh?.role || t.title}</div></div></div></td>
+              <td className="num">{t.sh ? `${String(t.sh.start_time).slice(0, 5)}–${String(t.sh.end_time).slice(0, 5)}` : '—'}</td>
+              <td>{t.at ? <Badge tone={ATT_TONE[t.at.status] || 'neutral'} dot>{humanize(t.at.status)}{t.at.check_in ? ` ${String(t.at.check_in).slice(0, 5)}` : ''}</Badge> : <span className="text-muted-foreground">Not marked</span>}</td>
+              <td className="num">{t.done} / {t.booked}</td>
+              <td><div className="flex items-center gap-2 w-[120px]"><Progress value={t.util} className="flex-1" /><span className="num text-[12px] w-8">{t.util}%</span></div></td>
+            </tr>)}</tbody></table></div> : <Empty title="No shifts today" body="Add shifts in HR → Shifts to see who is on duty." icon={<Users />} />}
+          <div className="mt-3 pt-3 border-t border-border/70 flex flex-wrap gap-x-6 gap-y-1 text-[12.5px] text-muted-foreground">
+            <span>Capacity <b className="text-foreground num">{Math.round(capShift / 60)} h</b></span><span>Booked <b className="text-foreground num">{Math.round(capBooked / 60)} h</b></span>
+            <span>Utilisation <b className="text-foreground num">{capShift ? Math.round((capBooked / capShift) * 100) : 0}%</b></span>
+          </div>
+        </Card>
+        <Card data-scroll title="Footfall, last 14 days" sub="Visits served vs no-shows">
+          <Bars height={200} money={false} x="day" data={footfall} series={[{ key: 'visits', name: 'Visits', color: 'var(--p)' }, { key: 'noshow', name: 'No-shows', color: 'var(--danger)' }]} />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">{([
+            ['Avg bill', kes(m.rev && (payments.data || []).filter((p) => inRange(p.paid_at, from, to)).length ? m.rev / (payments.data || []).filter((p) => inRange(p.paid_at, from, to)).length : 0)],
+            ['Completed', `${rate('completed')}%`], ['No-show rate', `${rate('no_show')}%`], ['Cancel rate', `${rate('cancelled')}%`],
+          ] as const).map(([k, v]) => <div key={k} className="rounded-[12px] bg-foreground/[.035] px-3 py-2"><div className="text-[11.5px] text-muted-foreground">{k}</div><div className="font-semibold num text-[14px]">{v}</div></div>)}</div>
+        </Card>
+      </div>
     </div>
   )
 }
