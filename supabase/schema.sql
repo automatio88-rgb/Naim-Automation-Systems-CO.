@@ -1012,3 +1012,240 @@ do $$ begin
     on conflict (id) do nothing;
   end if;
 end $$;
+-- 002 — Screen-parity columns & tables (from the 77-screenshot audit). Idempotent.
+
+-- Clients (Customer 360 profile rows, preferences, loyalty)
+alter table public.clients add column if not exists status text not null default 'active';
+alter table public.clients add column if not exists anniversary date;
+alter table public.clients add column if not exists preferred_staff_id uuid references public.staff(id) on delete set null;
+alter table public.clients add column if not exists referred_by uuid references public.clients(id) on delete set null;
+alter table public.clients add column if not exists marketing_consent boolean not null default false;
+alter table public.clients add column if not exists loyalty_points integer not null default 0;
+alter table public.clients add column if not exists preferences jsonb not null default '{}'::jsonb;
+
+-- Office spaces (salon chairs/rooms -> boardrooms, desks, call booths)
+create table if not exists public.office_spaces (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid references public.businesses(id) on delete cascade,
+  name text not null,
+  kind text not null default 'meeting_room',
+  capacity integer not null default 1,
+  status text not null default 'active',
+  sort integer not null default 0,
+  is_demo boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+-- Appointments (booking form + 360)
+alter table public.appointments add column if not exists space_id uuid references public.office_spaces(id) on delete set null;
+alter table public.appointments add column if not exists deposit_kes numeric(12,2) not null default 0;
+alter table public.appointments add column if not exists no_show_fee_kes numeric(12,2) not null default 0;
+alter table public.appointments add column if not exists invoice_id uuid references public.invoices(id) on delete set null;
+alter table public.appointments add column if not exists consult_notes text;
+alter table public.appointments add column if not exists outcome_notes text;
+alter table public.appointments add column if not exists checked_in_at timestamptz;
+alter table public.appointments add column if not exists started_at timestamptz;
+alter table public.appointments add column if not exists completed_at timestamptz;
+
+-- Invoices / commissions (Invoice 360: refunds, linked appointment, per-line commission)
+alter table public.invoices add column if not exists appointment_id uuid references public.appointments(id) on delete set null;
+alter table public.invoices add column if not exists refunded_kes numeric(12,2) not null default 0;
+alter table public.invoices add column if not exists tax_rate numeric(5,2) not null default 0;
+alter table public.invoices add column if not exists tips jsonb not null default '[]'::jsonb;
+alter table public.commissions add column if not exists line_label text;
+alter table public.commissions add column if not exists base_kes numeric(12,2);
+alter table public.commissions add column if not exists rate_pct numeric(5,2);
+alter table public.commissions add column if not exists basis text not null default 'net_of_cost';
+
+-- Services (Add Service: cost, buffer, online, discount guardrail) + recipes
+alter table public.services add column if not exists cost_kes numeric(12,2) not null default 0;
+alter table public.services add column if not exists buffer_min integer not null default 0;
+alter table public.services add column if not exists bookable_online boolean not null default true;
+alter table public.services add column if not exists max_discount_pct numeric(5,2) not null default 100;
+alter table public.services add column if not exists needs_space text;
+alter table public.service_categories add column if not exists active boolean not null default true;
+create table if not exists public.service_recipes (
+  id uuid primary key default gen_random_uuid(),
+  service_id uuid not null references public.services(id) on delete cascade,
+  product_id uuid not null references public.products(id) on delete cascade,
+  qty numeric(12,3) not null default 1,
+  is_demo boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+-- Products (Add Product fields)
+alter table public.products add column if not exists barcode text;
+alter table public.products add column if not exists brand text;
+alter table public.products add column if not exists pack_size integer not null default 1;
+alter table public.products add column if not exists usage_type text not null default 'both';
+alter table public.products add column if not exists commission_pct numeric(5,2);
+alter table public.products add column if not exists reorder_qty integer;
+alter table public.products add column if not exists shelf text;
+alter table public.products add column if not exists track_expiry boolean not null default false;
+
+-- Misc list columns
+alter table public.departments add column if not exists active boolean not null default true;
+alter table public.suppliers add column if not exists status text not null default 'active';
+alter table public.waitlist add column if not exists preferred_staff_id uuid references public.staff(id) on delete set null;
+alter table public.waitlist add column if not exists window_end timestamptz;
+alter table public.expenses add column if not exists source text not null default 'manual';
+alter table public.expenses add column if not exists recorded_by text;
+alter table public.till_sessions add column if not exists business_id uuid references public.businesses(id) on delete set null;
+alter table public.till_sessions add column if not exists paid_out_kes numeric(12,2) not null default 0;
+alter table public.staff add column if not exists leave_balance numeric(5,1) not null default 21;
+alter table public.staff add column if not exists commission_target_kes numeric(12,2) not null default 0;
+
+-- RLS for the new tables (same has_perm model as the rest)
+do $$
+declare pair text; t text; m text;
+begin
+  foreach pair in array array['office_spaces:appointments','service_recipes:services'] loop
+    t := split_part(pair, ':', 1); m := split_part(pair, ':', 2);
+    execute format('alter table public.%I enable row level security', t);
+    execute format('drop policy if exists %I on public.%I', t || '_select', t);
+    execute format('drop policy if exists %I on public.%I', t || '_insert', t);
+    execute format('drop policy if exists %I on public.%I', t || '_update', t);
+    execute format('drop policy if exists %I on public.%I', t || '_delete', t);
+    execute format('create policy %I on public.%I for select to authenticated using (public.has_perm(%L, ''view''))', t || '_select', t, m);
+    execute format('create policy %I on public.%I for insert to authenticated with check (public.has_perm(%L, ''create''))', t || '_insert', t, m);
+    execute format('create policy %I on public.%I for update to authenticated using (public.has_perm(%L, ''edit'')) with check (public.has_perm(%L, ''edit''))', t || '_update', t, m, m);
+    execute format('create policy %I on public.%I for delete to authenticated using (public.has_perm(%L, ''delete''))', t || '_delete', t, m);
+  end loop;
+end $$;
+grant all on public.office_spaces, public.service_recipes to authenticated, service_role;
+
+-- Demo office spaces + recipes (only when the demo seed is present)
+insert into public.office_spaces (business_id, name, kind, capacity, sort, is_demo)
+select b.id, s.name, s.kind, s.cap, s.sort, true
+from public.businesses b
+cross join (values ('Boardroom', 'meeting_room', 8, 1), ('Strategy Room', 'meeting_room', 4, 2), ('Call Booth 1', 'call_booth', 1, 3), ('Call Booth 2', 'call_booth', 1, 4), ('Hot Desk A', 'desk', 1, 5)) as s(name, kind, cap, sort)
+where b.is_primary and exists (select 1 from public.clients where is_demo)
+  and not exists (select 1 from public.office_spaces);
+
+update public.services set cost_kes = round(price_kes * 0.32), buffer_min = 15 where is_demo and cost_kes = 0;
+update public.clients set loyalty_points = floor(random() * 900)::int, marketing_consent = random() > .3,
+  preferences = jsonb_build_object('channel', (array['whatsapp','email','phone'])[1 + floor(random()*3)::int], 'meeting', (array['online','office','client_site'])[1 + floor(random()*3)::int], 'language', 'English', 'best_time', (array['morning','afternoon','evening'])[1 + floor(random()*3)::int])
+where is_demo and preferences = '{}'::jsonb;
+update public.appointments a set space_id = (select id from public.office_spaces order by random() limit 1)
+where a.is_demo and a.space_id is null and a.type in ('consultation', 'onboarding', 'review', 'walk_in');
+-- 003 — Round 3 parity: approve/export permissions, users/activity/leave modules, stock ledger,
+-- PO payments, payslip proration, plan validity, till payouts. Idempotent.
+
+-- ---------- Permissions: 6 action levels (View, Add, Edit, Delete, Approve, Export) ----------
+alter table public.role_permissions add column if not exists can_approve boolean not null default false;
+alter table public.role_permissions add column if not exists can_export boolean not null default false;
+
+create or replace function public.has_perm(p_module text, p_action text) returns boolean language sql stable security definer set search_path = public as $$
+  select case
+    when public.my_role() = 'owner' then true
+    when public.my_role() is null then false
+    else coalesce((select case p_action when 'view' then can_view when 'create' then can_create when 'edit' then can_edit
+                                        when 'delete' then can_delete when 'approve' then can_approve when 'export' then can_export else false end
+                   from role_permissions where role = public.my_role() and module = p_module), false)
+  end
+$$;
+
+-- New pages get their own rows: Leave (was inside staff), Users, Activity Logs
+insert into public.role_permissions (role, module, can_view, can_create, can_edit, can_delete)
+select role, 'leave', can_view or role = 'staff', can_create or role = 'staff', can_edit, can_delete from public.role_permissions where module = 'staff'
+on conflict (role, module) do nothing;
+insert into public.role_permissions (role, module, can_view, can_create, can_edit, can_delete)
+select r, m, r in ('admin','manager'), r = 'admin', r = 'admin', false
+from (values ('admin'),('manager'),('staff'),('viewer')) a(r) cross join (values ('users'),('activity_logs')) b(m)
+on conflict (role, module) do nothing;
+
+-- Sensible approve/export defaults, only where nothing has been set yet
+update public.role_permissions set can_approve = true, can_export = true where role = 'admin' and not can_approve and not can_export;
+update public.role_permissions set can_approve = module in ('expenses','leave','purchases','appointments','tasks','documents'), can_export = can_view
+  where role = 'manager' and not can_approve and not can_export;
+update public.role_permissions set can_export = module in ('reports') where role = 'viewer' and not can_export;
+
+-- Leave requests are now governed by the 'leave' module
+alter table public.leave_requests enable row level security;
+drop policy if exists leave_requests_select on public.leave_requests;
+drop policy if exists leave_requests_insert on public.leave_requests;
+drop policy if exists leave_requests_update on public.leave_requests;
+drop policy if exists leave_requests_delete on public.leave_requests;
+create policy leave_requests_select on public.leave_requests for select to authenticated using (public.has_perm('leave', 'view'));
+create policy leave_requests_insert on public.leave_requests for insert to authenticated with check (public.has_perm('leave', 'create'));
+create policy leave_requests_update on public.leave_requests for update to authenticated using (public.has_perm('leave', 'edit') or public.has_perm('leave', 'approve')) with check (public.has_perm('leave', 'edit') or public.has_perm('leave', 'approve'));
+create policy leave_requests_delete on public.leave_requests for delete to authenticated using (public.has_perm('leave', 'delete'));
+alter table public.leave_requests add column if not exists decided_at timestamptz;
+alter table public.leave_requests add column if not exists decision_note text;
+
+-- ---------- Stock ledger ----------
+create table if not exists public.stock_movements (
+  id uuid primary key default gen_random_uuid(),
+  product_id uuid not null references public.products(id) on delete cascade,
+  kind text not null default 'adjustment',  -- opening, purchase, sale, usage, adjustment, return, damage
+  qty numeric(12,3) not null,               -- signed: + in, − out
+  balance_after numeric(12,3),
+  unit_cost_kes numeric(12,2),
+  ref_type text, ref_id uuid, reason text, recorded_by text,
+  is_demo boolean not null default false,
+  created_at timestamptz not null default now()
+);
+create index if not exists stock_movements_product_idx on public.stock_movements(product_id, created_at desc);
+
+-- ---------- Purchases ----------
+alter table public.purchase_orders add column if not exists business_id uuid references public.businesses(id) on delete set null;
+alter table public.purchase_orders add column if not exists supplier_ref text;
+alter table public.purchase_orders add column if not exists tax_kes numeric(12,2) not null default 0;
+alter table public.purchase_orders add column if not exists payments jsonb not null default '[]'::jsonb;
+alter table public.suppliers add column if not exists address text;
+alter table public.suppliers add column if not exists payment_terms_days integer not null default 30;
+
+-- ---------- Expenses ----------
+alter table public.expenses add column if not exists notes text;
+
+-- ---------- Payroll ----------
+alter table public.payslips add column if not exists days_worked numeric(5,1);
+alter table public.payslips add column if not exists period_days numeric(5,1);
+alter table public.payslips add column if not exists incentives_kes numeric(12,2) not null default 0;
+alter table public.payslips add column if not exists paid_at timestamptz;
+alter table public.payslips add column if not exists method text;
+alter table public.salary_advances add column if not exists recovery_per_month_kes numeric(12,2);
+
+-- ---------- Memberships ----------
+alter table public.membership_plans add column if not exists validity_days integer not null default 30;
+alter table public.membership_plans add column if not exists benefit_type text not null default 'discount';
+alter table public.membership_plans add column if not exists description text;
+alter table public.subscriptions add column if not exists method text;
+alter table public.subscriptions add column if not exists business_id uuid references public.businesses(id) on delete set null;
+alter table public.subscriptions add column if not exists sold_by text;
+
+-- ---------- Till ----------
+alter table public.till_sessions add column if not exists payouts jsonb not null default '[]'::jsonb;
+alter table public.day_closes add column if not exists counted_cash_kes numeric(12,2);
+alter table public.day_closes add column if not exists variance_kes numeric(12,2);
+
+-- ---------- RLS for the new table ----------
+alter table public.stock_movements enable row level security;
+drop policy if exists stock_movements_select on public.stock_movements;
+drop policy if exists stock_movements_insert on public.stock_movements;
+drop policy if exists stock_movements_update on public.stock_movements;
+drop policy if exists stock_movements_delete on public.stock_movements;
+create policy stock_movements_select on public.stock_movements for select to authenticated using (public.has_perm('inventory', 'view'));
+create policy stock_movements_insert on public.stock_movements for insert to authenticated with check (public.has_perm('inventory', 'edit') or public.has_perm('purchases', 'edit') or public.has_perm('pos', 'create'));
+create policy stock_movements_update on public.stock_movements for update to authenticated using (public.has_perm('inventory', 'edit')) with check (public.has_perm('inventory', 'edit'));
+create policy stock_movements_delete on public.stock_movements for delete to authenticated using (public.has_perm('inventory', 'delete'));
+grant all on public.stock_movements to authenticated, service_role;
+
+-- ---------- Demo backfill ----------
+update public.purchase_orders set business_id = (select id from public.businesses where is_primary limit 1) where is_demo and business_id is null;
+update public.purchase_orders set payments = jsonb_build_array(jsonb_build_object('amount_kes', paid_kes, 'paid_at', coalesce(received_at, ordered_at), 'method', 'bank'))
+  where is_demo and paid_kes > 0 and payments = '[]'::jsonb;
+update public.membership_plans set validity_days = case when billing_cycle = 'yearly' then 365 else 30 end where is_demo;
+update public.subscriptions set method = 'mpesa' where is_demo and method is null;
+update public.payslips set days_worked = 26, period_days = 26 where is_demo and days_worked is null;
+insert into public.stock_movements (product_id, kind, qty, balance_after, unit_cost_kes, reason, recorded_by, is_demo, created_at)
+select p.id, 'opening', p.stock_qty, p.stock_qty, p.cost_kes, 'Opening balance', 'System', true, p.created_at
+from public.products p where p.is_demo and not exists (select 1 from public.stock_movements m where m.product_id = p.id);
+insert into public.leave_requests (staff_id, type, from_date, to_date, days, reason, status, is_demo)
+select s.id, t.type, current_date + t.off, current_date + t.off + t.len - 1, t.len, t.reason, t.status, true
+from (select id, row_number() over (order by full_name) rn from public.staff where is_demo and deleted_at is null) s
+join (values (1, 'annual', 9, 3, 'Family visit in Mombasa', 'pending'), (2, 'sick', -6, 2, 'Flu', 'approved'), (3, 'compassionate', 14, 1, 'Funeral', 'pending')) t(rn, type, off, len, reason, status) on t.rn = s.rn
+where (select count(1) from public.leave_requests) < 6;
+-- Owners and admins manage the permission grid (owner rows don't exist: owner is always full access)
+drop policy if exists rp_write on public.role_permissions;
+create policy rp_write on public.role_permissions for all to authenticated using (public.my_role() in ('owner','admin')) with check (public.my_role() in ('owner','admin'));
